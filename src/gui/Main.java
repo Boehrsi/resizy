@@ -45,6 +45,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -57,6 +58,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+import core.FileFilter;
 import core.ImageResize;
 
 public class Main {
@@ -169,6 +171,7 @@ public class Main {
 		});
 
 	}
+
 	private JFrame frmRezisy;
 	private JTextField outputPath;
 	private final JPanel top = new JPanel();
@@ -355,37 +358,38 @@ public class Main {
 		inputFiles.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evt) {
-				@SuppressWarnings("unchecked")
-				JList<String> list = (JList<String>) evt.getSource();
-				try {
-					if (evt.getClickCount() == 2) {
-						int index = list.locationToIndex(evt.getPoint());
-						inputFilesModel.removeElement(inputFilesModel
-								.elementAt(index));
-						inputFiles.setModel(inputFilesModel);
-					}
-				} catch (ArrayIndexOutOfBoundsException aioobe) {
 
+				if (SwingUtilities.isRightMouseButton(evt)) {
+					JFileChooser chooser = new JFileChooser();
+					chooser.setMultiSelectionEnabled(true);
+					chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+
+					int status = chooser.showDialog(frmRezisy, null);
+
+					if (status == JFileChooser.APPROVE_OPTION) {
+						File[] selectedFiles = chooser.getSelectedFiles();
+						FileFilter rightFilter = new FileFilter(
+								inputFilesModel, inputFiles);
+						for (int i = 0; i < selectedFiles.length; i++) {
+							rightFilter.filterImage(selectedFiles[i]);
+						}
+					} else if (status == JFileChooser.CANCEL_OPTION) {
+					}
+				} else {
+					try {
+						if (evt.getClickCount() == 2) {
+							@SuppressWarnings("unchecked")
+							JList<String> list = (JList<String>) evt
+									.getSource();
+							int index = list.locationToIndex(evt.getPoint());
+							inputFilesModel.removeElement(inputFilesModel
+									.elementAt(index));
+							inputFiles.setModel(inputFilesModel);
+						}
+					} catch (ArrayIndexOutOfBoundsException aioobe) {
+
+					}
 				}
-				/*
-				 * else if (evt.getClickCount() == 1) {
-				 * 
-				 * JFileChooser chooser = new JFileChooser();
-				 * chooser.setMultiSelectionEnabled(true);
-				 * chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-				 * 
-				 * int status = chooser.showDialog(frame, null);
-				 * 
-				 * if (status == JFileChooser.APPROVE_OPTION) { File[]
-				 * selectedFiles = chooser.getSelectedFiles(); for (int i = 0; i
-				 * < selectedFiles.length; i++) {
-				 * inputFilesModel.addElement(selectedFiles[i] .getParent() +
-				 * File.separator + selectedFiles[i].getName() + "\n");
-				 * inputFiles.setModel(inputFilesModel); } } else if (status ==
-				 * JFileChooser.CANCEL_OPTION) {
-				 * 
-				 * } }
-				 */
 			}
 		});
 		inputFiles.setDropTarget(new DropTarget() {
@@ -399,14 +403,10 @@ public class Main {
 					List<File> droppedFiles = (List<File>) evt
 							.getTransferable().getTransferData(
 									DataFlavor.javaFileListFlavor);
+					FileFilter dropFilter = new FileFilter(inputFilesModel,
+							inputFiles);
 					for (File file : droppedFiles) {
-						if (file.isFile()
-								&& (file.getName().contains(".png")
-										|| file.getName().contains(".jpg") || file
-										.getName().contains(".jpeg"))) {
-							inputFilesModel.addElement(file.getAbsolutePath());
-							inputFiles.setModel(inputFilesModel);
-						}
+						dropFilter.filterImage(file);
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
