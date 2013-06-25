@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
@@ -18,7 +17,8 @@ public class Language {
 
 	private Properties configFile;
 	private String file, close, lang, cfg, open, reset, inf, outf, outm, size,
-			pre, w, h, savepreset, convert, restart, restarttitel, progress;
+			pre, w, h, savepreset, convert, restart, restarttitel, progress,
+			hf, hof, hom, hs, hss, hp, s, hpro;
 	FileInputStream in;
 
 	public Language(String langFile) {
@@ -45,15 +45,56 @@ public class Language {
 			pre = configFile.getProperty("pre");
 			w = configFile.getProperty("w");
 			h = configFile.getProperty("h");
+			hf = configFile.getProperty("hintfiles");
+			hof = configFile.getProperty("hintoutputfolder");
+			hom = configFile.getProperty("hintoutputmod");
+			hs = configFile.getProperty("hintsize");
+			hss = configFile.getProperty("hintsizesave");
+			hp = configFile.getProperty("hintpresets");
+			hpro = configFile.getProperty("hintpro");
 			progress = configFile.getProperty("progress");
 			savepreset = configFile.getProperty("savepreset");
 			convert = configFile.getProperty("convert");
 			restart = configFile.getProperty("restart");
 			restarttitel = configFile.getProperty("restarttitel");
+			s = configFile.getProperty("do");
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	public String getHpro() {
+		return hpro;
+	}
+
+	public String getS() {
+		return s;
+	}
+
+	public String getHf() {
+		return hf;
+	}
+
+	public String getHof() {
+		return hof;
+	}
+
+	public String getHom() {
+		return hom;
+	}
+
+	public String getHs() {
+		return hs;
+	}
+
+	public String getHss() {
+		return hss;
+	}
+
+	public String getHp() {
+		return hp;
 	}
 
 	public String getCfg() {
@@ -136,8 +177,17 @@ public class Language {
 		return w;
 	}
 
-	public ArrayList<JMenuItem> langSelectable(JMenu mnLanguage,
-			final Config c, final JFrame frame) {
+	/**
+	 * Load language files form lang folder and add them to the GUI.
+	 * 
+	 * @param c
+	 *            Config object
+	 * @param frame
+	 *            GUI frame object
+	 * @return ArrayList<JMenuItem> with available languages
+	 */
+	public ArrayList<JMenuItem> langSelectable(final Config c,
+			final JFrame frame) {
 		ArrayList<JMenuItem> items = new ArrayList<JMenuItem>();
 		File folder = new File("lang");
 		File[] listOfFiles = folder.listFiles();

@@ -5,6 +5,7 @@ import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -44,6 +45,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -64,7 +66,7 @@ public class Main {
 
 		public ConvertAction() {
 			putValue(NAME, "Convert");
-			putValue(SHORT_DESCRIPTION, "Start conversion");
+			putValue(SHORT_DESCRIPTION, l.getS());
 		}
 
 		@Override
@@ -123,7 +125,7 @@ public class Main {
 
 		public SaveAction() {
 			putValue(NAME, "Save Preset");
-			putValue(SHORT_DESCRIPTION, "Save size to preset sizes");
+			putValue(SHORT_DESCRIPTION, l.getHss());
 		}
 
 		@Override
@@ -143,6 +145,7 @@ public class Main {
 	 */
 	public static void main(final String[] args) {
 		try {
+			ToolTipManager.sharedInstance().setDismissDelay(10000);
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
@@ -158,7 +161,7 @@ public class Main {
 			public void run() {
 				try {
 					Main window = new Main();
-					window.frame.setVisible(true);
+					window.frmRezisy.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -166,15 +169,13 @@ public class Main {
 		});
 
 	}
-
-	private JFrame frame;
+	private JFrame frmRezisy;
 	private JTextField outputPath;
 	private final JPanel top = new JPanel();
 	private JPanel center = new JPanel();
 	private JPanel bottom = new JPanel();
 	private JTextField width;;
 	private JTextField height;
-	private final Action startConversion = new ConvertAction();
 	private DefaultComboBoxModel<String> presetSizesInput = new DefaultComboBoxModel<String>();
 	private JComboBox<String> presetSizes;
 	private JTextField outputString;
@@ -191,6 +192,7 @@ public class Main {
 	private JTextPane txtpnSize;
 	private Config c = new Config();
 	private Language l = new Language(c.getLang());
+	private final Action startConversion = new ConvertAction();
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JButton btnPresetsave;
@@ -208,8 +210,8 @@ public class Main {
 	 * Create the application.
 	 */
 	public Main() {
+		System.setProperty("file.encoding", "UTF-16");
 		initialize();
-		outputPath.setText(c.getOutputDir());
 		width.setText(c.getWidth());
 		height.setText(c.getHeight());
 		outputString.setText(c.getOutputMod());
@@ -233,10 +235,11 @@ public class Main {
 		center.add(txtpnProgress, "2, 18, fill, fill");
 
 		progress = new JProgressBar();
+		progress.setToolTipText(l.getHpro());
 		center.add(progress, "4, 18");
 
 		menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		frmRezisy.setJMenuBar(menuBar);
 
 		mnFile = new JMenu(l.getFile());
 		menuBar.add(mnFile);
@@ -253,7 +256,7 @@ public class Main {
 		mnLanguage = new JMenu(l.getLang());
 		menuBar.add(mnLanguage);
 
-		ArrayList<JMenuItem> langs = l.langSelectable(mnLanguage, c, frame);
+		ArrayList<JMenuItem> langs = l.langSelectable(c, frmRezisy);
 		for (int i = 0; i < langs.size(); i++) {
 			mnLanguage.add(langs.get(i));
 		}
@@ -284,8 +287,8 @@ public class Main {
 				try {
 					inChannel = new FileInputStream(new File(
 							"cfg/config.ini.backup")).getChannel();
-					outChannel = new FileOutputStream(new File("cfg/config.ini"))
-							.getChannel();
+					outChannel = new FileOutputStream(
+							new File("cfg/config.ini")).getChannel();
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
@@ -297,7 +300,7 @@ public class Main {
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(frame, l.getRestart(),
+				JOptionPane.showMessageDialog(frmRezisy, l.getRestart(),
 						l.getRestarttitel(), JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -309,12 +312,15 @@ public class Main {
 	 */
 	private void initialize() {
 		inputFilesModel = new DefaultListModel<String>();
-		frame = new JFrame();
-		frame.setBounds(100, 100, 600, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmRezisy = new JFrame();
+		frmRezisy.setIconImage(Toolkit.getDefaultToolkit().getImage(
+				Main.class.getResource("/gui/icon.png")));
+		frmRezisy.setTitle("Resizy");
+		frmRezisy.setBounds(100, 100, 600, 500);
+		frmRezisy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		center.setBackground(UIManager.getColor("Label.background"));
-		frame.getContentPane().add(center, BorderLayout.CENTER);
+		frmRezisy.getContentPane().add(center, BorderLayout.CENTER);
 		center.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("150px:grow"),
@@ -345,6 +351,7 @@ public class Main {
 		center.add(inputFilesScroll, "4, 2, fill, fill");
 
 		inputFiles = new JList<String>();
+		inputFiles.setToolTipText(l.getHf());
 		inputFiles.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evt) {
@@ -409,6 +416,7 @@ public class Main {
 		inputFilesScroll.setViewportView(inputFiles);
 
 		outputPath = new JTextField();
+		outputPath.setToolTipText(l.getHof());
 		outputPath.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -416,7 +424,7 @@ public class Main {
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-				int status = chooser.showDialog(frame, null);
+				int status = chooser.showDialog(frmRezisy, null);
 
 				if (status == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
@@ -452,6 +460,7 @@ public class Main {
 		center.add(txtpnOutputAppendString, "2, 10, left, top");
 
 		outputString = new JTextField();
+		outputString.setToolTipText(l.getHom());
 		center.add(outputString, "4, 10, fill, fill");
 
 		txtpnSize = new JTextPane();
@@ -499,6 +508,7 @@ public class Main {
 		SizePanel.add(txtpnHeight, "5, 1, fill, fill");
 
 		presetSizes = new JComboBox<String>();
+		presetSizes.setToolTipText(l.getHp());
 		presetSizes.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent key) {
@@ -525,14 +535,16 @@ public class Main {
 		SizePanel.add(presetSizes, "1, 3, fill, fill");
 
 		width = new JTextField();
+		width.setToolTipText(l.getHs());
 		SizePanel.add(width, "3, 3, fill, fill");
 		width.setColumns(10);
 
 		height = new JTextField();
+		height.setToolTipText(l.getHs());
 		SizePanel.add(height, "5, 3, fill, fill");
 		height.setColumns(10);
-		frame.getContentPane().add(top, BorderLayout.NORTH);
-		frame.getContentPane().add(bottom, BorderLayout.SOUTH);
+		frmRezisy.getContentPane().add(top, BorderLayout.NORTH);
+		frmRezisy.getContentPane().add(bottom, BorderLayout.SOUTH);
 
 		btnConvert.setAction(startConversion);
 		btnConvert.setText(l.getConvert());
