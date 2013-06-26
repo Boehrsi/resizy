@@ -37,6 +37,10 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import java.awt.Window.Type;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 public class About {
 
@@ -97,7 +101,7 @@ public class About {
 		frmResizyAbout.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("30dlu:grow"),
+				ColumnSpec.decode("35dlu:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,},
