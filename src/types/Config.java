@@ -19,7 +19,7 @@ import java.util.Properties;
  */
 public class Config {
 	private static Properties configFile;
-	private String outputDir, outputMod, preset, lang;
+	private String outputDir, outputMod, preset, lang, version;
 
 	int width, height;
 
@@ -40,6 +40,7 @@ public class Config {
 			outputMod = configFile.getProperty("outputMod");
 			preset = configFile.getProperty("preset");
 			lang = configFile.getProperty("lang");
+			version = configFile.getProperty("version");
 			try {
 				width = Integer.parseInt(configFile.getProperty("width"));
 				height = Integer.parseInt(configFile.getProperty("height"));
@@ -48,6 +49,14 @@ public class Config {
 			}
 		} catch (IOException e) {
 		}
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	/**

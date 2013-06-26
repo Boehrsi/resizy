@@ -208,12 +208,14 @@ public class Main {
 	private JMenuItem mntmClose;
 	private JTextPane txtpnProgress;
 	private JProgressBar progress;
+	private JMenu mnNewMenu;
+	private JMenuItem mntmNewMenuItem;
 
 	/**
 	 * Create the application.
 	 */
 	public Main() {
-		System.setProperty("file.encoding", "UTF-16");
+		System.setProperty("file.encoding", "UTF-8");
 		initialize();
 		width.setText(c.getWidth());
 		height.setText(c.getHeight());
@@ -308,6 +310,17 @@ public class Main {
 			}
 		});
 		mnConfig.add(mntmReset);
+		
+		mnNewMenu = new JMenu(l.getHelp());
+		menuBar.add(mnNewMenu);
+		
+		mntmNewMenuItem = new JMenuItem(l.getAbout());
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				About.main(null);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem);
 	}
 
 	/**
@@ -318,7 +331,7 @@ public class Main {
 		frmRezisy = new JFrame();
 		frmRezisy.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				Main.class.getResource("/gui/icon.png")));
-		frmRezisy.setTitle("Resizy");
+		frmRezisy.setTitle(l.getProg());
 		frmRezisy.setBounds(100, 100, 600, 500);
 		frmRezisy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

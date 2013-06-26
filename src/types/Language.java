@@ -18,7 +18,24 @@ public class Language {
 	private Properties configFile;
 	private String file, close, lang, cfg, open, reset, inf, outf, outm, size,
 			pre, w, h, savepreset, convert, restart, restarttitel, progress,
-			hf, hof, hom, hs, hss, hp, s, hpro;
+			hf, hof, hom, hs, hss, hp, s, hpro, help, about, version, update,
+			prog, at, getlatest;
+	public String getVersion() {
+		return version;
+	}
+
+	public String getUpdate() {
+		return update;
+	}
+
+	public String getProg() {
+		return prog;
+	}
+
+	public String getAt() {
+		return at;
+	}
+
 	FileInputStream in;
 
 	public Language(String langFile) {
@@ -58,11 +75,30 @@ public class Language {
 			restart = configFile.getProperty("restart");
 			restarttitel = configFile.getProperty("restarttitel");
 			s = configFile.getProperty("do");
+			help = configFile.getProperty("help");
+			about = configFile.getProperty("about");
 
+			version = configFile.getProperty("version");
+			update = configFile.getProperty("update");
+			prog = configFile.getProperty("prog");
+			at = configFile.getProperty("at");
+			getlatest = configFile.getProperty("getlatest");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	public String getGetlatest() {
+		return getlatest;
+	}
+
+	public String getHelp() {
+		return help;
+	}
+
+	public String getAbout() {
+		return about;
 	}
 
 	public String getHpro() {
