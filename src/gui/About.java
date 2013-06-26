@@ -137,7 +137,7 @@ public class About {
 				try {
 					Desktop.getDesktop()
 							.browse(new URI(
-									"https://code.google.com/p/resizy/downloads/list?can=3"));
+									"https://drive.google.com/folderview?id=0B6fLujPPaJuuTGJvMEQ3SnNOWDQ&usp=sharing"));
 				} catch (URISyntaxException | IOException ex) {
 				}
 			}
