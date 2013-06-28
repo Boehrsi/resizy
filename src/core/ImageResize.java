@@ -48,6 +48,7 @@ public class ImageResize {
 	public static void resizeImageWithHint(String originalFile,
 			int outputWidth, int outputHeight, String outputFile,
 			String outputFileType) {
+		
 
 		BufferedImage inputImage = readImg(originalFile);
 		int[] sizes = calcResize(inputImage.getWidth(), inputImage.getHeight(),
@@ -77,8 +78,11 @@ public class ImageResize {
 		 * No output folder is set, use input folder.
 		 */
 		if (!outputFile.contains(":\\")) {
-			outputFile = originalFile;
+			outputFile = originalFile.substring(0,
+					originalFile.lastIndexOf("\\")) + outputFile;
 		}
+		System.out.println(originalFile);
+		System.out.println(outputFile);
 
 		/*
 		 * No output type is set, use input type.
