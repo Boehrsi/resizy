@@ -106,7 +106,8 @@ public class Main {
 										outputFile.length());
 						ImageResize.resizeImageWithHint(
 								inputFilesModel.elementAt(i), calcWidth,
-								calcHeight, outputFile);
+								calcHeight, outputFile,
+								(String) fileTypes.getSelectedItem());
 						progress.setValue(i + 1);
 						progress.setString(i + 1 + " / "
 								+ inputFilesModel.size());
@@ -180,7 +181,9 @@ public class Main {
 	private JTextField width;;
 	private JTextField height;
 	private DefaultComboBoxModel<String> presetSizesInput = new DefaultComboBoxModel<String>();
+	private DefaultComboBoxModel<String> presetTypes = new DefaultComboBoxModel<String>();
 	private JComboBox<String> presetSizes;
+	private JComboBox<String> fileTypes;
 	private JTextField outputString;
 	private JTextPane txtpnInputFiles;
 	private JTextPane txtpnOutputFiles;
@@ -188,7 +191,7 @@ public class Main {
 	private JTextPane txtpnHeight;
 	private JTextPane txtpnWidth;
 	private JTextPane txtpnPresetSizes;
-	private JTextPane txtpnOutputAppendString;
+	private JTextPane txtpnOutputString;
 	private JList<String> inputFiles;
 	private DefaultListModel<String> inputFilesModel;
 	private JScrollPane inputFilesScroll;
@@ -210,6 +213,7 @@ public class Main {
 	private JProgressBar progress;
 	private JMenu mnNewMenu;
 	private JMenuItem mntmNewMenuItem;
+	private JTextPane textPaneFileTypes;
 
 	/**
 	 * Create the application.
@@ -225,6 +229,12 @@ public class Main {
 			presetSizesInput.addElement(tempSize[i]);
 		}
 		presetSizes.setModel(presetSizesInput);
+
+		String[] tempTypes = c.getTypes().split(",");
+		for (int i = 0; i < tempTypes.length; i++) {
+			presetTypes.addElement(tempTypes[i]);
+		}
+		fileTypes.setModel(presetTypes);
 
 		btnPresetsave = new JButton("");
 		btnPresetsave.setAction(savePreset);
@@ -310,10 +320,10 @@ public class Main {
 			}
 		});
 		mnConfig.add(mntmReset);
-		
+
 		mnNewMenu = new JMenu(l.getHelp());
 		menuBar.add(mnNewMenu);
-		
+
 		mntmNewMenuItem = new JMenuItem(l.getAbout());
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -463,14 +473,26 @@ public class Main {
 		center.add(txtpnOutputFiles, "2, 6, left, top");
 		center.add(outputPath, "4, 6, fill, fill");
 
-		txtpnOutputAppendString = new JTextPane();
-		txtpnOutputAppendString.setOpaque(false);
-		txtpnOutputAppendString.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnOutputAppendString.setBackground(UIManager
-				.getColor("Label.background"));
-		txtpnOutputAppendString.setEditable(false);
-		txtpnOutputAppendString.setText(l.getOutm());
-		center.add(txtpnOutputAppendString, "2, 10, left, top");
+		textPaneFileTypes = new JTextPane();
+		textPaneFileTypes.setText(l.getFiletype());
+		textPaneFileTypes.setOpaque(false);
+		textPaneFileTypes.setFont(new Font("Arial", Font.PLAIN, 12));
+		textPaneFileTypes.setEditable(false);
+		textPaneFileTypes.setBackground(SystemColor.menu);
+		center.add(textPaneFileTypes, "2, 8, left, top");
+
+		fileTypes = new JComboBox<String>();
+
+		fileTypes.setToolTipText(l.getHintfiletypes());
+		center.add(fileTypes, "4, 8, fill, default");
+
+		txtpnOutputString = new JTextPane();
+		txtpnOutputString.setOpaque(false);
+		txtpnOutputString.setFont(new Font("Arial", Font.PLAIN, 12));
+		txtpnOutputString.setBackground(UIManager.getColor("Label.background"));
+		txtpnOutputString.setEditable(false);
+		txtpnOutputString.setText(l.getOutm());
+		center.add(txtpnOutputString, "2, 10, left, top");
 
 		outputString = new JTextField();
 		outputString.setToolTipText(l.getHom());

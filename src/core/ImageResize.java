@@ -46,7 +46,8 @@ public class ImageResize {
 	}
 
 	public static void resizeImageWithHint(String originalFile,
-			int outputWidth, int outputHeight, String outputFile) {
+			int outputWidth, int outputHeight, String outputFile,
+			String outputFileType) {
 
 		BufferedImage inputImage = readImg(originalFile);
 		int[] sizes = calcResize(inputImage.getWidth(), inputImage.getHeight(),
@@ -72,7 +73,30 @@ public class ImageResize {
 		g.drawImage(inputImage, 0, 0, outputWidth, outputHeight, null);
 		g.dispose();
 
-		writeImg(outputImage, outputFile, "png");
+		/*
+		 * No output folder is set, use input folder.
+		 */
+		if (!outputFile.contains(":\\")) {
+			outputFile = originalFile;
+		}
+
+		/*
+		 * No output type is set, use input type.
+		 */
+		if (outputFileType.equals("")) {
+			outputFileType = outputFile
+					.substring(outputFile.lastIndexOf(".") + 1);
+		} 
+		/*
+		 * Use costum set output type.
+		 */
+		else {
+			outputFile = outputFile.substring(0,
+					outputFile.lastIndexOf(".") + 1) + outputFileType;
+		}
+
+		writeImg(outputImage, outputFile, outputFileType);
+
 	}
 
 	private static void writeImg(BufferedImage outputImage, String outputFile,

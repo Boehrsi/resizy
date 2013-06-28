@@ -5,4 +5,5 @@ outputMod=
 width=0
 preset=320x240,640x480,800x600,1024x768,1280x720,1600x1200,1920x1080,
 lang=English
-version=0.11
+version=0.15
+types=,jpg,jpeg,png

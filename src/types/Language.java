@@ -19,7 +19,7 @@ public class Language {
 	private String file, close, lang, cfg, open, reset, inf, outf, outm, size,
 			pre, w, h, savepreset, convert, restart, restarttitel, progress,
 			hf, hof, hom, hs, hss, hp, s, hpro, help, about, version, update,
-			prog, at, getlatest;
+			prog, at, getlatest, filetype, hintfiletypes;
 	public String getVersion() {
 		return version;
 	}
@@ -77,6 +77,8 @@ public class Language {
 			s = configFile.getProperty("do");
 			help = configFile.getProperty("help");
 			about = configFile.getProperty("about");
+			filetype = configFile.getProperty("filetype");
+			hintfiletypes = configFile.getProperty("hintfiletypes");
 
 			version = configFile.getProperty("version");
 			update = configFile.getProperty("update");
@@ -87,6 +89,14 @@ public class Language {
 			e.printStackTrace();
 		}
 
+	}
+
+	public String getFiletype() {
+		return filetype;
+	}
+
+	public String getHintfiletypes() {
+		return hintfiletypes;
 	}
 
 	public String getGetlatest() {
