@@ -60,6 +60,8 @@ import com.jgoodies.forms.layout.RowSpec;
 
 import core.FileFilter;
 import core.ImageResize;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Main {
 
@@ -73,53 +75,69 @@ public class Main {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			progress.setMaximum(inputFilesModel.size());
-			progress.setValue(0);
-			progress.setStringPainted(true);
-			btnConvert.setEnabled(false);
-			Thread converThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					int calcWidth, calcHeight;
-					try {
-						calcWidth = Integer.parseInt(width.getText());
-					} catch (NumberFormatException nfe) {
-						calcWidth = 0;
-					}
-					try {
-						calcHeight = Integer.parseInt(height.getText());
-					} catch (NumberFormatException nfe) {
-						calcHeight = 0;
-					}
-					String outputModifier = outputString.getText();
-					String outputPathEcho = outputPath.getText();
-					for (int i = 0; i < inputFilesModel.size(); i++) {
-						String outputFile = inputFilesModel.elementAt(i);
-						outputFile = outputPathEcho
-								+ File.separator
-								+ outputFile.substring(
-										outputFile.lastIndexOf("\\") + 1,
-										outputFile.lastIndexOf("."))
-								+ outputModifier
-								+ outputFile.substring(
-										outputFile.lastIndexOf("."),
-										outputFile.length());
-						ImageResize.resizeImageWithHint(
-								inputFilesModel.elementAt(i), calcWidth,
-								calcHeight, outputFile,
-								(String) fileTypes.getSelectedItem());
-						progress.setValue(i + 1);
-						progress.setString(i + 1 + " / "
-								+ inputFilesModel.size());
-					}
-					c.setHeight(height.getText());
-					c.setWidth(width.getText());
-					c.setOutputMod(outputString.getText());
-					c.setOutputDir(outputPath.getText());
-					btnConvert.setEnabled(true);
+			if (inputFilesModel.size() != 0) {
+				if (!(width.getText().equals("") && height.getText().equals(""))
+						&& !(width.getText().equals("0") && height.getText()
+								.equals("0"))) {
+					progress.setMaximum(inputFilesModel.size());
+					progress.setValue(0);
+					progress.setStringPainted(true);
+					btnConvert.setEnabled(false);
+					Thread converThread = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							int calcWidth, calcHeight;
+							try {
+								calcWidth = Integer.parseInt(width.getText());
+							} catch (NumberFormatException nfe) {
+								calcWidth = 0;
+							}
+							try {
+								calcHeight = Integer.parseInt(height.getText());
+							} catch (NumberFormatException nfe) {
+								calcHeight = 0;
+							}
+							String outputModifier = outputString.getText();
+							String outputPathEcho = outputPath.getText();
+							for (int i = 0; i < inputFilesModel.size(); i++) {
+								String outputFile = inputFilesModel
+										.elementAt(i);
+								outputFile = outputPathEcho
+										+ File.separator
+										+ outputFile
+												.substring(
+														outputFile
+																.lastIndexOf("\\") + 1,
+														outputFile
+																.lastIndexOf("."))
+										+ outputModifier
+										+ outputFile.substring(
+												outputFile.lastIndexOf("."),
+												outputFile.length());
+								ImageResize.resizeImageWithHint(
+										inputFilesModel.elementAt(i),
+										calcWidth, calcHeight, outputFile,
+										(String) fileTypes.getSelectedItem());
+								progress.setValue(i + 1);
+								progress.setString(i + 1 + " / "
+										+ inputFilesModel.size());
+							}
+							c.setHeight(height.getText());
+							c.setWidth(width.getText());
+							c.setOutputMod(outputString.getText());
+							c.setOutputDir(outputPath.getText());
+							btnConvert.setEnabled(true);
+						}
+					}, "Thread for convert");
+					converThread.start();
+				} else {
+					JOptionPane.showMessageDialog(null, l.getErr1(),
+							l.getErr1t(), JOptionPane.ERROR_MESSAGE);
 				}
-			}, "Thread for convert");
-			converThread.start();
+			} else {
+				JOptionPane.showMessageDialog(null, l.getErr2(), l.getErr2t(),
+						JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
@@ -570,11 +588,27 @@ public class Main {
 		SizePanel.add(presetSizes, "1, 3, fill, fill");
 
 		width = new JTextField();
+		width.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (width.getText().equals("")) {
+					width.setText("0");
+				}
+			}
+		});
 		width.setToolTipText(l.getHs());
 		SizePanel.add(width, "3, 3, fill, fill");
 		width.setColumns(10);
 
 		height = new JTextField();
+		height.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (height.getText().equals("")) {
+					height.setText("0");
+				}
+			}
+		});
 		height.setToolTipText(l.getHs());
 		SizePanel.add(height, "5, 3, fill, fill");
 		height.setColumns(10);
