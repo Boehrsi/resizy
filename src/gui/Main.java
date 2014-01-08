@@ -367,21 +367,30 @@ public class Main {
 		frmRezisy.getContentPane().add(center, BorderLayout.CENTER);
 		center.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("150px:grow"),
+				ColumnSpec.decode("150px"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_COLSPEC, }, new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("130px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormFactory.RELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("130px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				RowSpec.decode("4dlu:grow"), }));
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				RowSpec.decode("4dlu:grow"),}));
 
 		txtpnInputFiles = new JTextPane();
 		txtpnInputFiles.setFont(new Font("Arial", Font.PLAIN, 12));

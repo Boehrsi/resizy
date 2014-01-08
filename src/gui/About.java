@@ -137,7 +137,7 @@ public class About {
 				try {
 					Desktop.getDesktop()
 							.browse(new URI(
-									"https://drive.google.com/folderview?id=0B6fLujPPaJuuTGJvMEQ3SnNOWDQ&usp=sharing"));
+									"https://drive.google.com/folderview?id=0B6fLujPPaJuuWWdhdTNmLTVHMGc"));
 				} catch (URISyntaxException | IOException ex) {
 				}
 			}
@@ -199,7 +199,7 @@ public class About {
 					try {
 						Desktop.getDesktop()
 								.browse(new URI(
-										"http://boehrsi.de/index.php?s=Resizy&notoppd=true"));
+										"http://boehrsi.de/index.php?action=c-public_project-post&id=26"));
 					} catch (URISyntaxException | IOException ex) {
 					}
 				}
