@@ -12,6 +12,7 @@ about=About
 inf=Input Files
 outf=Output Directory
 outm=Output Modifier
+outmeta=Copy last modified date
 filetype=Output File Type
 size=Size
 pre=Preset Sizes
@@ -33,6 +34,7 @@ hintsizesave=Saves the width and height as presetting.
 hintpresets=Select an entry to set width and height. Press DEL to delete selected presetting.
 hintpro=Shows conversion progress.
 hintfiletypes=Set output file type for all files. Leave empty to not change the file types.
+hintoutmeta=If enabled the last modified date of the source file will be copied over to the resized destination file
 # About
 version=Version
 update=Check for updates (Opens Browser)

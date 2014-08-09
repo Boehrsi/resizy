@@ -62,6 +62,7 @@ import core.FileFilter;
 import core.ImageResize;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.JCheckBox;
 
 public class Main {
 
@@ -83,7 +84,7 @@ public class Main {
 					progress.setValue(0);
 					progress.setStringPainted(true);
 					btnConvert.setEnabled(false);
-					Thread converThread = new Thread(new Runnable() {
+					Thread convertThread = new Thread(new Runnable() {
 						@Override
 						public void run() {
 							int calcWidth, calcHeight;
@@ -117,7 +118,7 @@ public class Main {
 								ImageResize.resizeImageWithHint(
 										inputFilesModel.elementAt(i),
 										calcWidth, calcHeight, outputFile,
-										(String) fileTypes.getSelectedItem());
+										(String) fileTypes.getSelectedItem(), chckbxMetaSave.isSelected());
 								progress.setValue(i + 1);
 								progress.setString(i + 1 + " / "
 										+ inputFilesModel.size());
@@ -129,7 +130,7 @@ public class Main {
 							btnConvert.setEnabled(true);
 						}
 					}, "Thread for convert");
-					converThread.start();
+					convertThread.start();
 				} else {
 					JOptionPane.showMessageDialog(null, l.getErr1(),
 							l.getErr1t(), JOptionPane.ERROR_MESSAGE);
@@ -231,7 +232,9 @@ public class Main {
 	private JProgressBar progress;
 	private JMenu mnNewMenu;
 	private JMenuItem mntmNewMenuItem;
-	private JTextPane textPaneFileTypes;
+	private JTextPane txtpnFileTypes;
+	private JTextPane txtpnMetaSave;
+	private JCheckBox chckbxMetaSave;
 
 	/**
 	 * Create the application.
@@ -360,20 +363,22 @@ public class Main {
 		frmRezisy.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				Main.class.getResource("/gui/icon.png")));
 		frmRezisy.setTitle(l.getProg());
-		frmRezisy.setBounds(100, 100, 600, 500);
+		frmRezisy.setBounds(100, 100, 600, 520);
 		frmRezisy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		center.setBackground(UIManager.getColor("Label.background"));
 		frmRezisy.getContentPane().add(center, BorderLayout.CENTER);
 		center.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("150px"),
+				ColumnSpec.decode("150px:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("130px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
 				RowSpec.decode("20px"),
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
@@ -500,13 +505,13 @@ public class Main {
 		center.add(txtpnOutputFiles, "2, 6, left, top");
 		center.add(outputPath, "4, 6, fill, fill");
 
-		textPaneFileTypes = new JTextPane();
-		textPaneFileTypes.setText(l.getFiletype());
-		textPaneFileTypes.setOpaque(false);
-		textPaneFileTypes.setFont(new Font("Arial", Font.PLAIN, 12));
-		textPaneFileTypes.setEditable(false);
-		textPaneFileTypes.setBackground(SystemColor.menu);
-		center.add(textPaneFileTypes, "2, 8, left, top");
+		txtpnFileTypes = new JTextPane();
+		txtpnFileTypes.setText(l.getFiletype());
+		txtpnFileTypes.setOpaque(false);
+		txtpnFileTypes.setFont(new Font("Arial", Font.PLAIN, 12));
+		txtpnFileTypes.setEditable(false);
+		txtpnFileTypes.setBackground(UIManager.getColor("Label.background"));
+		center.add(txtpnFileTypes, "2, 8, left, top");
 
 		fileTypes = new JComboBox<String>();
 
@@ -524,6 +529,19 @@ public class Main {
 		outputString = new JTextField();
 		outputString.setToolTipText(l.getHom());
 		center.add(outputString, "4, 10, fill, fill");
+		
+		txtpnMetaSave = new JTextPane();
+		txtpnMetaSave.setText((String) null);
+		txtpnMetaSave.setOpaque(false);
+		txtpnMetaSave.setFont(new Font("Arial", Font.PLAIN, 12));
+		txtpnMetaSave.setEditable(false);
+		txtpnMetaSave.setBackground(UIManager.getColor("Label.background"));
+		txtpnMetaSave.setText(l.getOutmeta());
+		center.add(txtpnMetaSave, "2, 12, left, top");
+		
+		chckbxMetaSave = new JCheckBox("");
+		chckbxMetaSave.setToolTipText(l.getHoutmeta());
+		center.add(chckbxMetaSave, "4, 12, left, center");
 
 		txtpnSize = new JTextPane();
 		txtpnSize.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -531,10 +549,10 @@ public class Main {
 		txtpnSize.setBackground(UIManager.getColor("Label.background"));
 		txtpnSize.setText(l.getSize());
 		txtpnSize.setEditable(false);
-		center.add(txtpnSize, "2, 14, left, center");
+		center.add(txtpnSize, "2, 16, left, center");
 
 		SizePanel = new JPanel();
-		center.add(SizePanel, "4, 14, fill, top");
+		center.add(SizePanel, "4, 16, fill, top");
 		SizePanel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,

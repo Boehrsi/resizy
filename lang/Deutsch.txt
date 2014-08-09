@@ -12,6 +12,7 @@ about=Über
 inf=Eingabedateien
 outf=Ausgabeordner
 outm=Ausgabemodifikator
+outmeta=Änderungsdatum kopieren
 filetype=Ausgabedateityp
 size=Größe
 pre=Vorgegebene Größen
@@ -33,6 +34,7 @@ hintsizesave=Speichert die Breite und Höhe als Voreinstellung.
 hintpresets=Einen Eintrag wählen um Breite und Höhe zu setzen. ENTF drücken um die gewählte Voreinstellung zu löschen.
 hintpro=Zeigt den Umwandlungsfortschritt.
 hintfiletypes=Ausgabedateityp für alle zu konvertierenden Dateien wählen oder leer lassen, in diesem Fall werden die jeweiligen Dateitypen beibehalten.
+hintoutmeta=Aktivieren um das Datum der letzten Änderung der Quelldatei auf die verkleinerte Zieldatei zu übertragen
 # About
 version=Version
 update=Auf Updates prüfen (Öffnet den Browser)

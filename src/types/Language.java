@@ -16,10 +16,12 @@ import javax.swing.JOptionPane;
 public class Language {
 
 	private Properties configFile;
-	private String file, close, lang, cfg, open, reset, inf, outf, outm, size,
-			pre, w, h, savepreset, convert, restart, restarttitel, progress,
-			hf, hof, hom, hs, hss, hp, s, hpro, help, about, version, update,
-			prog, at, getlatest, filetype, hintfiletypes, err1, err1t, err2, err2t;
+	private String file, close, lang, cfg, open, reset, inf, outf, outm,
+			outmeta, size, pre, w, h, savepreset, convert, restart,
+			restarttitel, progress, hf, hof, hom, hs, hss, hp, s, hpro, help,
+			houtmeta, about, version, update, prog, at, getlatest, filetype,
+			hintfiletypes, err1, err1t, err2, err2t;
+
 	public String getVersion() {
 		return version;
 	}
@@ -66,6 +68,8 @@ public class Language {
 			inf = configFile.getProperty("inf");
 			outf = configFile.getProperty("outf");
 			outm = configFile.getProperty("outm");
+			outmeta = configFile.getProperty("outmeta");
+			houtmeta = configFile.getProperty("hintoutmeta");
 			size = configFile.getProperty("size");
 			pre = configFile.getProperty("pre");
 			w = configFile.getProperty("w");
@@ -100,6 +104,10 @@ public class Language {
 			e.printStackTrace();
 		}
 
+	}
+
+	public String getHoutmeta() {
+		return houtmeta;
 	}
 
 	public String getErr1() {
@@ -208,6 +216,10 @@ public class Language {
 
 	public String getOutm() {
 		return outm;
+	}
+
+	public String getOutmeta() {
+		return outmeta;
 	}
 
 	public String getPre() {

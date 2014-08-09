@@ -7,6 +7,8 @@ import java.awt.RenderingHints.Key;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -47,9 +49,8 @@ public class ImageResize {
 
 	public static void resizeImageWithHint(String originalFile,
 			int outputWidth, int outputHeight, String outputFile,
-			String outputFileType) {
-		
-
+			String outputFileType, boolean copyLastMod) {
+		FileTime lastModDate = null;
 		BufferedImage inputImage = readImg(originalFile);
 		int[] sizes = calcResize(inputImage.getWidth(), inputImage.getHeight(),
 				outputWidth, outputHeight);
@@ -79,10 +80,9 @@ public class ImageResize {
 		 */
 		if (!outputFile.contains(":\\")) {
 			outputFile = originalFile.substring(0,
-					originalFile.lastIndexOf("\\")) + outputFile;
+					originalFile.lastIndexOf("\\"))
+					+ outputFile;
 		}
-		System.out.println(originalFile);
-		System.out.println(outputFile);
 
 		/*
 		 * No output type is set, use input type.
@@ -90,7 +90,7 @@ public class ImageResize {
 		if (outputFileType.equals("")) {
 			outputFileType = outputFile
 					.substring(outputFile.lastIndexOf(".") + 1);
-		} 
+		}
 		/*
 		 * Use costum set output type.
 		 */
@@ -99,16 +99,28 @@ public class ImageResize {
 					outputFile.lastIndexOf(".") + 1) + outputFileType;
 		}
 
-		writeImg(outputImage, outputFile, outputFileType);
+		if (copyLastMod) {
+			File tempFile = new File(originalFile);
+			try {
+				lastModDate = Files.getLastModifiedTime(tempFile.toPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		writeImg(outputImage, outputFile, outputFileType, lastModDate);
 
 	}
 
 	private static void writeImg(BufferedImage outputImage, String outputFile,
-			String type) {
+			String type, FileTime lastModDate) {
 		try {
-			ImageIO.write(outputImage, type, new File(outputFile));
+			File filePath = new File(outputFile);
+			ImageIO.write(outputImage, type, filePath);
+			try {
+				Files.setLastModifiedTime(filePath.toPath(), lastModDate);
+			} catch (NullPointerException npe) {
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 }
