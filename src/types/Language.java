@@ -20,30 +20,15 @@ public class Language {
 			outmeta, size, pre, w, h, savepreset, convert, restart,
 			restarttitel, progress, hf, hof, hom, hs, hss, hp, s, hpro, help,
 			houtmeta, about, version, update, prog, at, getlatest, filetype,
-			hintfiletypes, err1, err1t, err2, err2t;
+			hintfiletypes, err1, err1t, err2, err2t, err3, err3t,
+			overwritetitle, overwritetext;
 
-	public String getVersion() {
-		return version;
+	public String getErr3() {
+		return err3;
 	}
 
-	public String getErr2() {
-		return err2;
-	}
-
-	public String getErr2t() {
-		return err2t;
-	}
-
-	public String getUpdate() {
-		return update;
-	}
-
-	public String getProg() {
-		return prog;
-	}
-
-	public String getAt() {
-		return at;
+	public String getErr3t() {
+		return err3t;
 	}
 
 	FileInputStream in;
@@ -100,74 +85,30 @@ public class Language {
 			err1t = configFile.getProperty("err1t");
 			err2 = configFile.getProperty("err2");
 			err2t = configFile.getProperty("err2t");
+			err3 = configFile.getProperty("err3");
+			err3t = configFile.getProperty("err3t");
+			overwritetitle = configFile.getProperty("overwritetitle");
+			overwritetext = configFile.getProperty("overwritetext");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
 
-	public String getHoutmeta() {
-		return houtmeta;
+	public String getOverwritetitle() {
+		return overwritetitle;
 	}
 
-	public String getErr1() {
-		return err1;
-	}
-
-	public String getErr1t() {
-		return err1t;
-	}
-
-	public String getFiletype() {
-		return filetype;
-	}
-
-	public String getHintfiletypes() {
-		return hintfiletypes;
-	}
-
-	public String getGetlatest() {
-		return getlatest;
-	}
-
-	public String getHelp() {
-		return help;
+	public String getOverwritetext() {
+		return overwritetext;
 	}
 
 	public String getAbout() {
 		return about;
 	}
 
-	public String getHpro() {
-		return hpro;
-	}
-
-	public String getS() {
-		return s;
-	}
-
-	public String getHf() {
-		return hf;
-	}
-
-	public String getHof() {
-		return hof;
-	}
-
-	public String getHom() {
-		return hom;
-	}
-
-	public String getHs() {
-		return hs;
-	}
-
-	public String getHss() {
-		return hss;
-	}
-
-	public String getHp() {
-		return hp;
+	public String getAt() {
+		return at;
 	}
 
 	public String getCfg() {
@@ -186,12 +127,76 @@ public class Language {
 		return convert;
 	}
 
+	public String getErr1() {
+		return err1;
+	}
+
+	public String getErr1t() {
+		return err1t;
+	}
+
+	public String getErr2() {
+		return err2;
+	}
+
+	public String getErr2t() {
+		return err2t;
+	}
+
 	public String getFile() {
 		return file;
 	}
 
+	public String getFiletype() {
+		return filetype;
+	}
+
+	public String getGetlatest() {
+		return getlatest;
+	}
+
 	public String getH() {
 		return h;
+	}
+
+	public String getHelp() {
+		return help;
+	}
+
+	public String getHf() {
+		return hf;
+	}
+
+	public String getHintfiletypes() {
+		return hintfiletypes;
+	}
+
+	public String getHof() {
+		return hof;
+	}
+
+	public String getHom() {
+		return hom;
+	}
+
+	public String getHoutmeta() {
+		return houtmeta;
+	}
+
+	public String getHp() {
+		return hp;
+	}
+
+	public String getHpro() {
+		return hpro;
+	}
+
+	public String getHs() {
+		return hs;
+	}
+
+	public String getHss() {
+		return hss;
 	}
 
 	public FileInputStream getIn() {
@@ -226,6 +231,10 @@ public class Language {
 		return pre;
 	}
 
+	public String getProg() {
+		return prog;
+	}
+
 	public String getProgress() {
 		return progress;
 	}
@@ -242,12 +251,24 @@ public class Language {
 		return restarttitel;
 	}
 
+	public String getS() {
+		return s;
+	}
+
 	public String getSavepreset() {
 		return savepreset;
 	}
 
 	public String getSize() {
 		return size;
+	}
+
+	public String getUpdate() {
+		return update;
+	}
+
+	public String getVersion() {
+		return version;
 	}
 
 	public String getW() {

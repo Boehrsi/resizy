@@ -26,7 +26,7 @@ restart=Bitte die Anwendung neu starten, damit die Änderungen wirksam werden.
 restarttitel=Information
 # Hints
 do=Starten
-hintfiles=Drag and drop JPG, JPEG oder PNG hier oder Rechtsklick nutzen um die Dateiauswahl zu öffnen. Doppelklick um eine Datei zu entfernen.
+hintfiles=Drag and drop JPG, JPEG oder PNG hier oder Rechtsklick nutzen um die Dateiauswahl zu öffnen. Doppelklick um eine Datei zu entfernen oder mehrere Dateien markieren (STRG+Klick) und ENTF drücken. 
 hintoutputfolder=Hier klicken um den Ausgabeordner festzulegen. Falls nicht gesetzt sind Eingabe- und Ausgabeordner identisch. Falls kein Ausgabemodifikator gesetzt ist wird die Eingabedatei überschrieben.
 hintoutputmod=Verändert den Dateinamen der Ausgabedatei. Wird am Ende des Namens vor dem Dateityp eingefügt.
 hintsize=Verändert die Größe der Ausgabedatei. Falls einer der Werte auf 0 gesetzt ist wird dieser entsprechend des anderen Wert berechnet.
@@ -40,8 +40,13 @@ version=Version
 update=Auf Updates prüfen (Öffnet den Browser)
 at=auf
 getlatest=Aktualisieren
+# Overwrite
+overwritetitle=Warnung Dateien könnten überschrieben werden
+overwritetext=Wenn kein Ausgabemodifikator gesetzt ist und zusätzlich kein Ausgarbeordner oder aber der Ausgeabeordner identisch mit dem Eingabeordnerfür einige Dateien ist, so werden diese überschrieben. Möchten sie dies tun und diese Warnung deaktivieren?
 # Error
 err1t = Fehler 0001
 err1 = Einer der Werte Höhe / Breite muss ungleich 0 sein.
 err2t = Error 0002
 err2 = Es sind keine Eingabedateien vorhanden.
+err3t = Error 0003
+err3 = Bildmaße wurden zu groß gewählt.

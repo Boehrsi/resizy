@@ -17,6 +17,7 @@ public class FileFilter {
 
 	public void filterImage(File file) {
 		if (file.isFile()
+				&& !inputFilesModel.contains(file.getAbsolutePath())
 				&& (file.getName().toLowerCase().contains(".png")
 						|| file.getName().toLowerCase().contains(".jpg") || file
 						.getName().toLowerCase().contains(".jpeg"))) {

@@ -19,11 +19,13 @@ import java.util.Properties;
  */
 public class Config {
 	private static Properties configFile;
-	private String outputDir, outputMod, preset, lang, version, types;
+	private String outputDir, outputMod, preset, lang, version, types,
+			overwrite;
 
 	int width, height;
 
 	FileOutputStream out;
+
 	FileInputStream in;
 
 	/**
@@ -42,6 +44,7 @@ public class Config {
 			lang = configFile.getProperty("lang");
 			version = configFile.getProperty("version");
 			types = configFile.getProperty("types");
+			overwrite = configFile.getProperty("overwrite");
 			try {
 				width = Integer.parseInt(configFile.getProperty("width"));
 				height = Integer.parseInt(configFile.getProperty("height"));
@@ -52,20 +55,8 @@ public class Config {
 		}
 	}
 
-	public String getTypes() {
-		return types;
-	}
-
-	public void setTypes(String types) {
-		this.types = types;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
+	public String getOverwrite() {
+		return overwrite;
 	}
 
 	/**
@@ -113,6 +104,14 @@ public class Config {
 		return preset;
 	}
 
+	public String getTypes() {
+		return types;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
 	/**
 	 * Returns values form configuration file
 	 * 
@@ -120,6 +119,12 @@ public class Config {
 	 */
 	public String getWidth() {
 		return String.valueOf(width);
+	}
+
+	public void setOverwrite(String overwrite) {
+		this.overwrite = overwrite;
+		configFile.setProperty("overwrite", overwrite);
+		store();
 	}
 
 	/**
@@ -180,6 +185,14 @@ public class Config {
 		this.preset = preset;
 		configFile.setProperty("preset", preset);
 		store();
+	}
+
+	public void setTypes(String types) {
+		this.types = types;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	/**

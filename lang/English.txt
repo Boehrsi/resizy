@@ -26,7 +26,7 @@ restart=Please restart the application for changes to take effect.
 restarttitel=Information
 # Hints
 do=Start
-hintfiles=Drag and drop JPG, JPEG or PNG here or right click to open file chooser. Double click a file to remove it from the list.
+hintfiles=Drag and drop JPG, JPEG or PNG here or right click to open file chooser. Double click a file to remove it from the list or select multiple files (CTRL+Click) and press DEL.
 hintoutputfolder=Click to set output folder. If not set the input and output folder are equal, this overrides the input file if no output modifier is set.
 hintoutputmod=Modifies output file name. Inserts the string at the end of the name but before the file type.
 hintsize=Modifies output file size. If one value is 0 the value is calculated in dependency to the other value.
@@ -40,8 +40,13 @@ version=Version
 update=Check for updates (Opens Browser)
 at=at
 getlatest=Update
+# Overwrite
+overwritetitle=Possible overwrite warning
+overwritetext=If no output modifer is set and also no output directory or the output directory is the same as the input directory for some files, this files will be overwritten. Will you proceed and disable this warning?
 # Error
 err1t = Error 0001
 err1 = Either width or height must be not 0.
 err2t = Error 0002
 err2 = No input files.
+err3t = Error 0003
+err3 = Size value is set too large.

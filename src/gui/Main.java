@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -12,6 +13,8 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -32,6 +35,7 @@ import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -60,11 +64,11 @@ import com.jgoodies.forms.layout.RowSpec;
 
 import core.FileFilter;
 import core.ImageResize;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import javax.swing.JCheckBox;
 
 public class Main {
+
+	public Dimension dialogSize = new Dimension(400, 80);
+	private Dimension mainWindow = new Dimension(600, 520);
 
 	private class ConvertAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
@@ -76,68 +80,21 @@ public class Main {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (inputFilesModel.size() != 0) {
-				if (!(width.getText().equals("") && height.getText().equals(""))
-						&& !(width.getText().equals("0") && height.getText()
-								.equals("0"))) {
-					progress.setMaximum(inputFilesModel.size());
-					progress.setValue(0);
-					progress.setStringPainted(true);
-					btnConvert.setEnabled(false);
-					Thread convertThread = new Thread(new Runnable() {
-						@Override
-						public void run() {
-							int calcWidth, calcHeight;
-							try {
-								calcWidth = Integer.parseInt(width.getText());
-							} catch (NumberFormatException nfe) {
-								calcWidth = 0;
-							}
-							try {
-								calcHeight = Integer.parseInt(height.getText());
-							} catch (NumberFormatException nfe) {
-								calcHeight = 0;
-							}
-							String outputModifier = outputString.getText();
-							String outputPathEcho = outputPath.getText();
-							for (int i = 0; i < inputFilesModel.size(); i++) {
-								String outputFile = inputFilesModel
-										.elementAt(i);
-								outputFile = outputPathEcho
-										+ File.separator
-										+ outputFile
-												.substring(
-														outputFile
-																.lastIndexOf("\\") + 1,
-														outputFile
-																.lastIndexOf("."))
-										+ outputModifier
-										+ outputFile.substring(
-												outputFile.lastIndexOf("."),
-												outputFile.length());
-								ImageResize.resizeImageWithHint(
-										inputFilesModel.elementAt(i),
-										calcWidth, calcHeight, outputFile,
-										(String) fileTypes.getSelectedItem(), chckbxMetaSave.isSelected());
-								progress.setValue(i + 1);
-								progress.setString(i + 1 + " / "
-										+ inputFilesModel.size());
-							}
-							c.setHeight(height.getText());
-							c.setWidth(width.getText());
-							c.setOutputMod(outputString.getText());
-							c.setOutputDir(outputPath.getText());
-							btnConvert.setEnabled(true);
-						}
-					}, "Thread for convert");
-					convertThread.start();
-				} else {
-					JOptionPane.showMessageDialog(null, l.getErr1(),
-							l.getErr1t(), JOptionPane.ERROR_MESSAGE);
+			if (outputPath.getText().equals("") && c.getOverwrite().equals("1")) {
+				JPanel msgPanel = new JPanel();
+				JTextPane txtPane = new JTextPane();
+				txtPane.setText(l.getOverwritetext());
+				txtPane.setPreferredSize(dialogSize);
+				msgPanel.add(txtPane);
+				msgPanel.setPreferredSize(dialogSize);
+				int answer = JOptionPane.showConfirmDialog(null, msgPanel,
+						l.getOverwritetitle(), JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+				if (answer == JOptionPane.YES_OPTION) {
+					execResize();
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, l.getErr2(), l.getErr2t(),
-						JOptionPane.ERROR_MESSAGE);
+				execResize();
 			}
 		}
 	}
@@ -363,7 +320,10 @@ public class Main {
 		frmRezisy.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				Main.class.getResource("/gui/icon.png")));
 		frmRezisy.setTitle(l.getProg());
-		frmRezisy.setBounds(100, 100, 600, 520);
+		frmRezisy.setResizable(false);
+		frmRezisy.setPreferredSize(mainWindow);
+		frmRezisy.pack();
+		frmRezisy.setLocationRelativeTo(null);
 		frmRezisy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		center.setBackground(UIManager.getColor("Label.background"));
@@ -373,29 +333,19 @@ public class Main {
 				ColumnSpec.decode("150px:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("130px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
+				FormFactory.RELATED_GAP_COLSPEC, }, new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("130px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				RowSpec.decode("4dlu:grow"),}));
+				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
+				RowSpec.decode("4dlu:grow"), }));
 
 		txtpnInputFiles = new JTextPane();
 		txtpnInputFiles.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -409,6 +359,19 @@ public class Main {
 		center.add(inputFilesScroll, "4, 2, fill, fill");
 
 		inputFiles = new JList<String>();
+		inputFiles.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent key) {
+				if (key.getKeyCode() == KeyEvent.VK_DELETE) {
+					int[] toDelete = inputFiles.getSelectedIndices();
+					for (int i = toDelete.length - 1; i >= 0; i--) {
+						inputFilesModel.removeElement(inputFilesModel
+								.elementAt(toDelete[i]));
+					}
+					inputFiles.setModel(inputFilesModel);
+				}
+			}
+		});
 		inputFiles.setToolTipText(l.getHf());
 		inputFiles.addMouseListener(new MouseAdapter() {
 			@Override
@@ -529,7 +492,7 @@ public class Main {
 		outputString = new JTextField();
 		outputString.setToolTipText(l.getHom());
 		center.add(outputString, "4, 10, fill, fill");
-		
+
 		txtpnMetaSave = new JTextPane();
 		txtpnMetaSave.setText((String) null);
 		txtpnMetaSave.setOpaque(false);
@@ -538,7 +501,7 @@ public class Main {
 		txtpnMetaSave.setBackground(UIManager.getColor("Label.background"));
 		txtpnMetaSave.setText(l.getOutmeta());
 		center.add(txtpnMetaSave, "2, 12, left, top");
-		
+
 		chckbxMetaSave = new JCheckBox("");
 		chckbxMetaSave.setToolTipText(l.getHoutmeta());
 		center.add(chckbxMetaSave, "4, 12, left, center");
@@ -645,5 +608,77 @@ public class Main {
 		btnConvert.setAction(startConversion);
 		btnConvert.setText(l.getConvert());
 		bottom.add(btnConvert);
+	}
+
+	private void execResize() {
+		c.setOverwrite("0");
+
+		if (inputFilesModel.size() != 0) {
+			if (!(width.getText().equals("") && height.getText().equals(""))
+					&& !(width.getText().equals("0") && height.getText()
+							.equals("0"))) {
+				progress.setMaximum(inputFilesModel.size());
+				progress.setValue(0);
+				progress.setStringPainted(true);
+				btnConvert.setEnabled(false);
+				Thread convertThread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						int calcWidth, calcHeight;
+						try {
+							calcWidth = Integer.parseInt(width.getText());
+						} catch (NumberFormatException nfe) {
+							calcWidth = 0;
+						}
+						try {
+							calcHeight = Integer.parseInt(height.getText());
+						} catch (NumberFormatException nfe) {
+							calcHeight = 0;
+						}
+						String outputModifier = outputString.getText();
+						String outputPathEcho = outputPath.getText();
+						for (int i = 0; i < inputFilesModel.size(); i++) {
+							String outputFile = inputFilesModel.elementAt(i);
+							outputFile = outputPathEcho
+									+ File.separator
+									+ outputFile.substring(
+											outputFile.lastIndexOf("\\") + 1,
+											outputFile.lastIndexOf("."))
+									+ outputModifier
+									+ outputFile.substring(
+											outputFile.lastIndexOf("."),
+											outputFile.length());
+							try {
+								ImageResize.resizeImageWithHint(
+										inputFilesModel.elementAt(i),
+										calcWidth, calcHeight, outputFile,
+										(String) fileTypes.getSelectedItem(),
+										chckbxMetaSave.isSelected());
+							} catch (IllegalArgumentException iae) {
+								JOptionPane.showMessageDialog(null,
+										l.getErr3(), l.getErr3t(),
+										JOptionPane.ERROR_MESSAGE);
+								btnConvert.setEnabled(true);
+							}
+							progress.setValue(i + 1);
+							progress.setString(i + 1 + " / "
+									+ inputFilesModel.size());
+						}
+						c.setHeight(height.getText());
+						c.setWidth(width.getText());
+						c.setOutputMod(outputString.getText());
+						c.setOutputDir(outputPath.getText());
+						btnConvert.setEnabled(true);
+					}
+				}, "Thread for convert");
+				convertThread.start();
+			} else {
+				JOptionPane.showMessageDialog(null, l.getErr1(), l.getErr1t(),
+						JOptionPane.ERROR_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, l.getErr2(), l.getErr2t(),
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

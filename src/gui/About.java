@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
@@ -40,6 +41,7 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class About {
 
+	private Dimension aboutWindow = new Dimension(500, 285);
 	private JFrame frmResizyAbout;
 	private Config c = new Config();
 	private Language l = new Language(c.getLang());
@@ -89,7 +91,9 @@ public class About {
 		frmResizyAbout.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				About.class.getResource("/gui/icon.png")));
 		frmResizyAbout.setResizable(false);
-		frmResizyAbout.setBounds(100, 100, 500, 285);
+		frmResizyAbout.setPreferredSize(aboutWindow);
+		frmResizyAbout.pack();
+		frmResizyAbout.setLocationRelativeTo(null);
 		frmResizyAbout.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmResizyAbout.getContentPane().setLayout(new BorderLayout(0, 0));
 
