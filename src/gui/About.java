@@ -34,9 +34,9 @@ import javax.swing.border.EmptyBorder;
 import types.Config;
 import types.Language;
 
-import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
 public class About {
@@ -97,18 +97,16 @@ public class About {
 		frmResizyAbout.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmResizyAbout.getContentPane().setLayout(new BorderLayout(0, 0));
 
-		JPanel panel = new JPanel();
-		frmResizyAbout.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("35dlu:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
+		JPanel middle = new JPanel();
+		frmResizyAbout.getContentPane().add(middle, BorderLayout.CENTER);
+		middle.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("35dlu:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_COLSPEC, }, new RowSpec[] {
-				RowSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC, }, new RowSpec[] {
+				RowSpec.decode("default:grow"), FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.NARROW_LINE_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"), }));
 
 		JTextPane textPane_2 = new JTextPane();
@@ -117,7 +115,7 @@ public class About {
 		textPane_2.setFont(new Font("Arial", Font.BOLD, 12));
 		textPane_2.setEditable(false);
 		textPane_2.setBackground(SystemColor.menu);
-		panel.add(textPane_2, "2, 3, fill, top");
+		middle.add(textPane_2, "2, 3, fill, top");
 
 		JTextPane textPane_3 = new JTextPane();
 		textPane_3.setText(c.getVersion());
@@ -125,7 +123,7 @@ public class About {
 		textPane_3.setFont(new Font("Arial", Font.PLAIN, 12));
 		textPane_3.setEditable(false);
 		textPane_3.setBackground(SystemColor.menu);
-		panel.add(textPane_3, "4, 3, fill, top");
+		middle.add(textPane_3, "4, 3, fill, top");
 
 		JTextPane textPane_1 = new JTextPane();
 		textPane_1.setText(l.getUpdate());
@@ -133,7 +131,7 @@ public class About {
 		textPane_1.setFont(new Font("Arial", Font.BOLD, 12));
 		textPane_1.setEditable(false);
 		textPane_1.setBackground(SystemColor.menu);
-		panel.add(textPane_1, "2, 5, fill, top");
+		middle.add(textPane_1, "2, 5, fill, top");
 
 		JButton btnNewButton = new JButton(l.getGetlatest());
 		btnNewButton.addActionListener(new ActionListener() {
@@ -146,10 +144,10 @@ public class About {
 				}
 			}
 		});
-		panel.add(btnNewButton, "4, 5, fill, center");
+		middle.add(btnNewButton, "4, 5, fill, center");
 
-		JPanel panel_1 = new JPanel();
-		frmResizyAbout.getContentPane().add(panel_1, BorderLayout.NORTH);
+		JPanel top = new JPanel();
+		frmResizyAbout.getContentPane().add(top, BorderLayout.NORTH);
 
 		JTextPane txtpnResizy = new JTextPane();
 		txtpnResizy.setText(l.getProg());
@@ -157,21 +155,21 @@ public class About {
 		txtpnResizy.setFont(new Font("Arial", Font.BOLD, 25));
 		txtpnResizy.setEditable(false);
 		txtpnResizy.setBackground(SystemColor.menu);
-		panel_1.add(txtpnResizy);
+		top.add(txtpnResizy);
 
-		JPanel panel_2 = new JPanel();
-		frmResizyAbout.getContentPane().add(panel_2, BorderLayout.WEST);
+		JPanel image = new JPanel();
+		frmResizyAbout.getContentPane().add(image, BorderLayout.WEST);
 
 		BufferedImage aboutImg;
 		try {
 			aboutImg = ImageIO.read(About.class.getResource("/gui/icon.png"));
 			JLabel lblNewLabel = new JLabel(new ImageIcon(
 					aboutImg.getScaledInstance(150, 150, Image.SCALE_SMOOTH)));
-			panel_2.setBorder(new EmptyBorder(10, 10, 10, 10));
-			panel_2.add(lblNewLabel);
+			image.setBorder(new EmptyBorder(10, 10, 10, 10));
+			image.add(lblNewLabel);
 
-			JPanel panel_3 = new JPanel();
-			frmResizyAbout.getContentPane().add(panel_3, BorderLayout.SOUTH);
+			JPanel bottom = new JPanel();
+			frmResizyAbout.getContentPane().add(bottom, BorderLayout.SOUTH);
 
 			JTextPane txtpnResizyGoogle = new JTextPane();
 			txtpnResizyGoogle.setForeground(new Color(27, 133, 165));
@@ -191,7 +189,7 @@ public class About {
 			txtpnResizyGoogle.setFont(new Font("Arial", Font.PLAIN, 12));
 			txtpnResizyGoogle.setEditable(false);
 			txtpnResizyGoogle.setBackground(SystemColor.menu);
-			panel_3.add(txtpnResizyGoogle);
+			bottom.add(txtpnResizyGoogle);
 
 			JTextPane textPane = new JTextPane();
 			textPane.setText(l.getProg() + " " + l.getAt() + " www.Boehrsi.de");
@@ -211,7 +209,7 @@ public class About {
 			textPane.setFont(new Font("Arial", Font.PLAIN, 12));
 			textPane.setEditable(false);
 			textPane.setBackground(SystemColor.menu);
-			panel_3.add(textPane);
+			bottom.add(textPane);
 		} catch (IOException e) {
 		}
 	}

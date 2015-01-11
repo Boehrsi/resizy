@@ -57,9 +57,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import types.Config;
 import types.Language;
 
-import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
 import core.FileFilter;
@@ -68,7 +68,7 @@ import core.ImageResize;
 public class Main {
 
 	public Dimension dialogSize = new Dimension(400, 80);
-	private Dimension mainWindow = new Dimension(600, 520);
+	private Dimension mainWindow = new Dimension(700, 550);
 
 	private class ConvertAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
@@ -187,8 +187,9 @@ public class Main {
 	private JMenuItem mntmClose;
 	private JTextPane txtpnProgress;
 	private JProgressBar progress;
-	private JMenu mnNewMenu;
-	private JMenuItem mntmNewMenuItem;
+	private JMenu helpMenu;
+	private JMenuItem aboutMenuItem;
+	private JMenuItem helpMenuItem;
 	private JTextPane txtpnFileTypes;
 	private JTextPane txtpnMetaSave;
 	private JCheckBox chckbxMetaSave;
@@ -299,16 +300,24 @@ public class Main {
 		});
 		mnConfig.add(mntmReset);
 
-		mnNewMenu = new JMenu(l.getHelp());
-		menuBar.add(mnNewMenu);
+		helpMenu = new JMenu(l.getHelp());
+		menuBar.add(helpMenu);
 
-		mntmNewMenuItem = new JMenuItem(l.getAbout());
-		mntmNewMenuItem.addActionListener(new ActionListener() {
+		helpMenuItem = new JMenuItem(l.getHelp());
+		helpMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Help.main(null);
+			}
+		});
+		helpMenu.add(helpMenuItem);
+
+		aboutMenuItem = new JMenuItem(l.getAbout());
+		aboutMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				About.main(null);
 			}
 		});
-		mnNewMenu.add(mntmNewMenuItem);
+		helpMenu.add(aboutMenuItem);
 	}
 
 	/**
@@ -320,7 +329,6 @@ public class Main {
 		frmRezisy.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				Main.class.getResource("/gui/icon.png")));
 		frmRezisy.setTitle(l.getProg());
-		frmRezisy.setResizable(false);
 		frmRezisy.setPreferredSize(mainWindow);
 		frmRezisy.pack();
 		frmRezisy.setLocationRelativeTo(null);
@@ -329,23 +337,22 @@ public class Main {
 		center.setBackground(UIManager.getColor("Label.background"));
 		frmRezisy.getContentPane().add(center, BorderLayout.CENTER);
 		center.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("150px:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("200px"),
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_COLSPEC, }, new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("130px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC, RowSpec.decode("20px"),
-				RowSpec.decode("4dlu:grow"), }));
+				FormSpecs.RELATED_GAP_COLSPEC, }, new RowSpec[] {
+				FormSpecs.RELATED_GAP_ROWSPEC, RowSpec.decode("140px:grow"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+				FormSpecs.RELATED_GAP_ROWSPEC, }));
 
 		txtpnInputFiles = new JTextPane();
 		txtpnInputFiles.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -518,13 +525,13 @@ public class Main {
 		center.add(SizePanel, "4, 16, fill, top");
 		SizePanel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"), }, new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC, }));
+				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.LINE_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.LINE_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC, }));
 
 		txtpnPresetSizes = new JTextPane();
 		txtpnPresetSizes.setBackground(UIManager.getColor("Label.background"));
