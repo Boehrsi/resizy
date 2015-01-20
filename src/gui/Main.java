@@ -80,7 +80,7 @@ public class Main {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (outputPath.getText().equals("") && c.getOverwrite().equals("1")) {
+			if ((outputPath.getText().equals("") || outputString.getText().equals("")) && c.getOverwrite().equals("1")) {
 				JPanel msgPanel = new JPanel();
 				JTextPane txtPane = new JTextPane();
 				txtPane.setText(l.getOverwritetext());
