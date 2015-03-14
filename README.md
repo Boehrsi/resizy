@@ -5,7 +5,7 @@ Resizy is a small image resize tool featuring the following functions:
   * Edit multiple files and also rename these
   * Set width or height and the other value is calculated automaticly
   * Save often used width and height settings als presettings
-  * Use german or english language or easily add your own language by just adding a file (https://code.google.com/p/resizy/wiki/Localisation)
+  * Use german or english language or easily add your own language by just adding a file (See instructions below)
 
 # Downloads #
 https://drive.google.com/folderview?id=0B6fLujPPaJuuTGJvMEQ3SnNOWDQ&usp=sharing
@@ -15,6 +15,6 @@ https://drive.google.com/folderview?id=0B6fLujPPaJuuTGJvMEQ3SnNOWDQ&usp=sharing
 
 # Localization #
 
-  * To add your own language open the _lang_ folder https://code.google.com/p/resizy/source/browse/#git%2Flang and create a file named like the language you want to add. The file name will be displayed inside the program.
+  * To add your own language open the _lang_ folder https://github.com/Boehrsi/resizy/tree/master/lang and create a file named like the language you want to add. The file name will be displayed inside the program.
   * Open one of the given language files and copy the content to the new file. Then translate all entries on the right side of the equal sign and just save the file.
   * The file should be formated as ISO-8859-1 because of the pretending of the Java Properties Object.
