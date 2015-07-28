@@ -85,6 +85,7 @@ public class Main {
 					.equals("")) && c.getOverwrite().equals("1")) {
 				JPanel msgPanel = new JPanel();
 				JTextPane txtPane = new JTextPane();
+				txtPane.setEditable(false);
 				txtPane.setText(l.getOverwritetext());
 				txtPane.setPreferredSize(dialogSize);
 				msgPanel.add(txtPane);
