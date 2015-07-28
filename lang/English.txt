@@ -9,18 +9,22 @@ reset=Reset
 help=Help
 about=About
 # GUI
-inf=Input Files
-outf=Output Directory
-outm=Output Modifier
+inf=Input files
+outf=Target directory
+outm=Name modifier
 outmeta=Copy last modified date
-filetype=Output File Type
+filetype=File type
 size=Size
-pre=Preset Sizes
+pre=Preset sizes
 w=Width
 h=Height
-savepreset=Save as Preset
+savepreset=Save as preset
 convert=Convert
 progress=Progress
+inputLabel=Input
+inputButton=Clear input list
+outputLabel=Output
+outputButton=Reset output settings
 # Restart
 restart=Please restart the application for changes to take effect.
 restarttitel=Information
@@ -35,6 +39,8 @@ hintpresets=Select an entry to set width and height. Press DEL to delete selecte
 hintpro=Shows conversion progress.
 hintfiletypes=Set output file type for all files. Leave empty to not change the file types.
 hintoutmeta=If enabled the last modified date of the source file will be copied over to the resized destination file.
+hinputButton=Removes all entries from the input list.
+houtputButton=Resets all output settings to default.
 # About
 version=Version
 update=Check for updates (Opens Browser)

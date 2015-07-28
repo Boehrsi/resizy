@@ -21,7 +21,7 @@ public class Language {
 			restarttitel, progress, hf, hof, hom, hs, hss, hp, s, hpro, help,
 			houtmeta, about, version, update, prog, at, getlatest, filetype,
 			hintfiletypes, err1, err1t, err2, err2t, err3, err3t,
-			overwritetitle, overwritetext;
+			overwritetitle, overwritetext, inputLabel, inputButton, hinputButton, outputLabel, outputButton, houtputButton;
 
 	public String getErr3() {
 		return err3;
@@ -89,10 +89,40 @@ public class Language {
 			err3t = configFile.getProperty("err3t");
 			overwritetitle = configFile.getProperty("overwritetitle");
 			overwritetext = configFile.getProperty("overwritetext");
+			inputLabel = configFile.getProperty("inputLabel");
+			inputButton = configFile.getProperty("inputButton");
+			outputLabel = configFile.getProperty("outputLabel");
+			outputButton = configFile.getProperty("outputButton");
+			hinputButton = configFile.getProperty("hinputButton");
+			houtputButton = configFile.getProperty("houtputButton");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	public String getHinputButton() {
+		return hinputButton;
+	}
+
+	public String getHoutputButton() {
+		return houtputButton;
+	}
+
+	public String getInputLabel() {
+		return inputLabel;
+	}
+
+	public String getInputButton() {
+		return inputButton;
+	}
+
+	public String getOutputLabel() {
+		return outputLabel;
+	}
+
+	public String getOutputButton() {
+		return outputButton;
 	}
 
 	public String getOverwritetitle() {

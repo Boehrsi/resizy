@@ -10,10 +10,10 @@ help=Hilfe
 about=Über
 # GUI
 inf=Eingabedateien
-outf=Ausgabeordner
-outm=Ausgabemodifikator
+outf=Zielordner
+outm=Dateinamen-Modifikator
 outmeta=Änderungsdatum kopieren
-filetype=Ausgabedateityp
+filetype=Dateityp
 size=Größe
 pre=Vorgegebene Größen
 w=Breite
@@ -21,6 +21,10 @@ h=Höhe
 savepreset=Als Vorgabe speichern
 convert=Umwandeln
 progress=Fortschritt
+inputLabel=Eingabe
+inputButton=Eingabeliste leeren
+outputLabel=Ausgabe
+outputButton=Ausgabeeinstellungen zurücksetzen
 # Restart
 restart=Bitte die Anwendung neu starten, damit die Änderungen wirksam werden.
 restarttitel=Information
@@ -35,6 +39,8 @@ hintpresets=Einen Eintrag wählen um Breite und Höhe zu setzen. ENTF drücken um d
 hintpro=Zeigt den Umwandlungsfortschritt.
 hintfiletypes=Ausgabedateityp für alle zu konvertierenden Dateien wählen oder leer lassen, in diesem Fall werden die jeweiligen Dateitypen beibehalten.
 hintoutmeta=Aktivieren um das Datum der letzten Änderung der Quelldatei auf die verkleinerte Zieldatei zu übertragen.
+hinputButton=Entfernt alle Einträge aus der Eingabedateienliste.
+houtputButton=Setzt alle Ausgabeeinstellungen zurück.
 # About
 version=Version
 update=Auf Updates prüfen (Öffnet den Browser)
@@ -42,7 +48,7 @@ at=auf
 getlatest=Aktualisieren
 # Overwrite
 overwritetitle=Warnung Dateien könnten überschrieben werden
-overwritetext=Wenn kein Ausgabemodifikator gesetzt ist und zusätzlich kein Ausgarbeordner oder aber der Ausgeabeordner identisch mit dem Eingabeordnerfür einige Dateien ist, so werden diese überschrieben. Möchten sie dies tun und diese Warnung deaktivieren?
+overwritetext=Wenn kein Ausgabemodifikator gesetzt ist und zusätzlich kein Ausgarbeordner, bzw. der Ausgeabeordner identisch mit dem Eingabeordnerfür einige Dateien ist, so werden diese überschrieben. Möchten sie fortfahren und diese Warnung deaktivieren?
 # Error
 err1t = Fehler 0001
 err1 = Einer der Werte Höhe / Breite muss ungleich 0 sein.
