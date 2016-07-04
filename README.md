@@ -4,7 +4,7 @@ Resizy is a small image resize tool featuring the following functions:
   * Drag and Drop support for loading files
   * Edit multiple files and also rename these
   * Set width or height and the other value is calculated automaticly
-  * Save often used width and height settings als presettings
+  * Save often used width and height settings as presetting
   * Use german or english language or easily add your own language by just adding a file (See instructions below)
 
 # Downloads #
