@@ -52,7 +52,6 @@ import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import types.Config;
 import types.Language;
@@ -68,30 +67,28 @@ import core.ImageResize;
 
 public class Main {
 
-	public Dimension dialogSize = new Dimension(400, 80);
-	private Dimension mainWindow = new Dimension(700, 550);
-
 	private class ConvertAction extends AbstractAction {
+		
 		private static final long serialVersionUID = 1L;
 
 		public ConvertAction() {
 			putValue(NAME, "Convert");
-			putValue(SHORT_DESCRIPTION, l.getS());
+			putValue(SHORT_DESCRIPTION, lang.getS());
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ((outputPath.getText().equals("") || outputString.getText()
-					.equals("")) && c.getOverwrite().equals("1")) {
+			if ((outputPathTextfield.getText().equals("") || outputTextfield.getText()
+					.equals("")) && config.getOverwrite().equals("1")) {
 				JPanel msgPanel = new JPanel();
-				JTextPane txtPane = new JTextPane();
-				txtPane.setEditable(false);
-				txtPane.setText(l.getOverwritetext());
-				txtPane.setPreferredSize(dialogSize);
-				msgPanel.add(txtPane);
-				msgPanel.setPreferredSize(dialogSize);
+				JTextPane textpane = new JTextPane();
+				textpane.setEditable(false);
+				textpane.setText(lang.getOverwritetext());
+				textpane.setPreferredSize(dialogDimension);
+				msgPanel.add(textpane);
+				msgPanel.setPreferredSize(dialogDimension);
 				int answer = JOptionPane.showConfirmDialog(null, msgPanel,
-						l.getOverwritetitle(), JOptionPane.YES_NO_OPTION,
+						lang.getOverwritetitle(), JOptionPane.YES_NO_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 				if (answer == JOptionPane.YES_OPTION) {
 					execResize();
@@ -107,22 +104,75 @@ public class Main {
 
 		public SaveAction() {
 			putValue(NAME, "Save Preset");
-			putValue(SHORT_DESCRIPTION, l.getHss());
+			putValue(SHORT_DESCRIPTION, lang.getHss());
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String tempInsert = width.getText() + "x" + height.getText();
-			if (presetSizesInput.getIndexOf(tempInsert) == -1) {
-				presetSizesInput.addElement(tempInsert);
+			String tempInsert = widthTextfield.getText() + "x" + heightTextfield.getText();
+			if (presetSizesInputModel.getIndexOf(tempInsert) == -1) {
+				presetSizesInputModel.addElement(tempInsert);
 				String newPreset = "";
-				for (int i = 0; i < presetSizesInput.getSize(); i++) {
-					newPreset += presetSizesInput.getElementAt(i) + ",";
+				for (int i = 0; i < presetSizesInputModel.getSize(); i++) {
+					newPreset += presetSizesInputModel.getElementAt(i) + ",";
 				}
-				c.setPreset(newPreset);
+				config.setPreset(newPreset);
 			}
 		}
 	}
+	
+	private Config config = new Config();
+	private Language lang = new Language(config.getLang());
+	
+	private final Action startConversion = new ConvertAction();
+	private final Action savePreset = new SaveAction();
+	
+	private Dimension dialogDimension = new Dimension(400, 80);
+	private Dimension mainWindowDimension = new Dimension(700, 550);
+	private JFrame mainFrame;
+	private JTextField outputPathTextfield;
+	private final JPanel topPanel = new JPanel();
+	private JPanel centerPanel = new JPanel();
+	private JPanel bottomPanel = new JPanel();
+	private JTextField widthTextfield;;
+	private JTextField heightTextfield;
+	private DefaultComboBoxModel<String> presetSizesInputModel = new DefaultComboBoxModel<String>();
+	private DefaultComboBoxModel<String> presetTypesModel = new DefaultComboBoxModel<String>();
+	private JComboBox<String> presetSizesCombobox;
+	private JComboBox<String> fileTypesModel;
+	private JTextField outputTextfield;
+	private JTextPane inputFilesTextpane;
+	private JTextPane outputFilesTextpane;
+	private JPanel SizePanel;
+	private JTextPane heightTextpane;
+	private JTextPane widthTextpane;
+	private JTextPane presetSizesTextpane;
+	private JTextPane outputStringTextpane;
+	private JList<String> inputFileList;
+	private DefaultListModel<String> inputFileModel;
+	private JScrollPane inputFileScrollpane;
+	private JTextPane sizeTextpane;
+	private JTextPane progressTextpane;
+	private JProgressBar progressbar;
+	private JMenuBar menubar;
+	private JMenu fileMenu;
+	private JButton savePresetButton;
+	private JMenu languageMenu;
+	private JMenu configMenu;
+	private JMenuItem openMenuitem;
+	private JMenuItem resetMenuitem;
+	private JMenuItem closeMenuitem;
+	private JMenu helpMenu;
+	private JMenuItem aboutMenuitem;
+	private JMenuItem helpMenuitem;
+	private JTextPane fileTypesTextpane;
+	private JTextPane metaSaveTextpane;
+	private JCheckBox chckbxMetaSave;
+	private JTextPane outputLabelTextpane;
+	private JTextPane inputLabelTextpane;
+	private JButton outputButton;
+	private JButton inputButton;
+	private JButton convertButton = new JButton("");
 
 	/**
 	 * Launch the application.
@@ -131,77 +181,21 @@ public class Main {
 		try {
 			ToolTipManager.sharedInstance().setDismissDelay(10000);
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					Main window = new Main();
-					window.frmRezisy.setVisible(true);
+					window.mainFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-
 	}
-
-	private JFrame frmRezisy;
-	private JTextField outputPath;
-	private final JPanel top = new JPanel();
-	private JPanel center = new JPanel();
-	private JPanel bottom = new JPanel();
-	private JTextField width;;
-	private JTextField height;
-	private DefaultComboBoxModel<String> presetSizesInput = new DefaultComboBoxModel<String>();
-	private DefaultComboBoxModel<String> presetTypes = new DefaultComboBoxModel<String>();
-	private JComboBox<String> presetSizes;
-	private JComboBox<String> fileTypes;
-	private JTextField outputString;
-	private JTextPane txtpnInputFiles;
-	private JTextPane txtpnOutputFiles;
-	private JPanel SizePanel;
-	private JTextPane txtpnHeight;
-	private JTextPane txtpnWidth;
-	private JTextPane txtpnPresetSizes;
-	private JTextPane txtpnOutputString;
-	private JList<String> inputFiles;
-	private DefaultListModel<String> inputFilesModel;
-	private JScrollPane inputFilesScroll;
-	private JTextPane txtpnSize;
-	private Config c = new Config();
-	private Language l = new Language(c.getLang());
-	private final Action startConversion = new ConvertAction();
-	private JMenuBar menuBar;
-	private JMenu mnFile;
-	private JButton btnPresetsave;
-	private final Action savePreset = new SaveAction();
-	private JMenu mnLanguage;
-	private JMenu mnConfig;
-	private JButton btnConvert = new JButton("");
-	private JMenuItem mntmOpen;
-	private JMenuItem mntmReset;
-	private JMenuItem mntmClose;
-	private JTextPane txtpnProgress;
-	private JProgressBar progress;
-	private JMenu helpMenu;
-	private JMenuItem aboutMenuItem;
-	private JMenuItem helpMenuItem;
-	private JTextPane txtpnFileTypes;
-	private JTextPane txtpnMetaSave;
-	private JCheckBox chckbxMetaSave;
-	private JTextPane outputLabel;
-	private JTextPane inputLabel;
-	private JButton outputButton;
-	private JButton inputButton;
 
 	/**
 	 * Create the application.
@@ -209,70 +203,70 @@ public class Main {
 	public Main() {
 		System.setProperty("file.encoding", "UTF-8");
 		initialize();
-		width.setText(c.getWidth());
-		height.setText(c.getHeight());
-		outputString.setText(c.getOutputMod());
-		String[] tempSize = c.getPreset().split(",");
+		widthTextfield.setText(config.getWidth());
+		heightTextfield.setText(config.getHeight());
+		outputTextfield.setText(config.getOutputMod());
+		String[] tempSize = config.getPreset().split(",");
 		for (int i = 0; i < tempSize.length; i++) {
-			presetSizesInput.addElement(tempSize[i]);
+			presetSizesInputModel.addElement(tempSize[i]);
 		}
-		presetSizes.setModel(presetSizesInput);
+		presetSizesCombobox.setModel(presetSizesInputModel);
 
-		String[] tempTypes = c.getTypes().split(",");
+		String[] tempTypes = config.getTypes().split(",");
 		for (int i = 0; i < tempTypes.length; i++) {
-			presetTypes.addElement(tempTypes[i]);
+			presetTypesModel.addElement(tempTypes[i]);
 		}
-		fileTypes.setModel(presetTypes);
+		fileTypesModel.setModel(presetTypesModel);
 
-		btnPresetsave = new JButton("");
-		btnPresetsave.addActionListener(new ActionListener() {
+		savePresetButton = new JButton("");
+		savePresetButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnPresetsave.setAction(savePreset);
-		btnPresetsave.setText(l.getSavepreset());
-		SizePanel.add(btnPresetsave, "3, 5, fill, fill");
+		savePresetButton.setAction(savePreset);
+		savePresetButton.setText(lang.getSavepreset());
+		SizePanel.add(savePresetButton, "3, 5, fill, fill");
 
-		txtpnProgress = new JTextPane();
-		txtpnProgress.setText(l.getProgress());
-		txtpnProgress.setOpaque(false);
-		txtpnProgress.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnProgress.setEditable(false);
-		txtpnProgress.setBackground(SystemColor.menu);
-		center.add(txtpnProgress, "2, 22, fill, fill");
+		progressTextpane = new JTextPane();
+		progressTextpane.setText(lang.getProgress());
+		progressTextpane.setOpaque(false);
+		progressTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		progressTextpane.setEditable(false);
+		progressTextpane.setBackground(SystemColor.menu);
+		centerPanel.add(progressTextpane, "2, 22, fill, fill");
 
-		progress = new JProgressBar();
-		progress.setToolTipText(l.getHpro());
-		center.add(progress, "4, 22");
+		progressbar = new JProgressBar();
+		progressbar.setToolTipText(lang.getHpro());
+		centerPanel.add(progressbar, "4, 22");
 
-		menuBar = new JMenuBar();
-		frmRezisy.setJMenuBar(menuBar);
+		menubar = new JMenuBar();
+		mainFrame.setJMenuBar(menubar);
 
-		mnFile = new JMenu(l.getFile());
-		menuBar.add(mnFile);
+		fileMenu = new JMenu(lang.getFile());
+		menubar.add(fileMenu);
 
-		mntmClose = new JMenuItem(l.getClose());
-		mntmClose.addActionListener(new ActionListener() {
+		closeMenuitem = new JMenuItem(lang.getClose());
+		closeMenuitem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		mnFile.add(mntmClose);
+		fileMenu.add(closeMenuitem);
 
-		mnLanguage = new JMenu(l.getLang());
-		menuBar.add(mnLanguage);
+		languageMenu = new JMenu(lang.getLang());
+		menubar.add(languageMenu);
 
-		ArrayList<JMenuItem> langs = l.langSelectable(c, frmRezisy);
+		ArrayList<JMenuItem> langs = lang.langSelectable(config, mainFrame);
 		for (int i = 0; i < langs.size(); i++) {
-			mnLanguage.add(langs.get(i));
+			languageMenu.add(langs.get(i));
 		}
 
-		mnConfig = new JMenu(l.getCfg());
-		menuBar.add(mnConfig);
+		configMenu = new JMenu(lang.getCfg());
+		menubar.add(configMenu);
 
-		mntmOpen = new JMenuItem(l.getOpen());
-		mntmOpen.addActionListener(new ActionListener() {
+		openMenuitem = new JMenuItem(lang.getOpen());
+		openMenuitem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -283,73 +277,77 @@ public class Main {
 				}
 			}
 		});
-		mnConfig.add(mntmOpen);
+		configMenu.add(openMenuitem);
 
-		mntmReset = new JMenuItem(l.getReset());
-		mntmReset.addActionListener(new ActionListener() {
+		resetMenuitem = new JMenuItem(lang.getReset());
+		resetMenuitem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FileChannel inChannel = null;
 				FileChannel outChannel = null;
+				FileInputStream inStream = null;
+				FileOutputStream outStream = null;
 				try {
-					inChannel = new FileInputStream(new File(
-							"cfg/config.ini.backup")).getChannel();
-					outChannel = new FileOutputStream(
-							new File("cfg/config.ini")).getChannel();
+					inStream = new FileInputStream(new File("cfg/config.ini.backup"));
+					outStream = new FileOutputStream(new File("cfg/config.ini"));
+					inChannel = inStream.getChannel();
+					outChannel = outStream.getChannel();
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
 
 				try {
 					inChannel.transferTo(0, inChannel.size(), outChannel);
+					inStream.close();
+					outStream.close();
 					inChannel.close();
 					outChannel.close();
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(frmRezisy, l.getRestart(),
-						l.getRestarttitel(), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(mainFrame, lang.getRestart(),
+						lang.getRestarttitel(), JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		mnConfig.add(mntmReset);
+		configMenu.add(resetMenuitem);
 
-		helpMenu = new JMenu(l.getHelp());
-		menuBar.add(helpMenu);
+		helpMenu = new JMenu(lang.getHelp());
+		menubar.add(helpMenu);
 
-		helpMenuItem = new JMenuItem(l.getProg() + " - " + l.getHelp());
-		helpMenuItem.addActionListener(new ActionListener() {
+		helpMenuitem = new JMenuItem(lang.getProg() + " - " + lang.getHelp());
+		helpMenuitem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Help.main(null);
 			}
 		});
-		helpMenu.add(helpMenuItem);
+		helpMenu.add(helpMenuitem);
 
-		aboutMenuItem = new JMenuItem(l.getAbout());
-		aboutMenuItem.addActionListener(new ActionListener() {
+		aboutMenuitem = new JMenuItem(lang.getAbout());
+		aboutMenuitem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				About.main(null);
 			}
 		});
-		helpMenu.add(aboutMenuItem);
+		helpMenu.add(aboutMenuitem);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		inputFilesModel = new DefaultListModel<String>();
-		frmRezisy = new JFrame();
-		frmRezisy.setIconImage(Toolkit.getDefaultToolkit().getImage(
+		inputFileModel = new DefaultListModel<String>();
+		mainFrame = new JFrame();
+		mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				Main.class.getResource("/gui/icon.png")));
-		frmRezisy.setTitle(l.getProg() + " - v" + c.getVersion());
-		frmRezisy.setPreferredSize(mainWindow);
-		frmRezisy.pack();
-		frmRezisy.setLocationRelativeTo(null);
-		frmRezisy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setTitle(lang.getProg() + " - v" + config.getVersion());
+		mainFrame.setPreferredSize(mainWindowDimension);
+		mainFrame.pack();
+		mainFrame.setLocationRelativeTo(null);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		center.setBackground(UIManager.getColor("Label.background"));
-		frmRezisy.getContentPane().add(center, BorderLayout.CENTER);
-		center.setLayout(new FormLayout(new ColumnSpec[] {
+		centerPanel.setBackground(UIManager.getColor("Label.background"));
+		mainFrame.getContentPane().add(centerPanel, BorderLayout.CENTER);
+		centerPanel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("200px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
@@ -370,53 +368,53 @@ public class Main {
 				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
 				FormSpecs.RELATED_GAP_ROWSPEC, }));
 
-		inputLabel = new JTextPane();
-		inputLabel.setForeground(UIManager.getColor("textHighlight"));
-		inputLabel.setEditable(false);
-		inputLabel.setText(l.getInputLabel());
-		inputLabel.setOpaque(false);
-		inputLabel.setFont(new Font("Arial", Font.BOLD, 14));
-		inputLabel.setBackground(SystemColor.menu);
-		center.add(inputLabel, "2, 2, center, top");
+		inputLabelTextpane = new JTextPane();
+		inputLabelTextpane.setForeground(UIManager.getColor("textHighlight"));
+		inputLabelTextpane.setEditable(false);
+		inputLabelTextpane.setText(lang.getInputLabel());
+		inputLabelTextpane.setOpaque(false);
+		inputLabelTextpane.setFont(new Font("Arial", Font.BOLD, 14));
+		inputLabelTextpane.setBackground(SystemColor.menu);
+		centerPanel.add(inputLabelTextpane, "2, 2, center, top");
 
-		inputButton = new JButton(l.getInputButton());
-		inputButton.setToolTipText(l.getHinputButton());
+		inputButton = new JButton(lang.getInputButton());
+		inputButton.setToolTipText(lang.getHinputButton());
 		inputButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				inputFilesModel.removeAllElements();
-				inputFiles.setModel(inputFilesModel);
-				DynamicGUI.alterPane(txtpnInputFiles, l.getInf() + " (" + inputFilesModel.getSize() + ")");
+				inputFileModel.removeAllElements();
+				inputFileList.setModel(inputFileModel);
+				DynamicGUI.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
 			}
 		});
-		center.add(inputButton, "4, 2, center, center");
+		centerPanel.add(inputButton, "4, 2, center, center");
 
-		txtpnInputFiles = new JTextPane();
-		txtpnInputFiles.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnInputFiles.setOpaque(false);
-		center.add(txtpnInputFiles, "2, 4, left, center");
-		txtpnInputFiles.setBackground(UIManager.getColor("Label.background"));
-		txtpnInputFiles.setEditable(false);
-		DynamicGUI.alterPane(txtpnInputFiles, l.getInf() + " (" + inputFilesModel.getSize() + ")");
+		inputFilesTextpane = new JTextPane();
+		inputFilesTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		inputFilesTextpane.setOpaque(false);
+		centerPanel.add(inputFilesTextpane, "2, 4, left, center");
+		inputFilesTextpane.setBackground(UIManager.getColor("Label.background"));
+		inputFilesTextpane.setEditable(false);
+		DynamicGUI.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
 
-		inputFilesScroll = new JScrollPane();
-		center.add(inputFilesScroll, "4, 4, fill, fill");
+		inputFileScrollpane = new JScrollPane();
+		centerPanel.add(inputFileScrollpane, "4, 4, fill, fill");
 
-		inputFiles = new JList<String>();
-		inputFiles.addKeyListener(new KeyAdapter() {
+		inputFileList = new JList<String>();
+		inputFileList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent key) {
 				if (key.getKeyCode() == KeyEvent.VK_DELETE) {
-					int[] toDelete = inputFiles.getSelectedIndices();
+					int[] toDelete = inputFileList.getSelectedIndices();
 					for (int i = toDelete.length - 1; i >= 0; i--) {
-						inputFilesModel.removeElement(inputFilesModel
+						inputFileModel.removeElement(inputFileModel
 								.elementAt(toDelete[i]));
 					}
-					inputFiles.setModel(inputFilesModel);
+					inputFileList.setModel(inputFileModel);
 				}
 			}
 		});
-		inputFiles.setToolTipText(l.getHf());
-		inputFiles.addMouseListener(new MouseAdapter() {
+		inputFileList.setToolTipText(lang.getHf());
+		inputFileList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evt) {
 
@@ -425,12 +423,12 @@ public class Main {
 					chooser.setMultiSelectionEnabled(true);
 					chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-					int status = chooser.showDialog(frmRezisy, null);
+					int status = chooser.showDialog(mainFrame, null);
 
 					if (status == JFileChooser.APPROVE_OPTION) {
 						File[] selectedFiles = chooser.getSelectedFiles();
 						FileFilter rightFilter = new FileFilter(
-								inputFilesModel, inputFiles);
+								inputFileModel, inputFileList);
 						for (int i = 0; i < selectedFiles.length; i++) {
 							rightFilter.filterImage(selectedFiles[i]);
 						}
@@ -443,18 +441,18 @@ public class Main {
 							JList<String> list = (JList<String>) evt
 									.getSource();
 							int index = list.locationToIndex(evt.getPoint());
-							inputFilesModel.removeElement(inputFilesModel
+							inputFileModel.removeElement(inputFileModel
 									.elementAt(index));
-							inputFiles.setModel(inputFilesModel);
+							inputFileList.setModel(inputFileModel);
 						}
 					} catch (ArrayIndexOutOfBoundsException aioobe) {
 
 					}
 				}
-				DynamicGUI.alterPane(txtpnInputFiles, l.getInf() + " (" + inputFilesModel.getSize() + ")");
+				DynamicGUI.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
 			}
 		});
-		inputFiles.setDropTarget(new DropTarget() {
+		inputFileList.setDropTarget(new DropTarget() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -465,37 +463,37 @@ public class Main {
 					List<File> droppedFiles = (List<File>) evt
 							.getTransferable().getTransferData(
 									DataFlavor.javaFileListFlavor);
-					FileFilter dropFilter = new FileFilter(inputFilesModel,
-							inputFiles);
+					FileFilter dropFilter = new FileFilter(inputFileModel,
+							inputFileList);
 					for (File file : droppedFiles) {
 						dropFilter.filterImage(file);
 					}
-					DynamicGUI.alterPane(txtpnInputFiles, l.getInf() + " (" + inputFilesModel.getSize() + ")");
+					DynamicGUI.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		});
-		inputFilesScroll.setViewportView(inputFiles);
+		inputFileScrollpane.setViewportView(inputFileList);
 
-		outputPath = new JTextField();
-		outputPath.setToolTipText(l.getHof());
-		outputPath.addMouseListener(new MouseAdapter() {
+		outputPathTextfield = new JTextField();
+		outputPathTextfield.setToolTipText(lang.getHof());
+		outputPathTextfield.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				JFileChooser chooser = new JFileChooser();
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-				int status = chooser.showDialog(frmRezisy, null);
+				int status = chooser.showDialog(mainFrame, null);
 
 				if (status == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
 					try {
-						outputPath.setText(selectedFile.getParent().trim()
+						outputPathTextfield.setText(selectedFile.getParent().trim()
 								+ File.separator + selectedFile.getName());
 					} catch (NullPointerException npe) {
-						outputPath.setText(selectedFile.getName());
+						outputPathTextfield.setText(selectedFile.getName());
 					}
 				} else if (status == JFileChooser.CANCEL_OPTION) {
 
@@ -503,86 +501,86 @@ public class Main {
 			}
 		});
 
-		outputLabel = new JTextPane();
-		outputLabel.setForeground(UIManager.getColor("textHighlight"));
-		outputLabel.setText(l.getOutputLabel());
-		outputLabel.setOpaque(false);
-		outputLabel.setFont(new Font("Arial", Font.BOLD, 14));
-		outputLabel.setEditable(false);
-		outputLabel.setBackground(SystemColor.menu);
-		center.add(outputLabel, "2, 8, center, top");
+		outputLabelTextpane = new JTextPane();
+		outputLabelTextpane.setForeground(UIManager.getColor("textHighlight"));
+		outputLabelTextpane.setText(lang.getOutputLabel());
+		outputLabelTextpane.setOpaque(false);
+		outputLabelTextpane.setFont(new Font("Arial", Font.BOLD, 14));
+		outputLabelTextpane.setEditable(false);
+		outputLabelTextpane.setBackground(SystemColor.menu);
+		centerPanel.add(outputLabelTextpane, "2, 8, center, top");
 
-		outputButton = new JButton(l.getOutputButton());
-		outputButton.setToolTipText(l.getHoutputButton());
+		outputButton = new JButton(lang.getOutputButton());
+		outputButton.setToolTipText(lang.getHoutputButton());
 		outputButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				outputPath.setText("");
-				fileTypes.setSelectedIndex(0);
-				outputString.setText("");
+				outputPathTextfield.setText("");
+				fileTypesModel.setSelectedIndex(0);
+				outputTextfield.setText("");
 				chckbxMetaSave.setSelected(false);
-				presetSizes.setSelectedIndex(0);
+				presetSizesCombobox.setSelectedIndex(0);
 			}
 		});
-		center.add(outputButton, "4, 8, center, center");
+		centerPanel.add(outputButton, "4, 8, center, center");
 
-		txtpnOutputFiles = new JTextPane();
-		txtpnOutputFiles.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnOutputFiles.setOpaque(false);
-		txtpnOutputFiles.setOpaque(false);
-		txtpnOutputFiles.setBackground(UIManager.getColor("Label.background"));
-		txtpnOutputFiles.setEditable(false);
-		txtpnOutputFiles.setText(l.getOutf());
-		center.add(txtpnOutputFiles, "2, 10, left, top");
-		center.add(outputPath, "4, 10, fill, fill");
+		outputFilesTextpane = new JTextPane();
+		outputFilesTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		outputFilesTextpane.setOpaque(false);
+		outputFilesTextpane.setOpaque(false);
+		outputFilesTextpane.setBackground(UIManager.getColor("Label.background"));
+		outputFilesTextpane.setEditable(false);
+		outputFilesTextpane.setText(lang.getOutf());
+		centerPanel.add(outputFilesTextpane, "2, 10, left, top");
+		centerPanel.add(outputPathTextfield, "4, 10, fill, fill");
 
-		txtpnFileTypes = new JTextPane();
-		txtpnFileTypes.setText(l.getFiletype());
-		txtpnFileTypes.setOpaque(false);
-		txtpnFileTypes.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnFileTypes.setEditable(false);
-		txtpnFileTypes.setBackground(UIManager.getColor("Label.background"));
-		center.add(txtpnFileTypes, "2, 12, left, top");
+		fileTypesTextpane = new JTextPane();
+		fileTypesTextpane.setText(lang.getFiletype());
+		fileTypesTextpane.setOpaque(false);
+		fileTypesTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		fileTypesTextpane.setEditable(false);
+		fileTypesTextpane.setBackground(UIManager.getColor("Label.background"));
+		centerPanel.add(fileTypesTextpane, "2, 12, left, top");
 
-		fileTypes = new JComboBox<String>();
+		fileTypesModel = new JComboBox<String>();
 
-		fileTypes.setToolTipText(l.getHintfiletypes());
-		center.add(fileTypes, "4, 12, fill, center");
+		fileTypesModel.setToolTipText(lang.getHintfiletypes());
+		centerPanel.add(fileTypesModel, "4, 12, fill, center");
 
-		txtpnOutputString = new JTextPane();
-		txtpnOutputString.setOpaque(false);
-		txtpnOutputString.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnOutputString.setBackground(UIManager.getColor("Label.background"));
-		txtpnOutputString.setEditable(false);
-		txtpnOutputString.setText(l.getOutm());
-		center.add(txtpnOutputString, "2, 14, left, top");
+		outputStringTextpane = new JTextPane();
+		outputStringTextpane.setOpaque(false);
+		outputStringTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		outputStringTextpane.setBackground(UIManager.getColor("Label.background"));
+		outputStringTextpane.setEditable(false);
+		outputStringTextpane.setText(lang.getOutm());
+		centerPanel.add(outputStringTextpane, "2, 14, left, top");
 
-		outputString = new JTextField();
-		outputString.setToolTipText(l.getHom());
-		center.add(outputString, "4, 14, fill, fill");
+		outputTextfield = new JTextField();
+		outputTextfield.setToolTipText(lang.getHom());
+		centerPanel.add(outputTextfield, "4, 14, fill, fill");
 
-		txtpnMetaSave = new JTextPane();
-		txtpnMetaSave.setText((String) null);
-		txtpnMetaSave.setOpaque(false);
-		txtpnMetaSave.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnMetaSave.setEditable(false);
-		txtpnMetaSave.setBackground(UIManager.getColor("Label.background"));
-		txtpnMetaSave.setText(l.getOutmeta());
-		center.add(txtpnMetaSave, "2, 16, left, top");
+		metaSaveTextpane = new JTextPane();
+		metaSaveTextpane.setText((String) null);
+		metaSaveTextpane.setOpaque(false);
+		metaSaveTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		metaSaveTextpane.setEditable(false);
+		metaSaveTextpane.setBackground(UIManager.getColor("Label.background"));
+		metaSaveTextpane.setText(lang.getOutmeta());
+		centerPanel.add(metaSaveTextpane, "2, 16, left, top");
 
 		chckbxMetaSave = new JCheckBox("");
-		chckbxMetaSave.setToolTipText(l.getHoutmeta());
-		center.add(chckbxMetaSave, "4, 16, left, center");
+		chckbxMetaSave.setToolTipText(lang.getHoutmeta());
+		centerPanel.add(chckbxMetaSave, "4, 16, left, center");
 
-		txtpnSize = new JTextPane();
-		txtpnSize.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnSize.setOpaque(false);
-		txtpnSize.setBackground(UIManager.getColor("Label.background"));
-		txtpnSize.setText(l.getSize());
-		txtpnSize.setEditable(false);
-		center.add(txtpnSize, "2, 18, left, center");
+		sizeTextpane = new JTextPane();
+		sizeTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		sizeTextpane.setOpaque(false);
+		sizeTextpane.setBackground(UIManager.getColor("Label.background"));
+		sizeTextpane.setText(lang.getSize());
+		sizeTextpane.setEditable(false);
+		centerPanel.add(sizeTextpane, "2, 18, left, center");
 
 		SizePanel = new JPanel();
-		center.add(SizePanel, "4, 18, fill, center");
+		centerPanel.add(SizePanel, "4, 18, fill, center");
 		SizePanel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
@@ -593,119 +591,119 @@ public class Main {
 				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.LINE_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC, }));
 
-		txtpnPresetSizes = new JTextPane();
-		txtpnPresetSizes.setBackground(UIManager.getColor("Label.background"));
-		txtpnPresetSizes.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnPresetSizes.setOpaque(false);
-		txtpnPresetSizes.setEditable(false);
-		txtpnPresetSizes.setText(l.getPre());
-		SizePanel.add(txtpnPresetSizes, "1, 1, fill, fill");
+		presetSizesTextpane = new JTextPane();
+		presetSizesTextpane.setBackground(UIManager.getColor("Label.background"));
+		presetSizesTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		presetSizesTextpane.setOpaque(false);
+		presetSizesTextpane.setEditable(false);
+		presetSizesTextpane.setText(lang.getPre());
+		SizePanel.add(presetSizesTextpane, "1, 1, fill, fill");
 
-		txtpnWidth = new JTextPane();
-		txtpnWidth.setBackground(UIManager.getColor("Label.background"));
-		txtpnWidth.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnWidth.setOpaque(false);
-		txtpnWidth.setEditable(false);
-		txtpnWidth.setText(l.getW());
-		SizePanel.add(txtpnWidth, "3, 1, fill, fill");
+		widthTextpane = new JTextPane();
+		widthTextpane.setBackground(UIManager.getColor("Label.background"));
+		widthTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		widthTextpane.setOpaque(false);
+		widthTextpane.setEditable(false);
+		widthTextpane.setText(lang.getW());
+		SizePanel.add(widthTextpane, "3, 1, fill, fill");
 
-		txtpnHeight = new JTextPane();
-		txtpnHeight.setBackground(UIManager.getColor("Label.background"));
-		txtpnHeight.setFont(new Font("Arial", Font.PLAIN, 12));
-		txtpnHeight.setOpaque(false);
-		txtpnHeight.setEditable(false);
-		txtpnHeight.setText(l.getH());
-		SizePanel.add(txtpnHeight, "5, 1, fill, fill");
+		heightTextpane = new JTextPane();
+		heightTextpane.setBackground(UIManager.getColor("Label.background"));
+		heightTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		heightTextpane.setOpaque(false);
+		heightTextpane.setEditable(false);
+		heightTextpane.setText(lang.getH());
+		SizePanel.add(heightTextpane, "5, 1, fill, fill");
 
-		presetSizes = new JComboBox<String>();
-		presetSizes.setToolTipText(l.getHp());
-		presetSizes.addKeyListener(new KeyAdapter() {
+		presetSizesCombobox = new JComboBox<String>();
+		presetSizesCombobox.setToolTipText(lang.getHp());
+		presetSizesCombobox.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent key) {
 				if (key.getKeyCode() == KeyEvent.VK_DELETE
 						|| key.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					presetSizesInput.removeElementAt(presetSizes
+					presetSizesInputModel.removeElementAt(presetSizesCombobox
 							.getSelectedIndex());
 					String newPreset = "";
-					for (int i = 0; i < presetSizesInput.getSize(); i++) {
-						newPreset += presetSizesInput.getElementAt(i) + ",";
+					for (int i = 0; i < presetSizesInputModel.getSize(); i++) {
+						newPreset += presetSizesInputModel.getElementAt(i) + ",";
 					}
-					c.setPreset(newPreset);
+					config.setPreset(newPreset);
 				}
 			}
 		});
-		presetSizes.addItemListener(new ItemListener() {
+		presetSizesCombobox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent item) {
 				String[] res = ((String) item.getItem()).split("x");
-				width.setText(res[0]);
-				height.setText(res[1]);
+				widthTextfield.setText(res[0]);
+				heightTextfield.setText(res[1]);
 			}
 		});
-		SizePanel.add(presetSizes, "1, 3, fill, fill");
+		SizePanel.add(presetSizesCombobox, "1, 3, fill, fill");
 
-		width = new JTextField();
-		width.addFocusListener(new FocusAdapter() {
+		widthTextfield = new JTextField();
+		widthTextfield.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (width.getText().equals("")) {
-					width.setText("0");
+				if (widthTextfield.getText().equals("")) {
+					widthTextfield.setText("0");
 				}
 			}
 		});
-		width.setToolTipText(l.getHs());
-		SizePanel.add(width, "3, 3, fill, fill");
-		width.setColumns(10);
+		widthTextfield.setToolTipText(lang.getHs());
+		SizePanel.add(widthTextfield, "3, 3, fill, fill");
+		widthTextfield.setColumns(10);
 
-		height = new JTextField();
-		height.addFocusListener(new FocusAdapter() {
+		heightTextfield = new JTextField();
+		heightTextfield.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (height.getText().equals("")) {
-					height.setText("0");
+				if (heightTextfield.getText().equals("")) {
+					heightTextfield.setText("0");
 				}
 			}
 		});
-		height.setToolTipText(l.getHs());
-		SizePanel.add(height, "5, 3, fill, fill");
-		height.setColumns(10);
-		frmRezisy.getContentPane().add(top, BorderLayout.NORTH);
-		frmRezisy.getContentPane().add(bottom, BorderLayout.SOUTH);
+		heightTextfield.setToolTipText(lang.getHs());
+		SizePanel.add(heightTextfield, "5, 3, fill, fill");
+		heightTextfield.setColumns(10);
+		mainFrame.getContentPane().add(topPanel, BorderLayout.NORTH);
+		mainFrame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 
-		btnConvert.setAction(startConversion);
-		btnConvert.setText(l.getConvert());
-		bottom.add(btnConvert);
+		convertButton.setAction(startConversion);
+		convertButton.setText(lang.getConvert());
+		bottomPanel.add(convertButton);
 	}
 
 	private void execResize() {
-		c.setOverwrite("0");
+		config.setOverwrite("0");
 
-		if (inputFilesModel.size() != 0) {
-			if (!(width.getText().equals("") && height.getText().equals(""))
-					&& !(width.getText().equals("0") && height.getText()
+		if (inputFileModel.size() != 0) {
+			if (!(widthTextfield.getText().equals("") && heightTextfield.getText().equals(""))
+					&& !(widthTextfield.getText().equals("0") && heightTextfield.getText()
 							.equals("0"))) {
-				progress.setMaximum(inputFilesModel.size());
-				progress.setValue(0);
-				progress.setStringPainted(true);
-				btnConvert.setEnabled(false);
+				progressbar.setMaximum(inputFileModel.size());
+				progressbar.setValue(0);
+				progressbar.setStringPainted(true);
+				convertButton.setEnabled(false);
 				Thread convertThread = new Thread(new Runnable() {
 					@Override
 					public void run() {
 						int calcWidth, calcHeight;
 						try {
-							calcWidth = Integer.parseInt(width.getText());
+							calcWidth = Integer.parseInt(widthTextfield.getText());
 						} catch (NumberFormatException nfe) {
 							calcWidth = 0;
 						}
 						try {
-							calcHeight = Integer.parseInt(height.getText());
+							calcHeight = Integer.parseInt(heightTextfield.getText());
 						} catch (NumberFormatException nfe) {
 							calcHeight = 0;
 						}
-						String outputModifier = outputString.getText();
-						String outputPathEcho = outputPath.getText();
-						for (int i = 0; i < inputFilesModel.size(); i++) {
-							String outputFile = inputFilesModel.elementAt(i);
+						String outputModifier = outputTextfield.getText();
+						String outputPathEcho = outputPathTextfield.getText();
+						for (int i = 0; i < inputFileModel.size(); i++) {
+							String outputFile = inputFileModel.elementAt(i);
 							outputFile = outputPathEcho
 									+ File.separator
 									+ outputFile.substring(
@@ -717,34 +715,34 @@ public class Main {
 											outputFile.length());
 							try {
 								ImageResize.resizeImageWithHint(
-										inputFilesModel.elementAt(i),
+										inputFileModel.elementAt(i),
 										calcWidth, calcHeight, outputFile,
-										(String) fileTypes.getSelectedItem(),
+										(String) fileTypesModel.getSelectedItem(),
 										chckbxMetaSave.isSelected());
 							} catch (IllegalArgumentException iae) {
 								JOptionPane.showMessageDialog(null,
-										l.getErr3(), l.getErr3t(),
+										lang.getErr3(), lang.getErr3t(),
 										JOptionPane.ERROR_MESSAGE);
-								btnConvert.setEnabled(true);
+								convertButton.setEnabled(true);
 							}
-							progress.setValue(i + 1);
-							progress.setString(i + 1 + " / "
-									+ inputFilesModel.size());
+							progressbar.setValue(i + 1);
+							progressbar.setString(i + 1 + " / "
+									+ inputFileModel.size());
 						}
-						c.setHeight(height.getText());
-						c.setWidth(width.getText());
-						c.setOutputMod(outputString.getText());
-						c.setOutputDir(outputPath.getText());
-						btnConvert.setEnabled(true);
+						config.setHeight(heightTextfield.getText());
+						config.setWidth(widthTextfield.getText());
+						config.setOutputMod(outputTextfield.getText());
+						config.setOutputDir(outputPathTextfield.getText());
+						convertButton.setEnabled(true);
 					}
 				}, "Thread for convert");
 				convertThread.start();
 			} else {
-				JOptionPane.showMessageDialog(null, l.getErr1(), l.getErr1t(),
+				JOptionPane.showMessageDialog(null, lang.getErr1(), lang.getErr1t(),
 						JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, l.getErr2(), l.getErr2t(),
+			JOptionPane.showMessageDialog(null, lang.getErr2(), lang.getErr2t(),
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
