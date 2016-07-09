@@ -53,22 +53,23 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
-import types.Config;
-import types.Language;
-
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
+import core.Config;
 import core.DynamicGUI;
 import core.FileFilter;
-import core.ImageResize;
+import core.Language;
+import core.MultiThreadImageResizer;
+import interfaces.UiSynchronization;
+import utilities.ListUtility;
 
-public class Main {
+public class Main implements UiSynchronization {
 
 	private class ConvertAction extends AbstractAction {
-		
+
 		private static final long serialVersionUID = 1L;
 
 		public ConvertAction() {
@@ -78,8 +79,8 @@ public class Main {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ((outputPathTextfield.getText().equals("") || outputTextfield.getText()
-					.equals("")) && config.getOverwrite().equals("1")) {
+			if ((outputPathTextfield.getText().equals("") || outputTextfield.getText().equals(""))
+					&& config.getOverwrite().equals("1")) {
 				JPanel msgPanel = new JPanel();
 				JTextPane textpane = new JTextPane();
 				textpane.setEditable(false);
@@ -87,9 +88,8 @@ public class Main {
 				textpane.setPreferredSize(dialogDimension);
 				msgPanel.add(textpane);
 				msgPanel.setPreferredSize(dialogDimension);
-				int answer = JOptionPane.showConfirmDialog(null, msgPanel,
-						lang.getOverwritetitle(), JOptionPane.YES_NO_OPTION,
-						JOptionPane.WARNING_MESSAGE);
+				int answer = JOptionPane.showConfirmDialog(null, msgPanel, lang.getOverwritetitle(),
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if (answer == JOptionPane.YES_OPTION) {
 					execResize();
 				}
@@ -120,13 +120,13 @@ public class Main {
 			}
 		}
 	}
-	
+
 	private Config config = new Config();
 	private Language lang = new Language(config.getLang());
-	
+
 	private final Action startConversion = new ConvertAction();
 	private final Action savePreset = new SaveAction();
-	
+
 	private Dimension dialogDimension = new Dimension(400, 80);
 	private Dimension mainWindowDimension = new Dimension(700, 550);
 	private JFrame mainFrame;
@@ -143,7 +143,7 @@ public class Main {
 	private JTextField outputTextfield;
 	private JTextPane inputFilesTextpane;
 	private JTextPane outputFilesTextpane;
-	private JPanel SizePanel;
+	private JPanel sizePanel;
 	private JTextPane heightTextpane;
 	private JTextPane widthTextpane;
 	private JTextPane presetSizesTextpane;
@@ -167,7 +167,7 @@ public class Main {
 	private JMenuItem helpMenuitem;
 	private JTextPane fileTypesTextpane;
 	private JTextPane metaSaveTextpane;
-	private JCheckBox chckbxMetaSave;
+	private JCheckBox metaSaveCheckbox;
 	private JTextPane outputLabelTextpane;
 	private JTextPane inputLabelTextpane;
 	private JButton outputButton;
@@ -225,7 +225,7 @@ public class Main {
 		});
 		savePresetButton.setAction(savePreset);
 		savePresetButton.setText(lang.getSavepreset());
-		SizePanel.add(savePresetButton, "3, 5, fill, fill");
+		sizePanel.add(savePresetButton, "3, 5, fill, fill");
 
 		progressTextpane = new JTextPane();
 		progressTextpane.setText(lang.getProgress());
@@ -305,8 +305,8 @@ public class Main {
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(mainFrame, lang.getRestart(),
-						lang.getRestarttitel(), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(mainFrame, lang.getRestart(), lang.getRestarttitel(),
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		configMenu.add(resetMenuitem);
@@ -337,8 +337,7 @@ public class Main {
 	private void initialize() {
 		inputFileModel = new DefaultListModel<String>();
 		mainFrame = new JFrame();
-		mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(
-				Main.class.getResource("/gui/icon.png")));
+		mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/gui/icon.png")));
 		mainFrame.setTitle(lang.getProg() + " - v" + config.getVersion());
 		mainFrame.setPreferredSize(mainWindowDimension);
 		mainFrame.pack();
@@ -347,26 +346,23 @@ public class Main {
 
 		centerPanel.setBackground(UIManager.getColor("Label.background"));
 		mainFrame.getContentPane().add(centerPanel, BorderLayout.CENTER);
-		centerPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("200px"),
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
-				FormSpecs.RELATED_GAP_COLSPEC, }, new RowSpec[] {
-				FormSpecs.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
-				RowSpec.decode("140px:grow"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormSpecs.RELATED_GAP_ROWSPEC, }));
+		centerPanel.setLayout(new FormLayout(
+				new ColumnSpec[] { FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("200px"),
+						FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("default:grow"),
+						FormSpecs.RELATED_GAP_COLSPEC, },
+				new RowSpec[] { FormSpecs.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("140px:grow"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC, RowSpec.decode("20px"),
+						FormSpecs.RELATED_GAP_ROWSPEC, }));
 
 		inputLabelTextpane = new JTextPane();
 		inputLabelTextpane.setForeground(UIManager.getColor("textHighlight"));
@@ -406,8 +402,7 @@ public class Main {
 				if (key.getKeyCode() == KeyEvent.VK_DELETE) {
 					int[] toDelete = inputFileList.getSelectedIndices();
 					for (int i = toDelete.length - 1; i >= 0; i--) {
-						inputFileModel.removeElement(inputFileModel
-								.elementAt(toDelete[i]));
+						inputFileModel.removeElement(inputFileModel.elementAt(toDelete[i]));
 					}
 					inputFileList.setModel(inputFileModel);
 				}
@@ -417,7 +412,6 @@ public class Main {
 		inputFileList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evt) {
-
 				if (SwingUtilities.isRightMouseButton(evt)) {
 					JFileChooser chooser = new JFileChooser();
 					chooser.setMultiSelectionEnabled(true);
@@ -427,8 +421,7 @@ public class Main {
 
 					if (status == JFileChooser.APPROVE_OPTION) {
 						File[] selectedFiles = chooser.getSelectedFiles();
-						FileFilter rightFilter = new FileFilter(
-								inputFileModel, inputFileList);
+						FileFilter rightFilter = new FileFilter(inputFileModel, inputFileList);
 						for (int i = 0; i < selectedFiles.length; i++) {
 							rightFilter.filterImage(selectedFiles[i]);
 						}
@@ -438,11 +431,9 @@ public class Main {
 					try {
 						if (evt.getClickCount() == 2) {
 							@SuppressWarnings("unchecked")
-							JList<String> list = (JList<String>) evt
-									.getSource();
+							JList<String> list = (JList<String>) evt.getSource();
 							int index = list.locationToIndex(evt.getPoint());
-							inputFileModel.removeElement(inputFileModel
-									.elementAt(index));
+							inputFileModel.removeElement(inputFileModel.elementAt(index));
 							inputFileList.setModel(inputFileModel);
 						}
 					} catch (ArrayIndexOutOfBoundsException aioobe) {
@@ -460,11 +451,9 @@ public class Main {
 				try {
 					evt.acceptDrop(DnDConstants.ACTION_COPY);
 					@SuppressWarnings("unchecked")
-					List<File> droppedFiles = (List<File>) evt
-							.getTransferable().getTransferData(
-									DataFlavor.javaFileListFlavor);
-					FileFilter dropFilter = new FileFilter(inputFileModel,
-							inputFileList);
+					List<File> droppedFiles = (List<File>) evt.getTransferable()
+							.getTransferData(DataFlavor.javaFileListFlavor);
+					FileFilter dropFilter = new FileFilter(inputFileModel, inputFileList);
 					for (File file : droppedFiles) {
 						dropFilter.filterImage(file);
 					}
@@ -490,8 +479,8 @@ public class Main {
 				if (status == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
 					try {
-						outputPathTextfield.setText(selectedFile.getParent().trim()
-								+ File.separator + selectedFile.getName());
+						outputPathTextfield
+								.setText(selectedFile.getParent().trim() + File.separator + selectedFile.getName());
 					} catch (NullPointerException npe) {
 						outputPathTextfield.setText(selectedFile.getName());
 					}
@@ -517,7 +506,7 @@ public class Main {
 				outputPathTextfield.setText("");
 				fileTypesModel.setSelectedIndex(0);
 				outputTextfield.setText("");
-				chckbxMetaSave.setSelected(false);
+				metaSaveCheckbox.setSelected(false);
 				presetSizesCombobox.setSelectedIndex(0);
 			}
 		});
@@ -567,9 +556,9 @@ public class Main {
 		metaSaveTextpane.setText(lang.getOutmeta());
 		centerPanel.add(metaSaveTextpane, "2, 16, left, top");
 
-		chckbxMetaSave = new JCheckBox("");
-		chckbxMetaSave.setToolTipText(lang.getHoutmeta());
-		centerPanel.add(chckbxMetaSave, "4, 16, left, center");
+		metaSaveCheckbox = new JCheckBox("");
+		metaSaveCheckbox.setToolTipText(lang.getHoutmeta());
+		centerPanel.add(metaSaveCheckbox, "4, 16, left, center");
 
 		sizeTextpane = new JTextPane();
 		sizeTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -579,17 +568,14 @@ public class Main {
 		sizeTextpane.setEditable(false);
 		centerPanel.add(sizeTextpane, "2, 18, left, center");
 
-		SizePanel = new JPanel();
-		centerPanel.add(SizePanel, "4, 18, fill, center");
-		SizePanel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("default:grow"),
-				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
-				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"), }, new RowSpec[] {
-				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.LINE_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.LINE_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC, }));
+		sizePanel = new JPanel();
+		centerPanel.add(sizePanel, "4, 18, fill, center");
+		sizePanel.setLayout(new FormLayout(
+				new ColumnSpec[] { ColumnSpec.decode("default:grow"), FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+						ColumnSpec.decode("default:grow"), FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+						ColumnSpec.decode("default:grow"), },
+				new RowSpec[] { FormSpecs.DEFAULT_ROWSPEC, FormSpecs.LINE_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
+						FormSpecs.LINE_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, }));
 
 		presetSizesTextpane = new JTextPane();
 		presetSizesTextpane.setBackground(UIManager.getColor("Label.background"));
@@ -597,7 +583,7 @@ public class Main {
 		presetSizesTextpane.setOpaque(false);
 		presetSizesTextpane.setEditable(false);
 		presetSizesTextpane.setText(lang.getPre());
-		SizePanel.add(presetSizesTextpane, "1, 1, fill, fill");
+		sizePanel.add(presetSizesTextpane, "1, 1, fill, fill");
 
 		widthTextpane = new JTextPane();
 		widthTextpane.setBackground(UIManager.getColor("Label.background"));
@@ -605,7 +591,7 @@ public class Main {
 		widthTextpane.setOpaque(false);
 		widthTextpane.setEditable(false);
 		widthTextpane.setText(lang.getW());
-		SizePanel.add(widthTextpane, "3, 1, fill, fill");
+		sizePanel.add(widthTextpane, "3, 1, fill, fill");
 
 		heightTextpane = new JTextPane();
 		heightTextpane.setBackground(UIManager.getColor("Label.background"));
@@ -613,17 +599,15 @@ public class Main {
 		heightTextpane.setOpaque(false);
 		heightTextpane.setEditable(false);
 		heightTextpane.setText(lang.getH());
-		SizePanel.add(heightTextpane, "5, 1, fill, fill");
+		sizePanel.add(heightTextpane, "5, 1, fill, fill");
 
 		presetSizesCombobox = new JComboBox<String>();
 		presetSizesCombobox.setToolTipText(lang.getHp());
 		presetSizesCombobox.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent key) {
-				if (key.getKeyCode() == KeyEvent.VK_DELETE
-						|| key.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					presetSizesInputModel.removeElementAt(presetSizesCombobox
-							.getSelectedIndex());
+				if (key.getKeyCode() == KeyEvent.VK_DELETE || key.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+					presetSizesInputModel.removeElementAt(presetSizesCombobox.getSelectedIndex());
 					String newPreset = "";
 					for (int i = 0; i < presetSizesInputModel.getSize(); i++) {
 						newPreset += presetSizesInputModel.getElementAt(i) + ",";
@@ -640,7 +624,7 @@ public class Main {
 				heightTextfield.setText(res[1]);
 			}
 		});
-		SizePanel.add(presetSizesCombobox, "1, 3, fill, fill");
+		sizePanel.add(presetSizesCombobox, "1, 3, fill, fill");
 
 		widthTextfield = new JTextField();
 		widthTextfield.addFocusListener(new FocusAdapter() {
@@ -652,7 +636,7 @@ public class Main {
 			}
 		});
 		widthTextfield.setToolTipText(lang.getHs());
-		SizePanel.add(widthTextfield, "3, 3, fill, fill");
+		sizePanel.add(widthTextfield, "3, 3, fill, fill");
 		widthTextfield.setColumns(10);
 
 		heightTextfield = new JTextField();
@@ -665,7 +649,7 @@ public class Main {
 			}
 		});
 		heightTextfield.setToolTipText(lang.getHs());
-		SizePanel.add(heightTextfield, "5, 3, fill, fill");
+		sizePanel.add(heightTextfield, "5, 3, fill, fill");
 		heightTextfield.setColumns(10);
 		mainFrame.getContentPane().add(topPanel, BorderLayout.NORTH);
 		mainFrame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
@@ -677,73 +661,50 @@ public class Main {
 
 	private void execResize() {
 		config.setOverwrite("0");
-
 		if (inputFileModel.size() != 0) {
 			if (!(widthTextfield.getText().equals("") && heightTextfield.getText().equals(""))
-					&& !(widthTextfield.getText().equals("0") && heightTextfield.getText()
-							.equals("0"))) {
+					&& !(widthTextfield.getText().equals("0") && heightTextfield.getText().equals("0"))) {
 				progressbar.setMaximum(inputFileModel.size());
 				progressbar.setValue(0);
 				progressbar.setStringPainted(true);
 				convertButton.setEnabled(false);
-				Thread convertThread = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						int calcWidth, calcHeight;
-						try {
-							calcWidth = Integer.parseInt(widthTextfield.getText());
-						} catch (NumberFormatException nfe) {
-							calcWidth = 0;
-						}
-						try {
-							calcHeight = Integer.parseInt(heightTextfield.getText());
-						} catch (NumberFormatException nfe) {
-							calcHeight = 0;
-						}
-						String outputModifier = outputTextfield.getText();
-						String outputPathEcho = outputPathTextfield.getText();
-						for (int i = 0; i < inputFileModel.size(); i++) {
-							String outputFile = inputFileModel.elementAt(i);
-							outputFile = outputPathEcho
-									+ File.separator
-									+ outputFile.substring(
-											outputFile.lastIndexOf("\\") + 1,
-											outputFile.lastIndexOf("."))
-									+ outputModifier
-									+ outputFile.substring(
-											outputFile.lastIndexOf("."),
-											outputFile.length());
-							try {
-								ImageResize.resizeImageWithHint(
-										inputFileModel.elementAt(i),
-										calcWidth, calcHeight, outputFile,
-										(String) fileTypesModel.getSelectedItem(),
-										chckbxMetaSave.isSelected());
-							} catch (IllegalArgumentException iae) {
-								JOptionPane.showMessageDialog(null,
-										lang.getErr3(), lang.getErr3t(),
-										JOptionPane.ERROR_MESSAGE);
-								convertButton.setEnabled(true);
-							}
-							progressbar.setValue(i + 1);
-							progressbar.setString(i + 1 + " / "
-									+ inputFileModel.size());
-						}
-						config.setHeight(heightTextfield.getText());
-						config.setWidth(widthTextfield.getText());
-						config.setOutputMod(outputTextfield.getText());
-						config.setOutputDir(outputPathTextfield.getText());
-						convertButton.setEnabled(true);
-					}
-				}, "Thread for convert");
-				convertThread.start();
+
+				int calcWidth = Integer.parseInt(widthTextfield.getText());
+				int calcHeight = Integer.parseInt(heightTextfield.getText());
+				String outputModifier = outputTextfield.getText();
+				String outputPath = outputPathTextfield.getText();
+				boolean saveMetaData = metaSaveCheckbox.isSelected();
+				ArrayList<String> inputFileList = ListUtility.defaultModeltoArrayList(inputFileModel);
+				String outputfileType = (String) fileTypesModel.getSelectedItem();
+
+				MultiThreadImageResizer resizer = new MultiThreadImageResizer();
+				resizer.setup(config, lang, convertButton, this);
+				resizer.resizeImageList(calcWidth, calcHeight, outputModifier, outputPath, inputFileList,
+						outputfileType, saveMetaData);
+
+				config.setHeight(heightTextfield.getText());
+				config.setWidth(widthTextfield.getText());
+				config.setOutputMod(outputTextfield.getText());
+				config.setOutputDir(outputPathTextfield.getText());
 			} else {
-				JOptionPane.showMessageDialog(null, lang.getErr1(), lang.getErr1t(),
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, lang.getErr1(), lang.getErr1t(), JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, lang.getErr2(), lang.getErr2t(),
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, lang.getErr2(), lang.getErr2t(), JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	@Override
+	public void updateProgress() {
+		int progressbarValue = progressbar.getValue();
+		progressbar.setValue(progressbarValue + 1);
+		progressbar.setString(progressbarValue + 1 + " / " + inputFileModel.size());
+	}
+
+	@Override
+	public void finishProgress() {
+		int progressbarFinishValue = progressbar.getMaximum();
+		progressbar.setValue(progressbarFinishValue);
+		progressbar.setString(progressbarFinishValue + " / " + inputFileModel.size());
 	}
 }

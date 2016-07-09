@@ -14,8 +14,8 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import types.Config;
-import types.Language;
+import core.Config;
+import core.Language;
 
 public class Help {
 	private JFrame frmResizyHelp;
