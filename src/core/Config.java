@@ -18,7 +18,8 @@ import java.util.Properties;
 
 public class Config {
 	private static Properties configFile;
-	private String outputDir, outputMod, preset, lang, version, types, overwrite;
+	private String outputDir, outputMod, preset, lang, version, types, overwrite, useMultithreading;
+
 	int width, height;
 	FileOutputStream out;
 	FileInputStream in;
@@ -36,6 +37,7 @@ public class Config {
 			version = configFile.getProperty("version");
 			types = configFile.getProperty("types");
 			overwrite = configFile.getProperty("overwrite");
+			useMultithreading = configFile.getProperty("useMultithreading");
 			try {
 				width = Integer.parseInt(configFile.getProperty("width"));
 				height = Integer.parseInt(configFile.getProperty("height"));
@@ -44,10 +46,6 @@ public class Config {
 			}
 		} catch (IOException e) {
 		}
-	}
-
-	public String getOverwrite() {
-		return overwrite;
 	}
 
 	public String getHeight() {
@@ -66,6 +64,10 @@ public class Config {
 		return outputMod;
 	}
 
+	public String getOverwrite() {
+		return overwrite;
+	}
+
 	public String getPreset() {
 		return preset;
 	}
@@ -74,18 +76,16 @@ public class Config {
 		return types;
 	}
 
+	public String getUseMultithreading() {
+		return useMultithreading;
+	}
+
 	public String getVersion() {
 		return version;
 	}
 
 	public String getWidth() {
 		return String.valueOf(width);
-	}
-
-	public void setOverwrite(String overwrite) {
-		this.overwrite = overwrite;
-		configFile.setProperty("overwrite", overwrite);
-		store();
 	}
 
 	public void setHeight(String height) {
@@ -112,6 +112,12 @@ public class Config {
 		store();
 	}
 
+	public void setOverwrite(String overwrite) {
+		this.overwrite = overwrite;
+		configFile.setProperty("overwrite", overwrite);
+		store();
+	}
+
 	public void setPreset(String preset) {
 		this.preset = preset;
 		configFile.setProperty("preset", preset);
@@ -122,10 +128,16 @@ public class Config {
 		this.types = types;
 	}
 
+	public void setUseMultithreading(String useMultithreading) {
+		this.useMultithreading = useMultithreading;
+		configFile.setProperty("useMultithreading", useMultithreading);
+		store();
+	}
+
 	public void setVersion(String version) {
 		this.version = version;
 	}
-
+	
 	public void setWidth(String width) {
 		this.width = Integer.parseInt(width);
 		configFile.setProperty("width", width);

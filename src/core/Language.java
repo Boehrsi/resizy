@@ -27,15 +27,8 @@ public class Language {
 	private String file, close, lang, cfg, open, reset, inf, outf, outm, outmeta, size, pre, w, h, savepreset, convert,
 			restart, restarttitel, progress, hf, hof, hom, hs, hss, hp, s, hpro, help, houtmeta, about, version, update,
 			prog, at, getlatest, filetype, hintfiletypes, err1, err1t, err2, err2t, err3, err3t, overwritetitle,
-			overwritetext, inputLabel, inputButton, hinputButton, outputLabel, outputButton, houtputButton;
-
-	public String getErr3() {
-		return err3;
-	}
-
-	public String getErr3t() {
-		return err3t;
-	}
+			overwritetext, inputLabel, inputButton, hinputButton, outputLabel, outputButton, houtputButton,
+			useMultithreading;
 
 	FileInputStream in;
 
@@ -100,42 +93,11 @@ public class Language {
 			outputButton = configFile.getProperty("outputButton");
 			hinputButton = configFile.getProperty("hinputButton");
 			houtputButton = configFile.getProperty("houtputButton");
+			useMultithreading = configFile.getProperty("useMultithreading");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-	}
-
-	public String getHinputButton() {
-		return hinputButton;
-	}
-
-	public String getHoutputButton() {
-		return houtputButton;
-	}
-
-	public String getInputLabel() {
-		return inputLabel;
-	}
-
-	public String getInputButton() {
-		return inputButton;
-	}
-
-	public String getOutputLabel() {
-		return outputLabel;
-	}
-
-	public String getOutputButton() {
-		return outputButton;
-	}
-
-	public String getOverwritetitle() {
-		return overwritetitle;
-	}
-
-	public String getOverwritetext() {
-		return overwritetext;
 	}
 
 	public String getAbout() {
@@ -178,6 +140,14 @@ public class Language {
 		return err2t;
 	}
 
+	public String getErr3() {
+		return err3;
+	}
+
+	public String getErr3t() {
+		return err3t;
+	}
+
 	public String getFile() {
 		return file;
 	}
@@ -202,6 +172,10 @@ public class Language {
 		return hf;
 	}
 
+	public String getHinputButton() {
+		return hinputButton;
+	}
+
 	public String getHintfiletypes() {
 		return hintfiletypes;
 	}
@@ -216,6 +190,10 @@ public class Language {
 
 	public String getHoutmeta() {
 		return houtmeta;
+	}
+
+	public String getHoutputButton() {
+		return houtputButton;
 	}
 
 	public String getHp() {
@@ -242,6 +220,14 @@ public class Language {
 		return inf;
 	}
 
+	public String getInputButton() {
+		return inputButton;
+	}
+
+	public String getInputLabel() {
+		return inputLabel;
+	}
+
 	public String getLang() {
 		return lang;
 	}
@@ -260,6 +246,22 @@ public class Language {
 
 	public String getOutmeta() {
 		return outmeta;
+	}
+
+	public String getOutputButton() {
+		return outputButton;
+	}
+
+	public String getOutputLabel() {
+		return outputLabel;
+	}
+
+	public String getOverwritetext() {
+		return overwritetext;
+	}
+
+	public String getOverwritetitle() {
+		return overwritetitle;
 	}
 
 	public String getPre() {
@@ -300,6 +302,10 @@ public class Language {
 
 	public String getUpdate() {
 		return update;
+	}
+
+	public String getUseMultithreading() {
+		return useMultithreading;
 	}
 
 	public String getVersion() {

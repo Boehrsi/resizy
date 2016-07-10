@@ -177,6 +177,7 @@ public class Main implements UiSynchronization {
 	private JButton outputButton;
 	private JButton inputButton;
 	private JButton convertButton = new JButton("");
+	private JCheckBox multiThreadCheckbox;
 
 	public static void main(final String[] args) {
 		try {
@@ -524,6 +525,11 @@ public class Main implements UiSynchronization {
 		convertButton.setAction(startConversion);
 		convertButton.setText(lang.getConvert());
 		bottomPanel.add(convertButton);
+		
+		multiThreadCheckbox = new JCheckBox(lang.getUseMultithreading());
+		boolean selected = config.getUseMultithreading().equals("1") ? true : false;
+		multiThreadCheckbox.setSelected(selected);
+		bottomPanel.add(multiThreadCheckbox);
 
 		widthTextfield.setText(config.getWidth());
 		heightTextfield.setText(config.getHeight());

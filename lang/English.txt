@@ -25,6 +25,7 @@ inputLabel=Input
 inputButton=Clear input list
 outputLabel=Output
 outputButton=Reset output settings
+useMultithreading=Use multithreading
 # Restart
 restart=Please restart the application for changes to take effect.
 restarttitel=Information

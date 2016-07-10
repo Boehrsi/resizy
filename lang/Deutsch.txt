@@ -25,6 +25,7 @@ inputLabel=Eingabe
 inputButton=Eingabeliste leeren
 outputLabel=Ausgabe
 outputButton=Ausgabeeinstellungen zurücksetzen
+useMultithreading=Multithreading nutzen
 # Restart
 restart=Bitte die Anwendung neu starten, damit die Änderungen wirksam werden.
 restarttitel=Information
