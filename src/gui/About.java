@@ -171,12 +171,12 @@ public class About {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					try {
-						Desktop.getDesktop().browse(new URI("https://github.com/Boehrsi/resizy"));
+						Desktop.getDesktop().browse(new URI("https://boehrsi.github.io/resizy/"));
 					} catch (URISyntaxException | IOException ex) {
 					}
 				}
 			});
-			txtpnResizyCode.setText(l.getProg() + " " + l.getAt() + " GitHub");
+			txtpnResizyCode.setText(l.getProg() + " " + l.getAt() + " GitHub Pages");
 			txtpnResizyCode.setOpaque(false);
 			txtpnResizyCode.setFont(new Font("Arial", Font.PLAIN, 12));
 			txtpnResizyCode.setEditable(false);
