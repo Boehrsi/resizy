@@ -11,6 +11,15 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+/**
+ * 
+ * Utility class for image operations and checks.
+ * 
+ * @author Boehrsi
+ * @version 1.0
+ * 
+ */
+
 public class ImageUtility {
 
 	static final HashMap<Key, Object> hints = new HashMap<Key, Object>();
@@ -64,6 +73,16 @@ public class ImageUtility {
 			outputSize[1] = outputHeightInt;
 		}
 		return outputSize;
+	}
+
+	public static boolean isGivenSizeValid(String sizeValue) {
+		return !sizeValue.equals("") && !sizeValue.equals("0");
+	}
+
+	public static String generatePath(String outputModifier, String outputPath, String outputFile) {
+		return outputPath + File.separator
+				+ outputFile.substring(outputFile.lastIndexOf("\\") + 1, outputFile.lastIndexOf(".")) + outputModifier
+				+ outputFile.substring(outputFile.lastIndexOf("."), outputFile.length());
 	}
 
 	public static HashMap<Key, Object> getImageHints() {

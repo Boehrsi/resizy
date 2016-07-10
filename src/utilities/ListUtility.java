@@ -5,6 +5,15 @@ import java.util.Collections;
 
 import javax.swing.DefaultListModel;
 
+/**
+ * 
+ * Utility class for list operations.
+ * 
+ * @author Boehrsi
+ * @version 1.0
+ * 
+ */
+
 public class ListUtility {
 
 	private ListUtility() {
@@ -16,5 +25,5 @@ public class ListUtility {
 		list.addAll(Collections.list(model.elements()));
 		return list;
 	}
-	
+
 }

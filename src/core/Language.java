@@ -13,15 +13,21 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-public class Language {
+/**
+ * 
+ * Internationalization handling base on the file in the lang folder.
+ * 
+ * @author Boehrsi
+ * @version 1.0
+ * 
+ */
 
+public class Language {
 	private Properties configFile;
-	private String file, close, lang, cfg, open, reset, inf, outf, outm,
-			outmeta, size, pre, w, h, savepreset, convert, restart,
-			restarttitel, progress, hf, hof, hom, hs, hss, hp, s, hpro, help,
-			houtmeta, about, version, update, prog, at, getlatest, filetype,
-			hintfiletypes, err1, err1t, err2, err2t, err3, err3t,
-			overwritetitle, overwritetext, inputLabel, inputButton, hinputButton, outputLabel, outputButton, houtputButton;
+	private String file, close, lang, cfg, open, reset, inf, outf, outm, outmeta, size, pre, w, h, savepreset, convert,
+			restart, restarttitel, progress, hf, hof, hom, hs, hss, hp, s, hpro, help, houtmeta, about, version, update,
+			prog, at, getlatest, filetype, hintfiletypes, err1, err1t, err2, err2t, err3, err3t, overwritetitle,
+			overwritetext, inputLabel, inputButton, hinputButton, outputLabel, outputButton, houtputButton;
 
 	public String getErr3() {
 		return err3;
@@ -35,8 +41,7 @@ public class Language {
 
 	public Language(String langFile) {
 		try {
-			in = new FileInputStream("lang" + File.separator + langFile
-					+ ".txt");
+			in = new FileInputStream("lang" + File.separator + langFile + ".txt");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -314,21 +319,18 @@ public class Language {
 	 *            GUI frame object
 	 * @return ArrayList<JMenuItem> with available languages
 	 */
-	public ArrayList<JMenuItem> langSelectable(final Config c,
-			final JFrame frame) {
+	public ArrayList<JMenuItem> langSelectable(final Config c, final JFrame frame) {
 		ArrayList<JMenuItem> items = new ArrayList<JMenuItem>();
 		File folder = new File("lang");
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
-				JMenuItem tempItem = new JMenuItem(file.getName().replace(
-						".txt", ""));
+				JMenuItem tempItem = new JMenuItem(file.getName().replace(".txt", ""));
 				tempItem.addActionListener(new ActionListener() {
 					@Override
 					public final void actionPerformed(final ActionEvent e) {
 						c.setLanguage(e.getActionCommand());
-						JOptionPane.showMessageDialog(frame, getRestart(),
-								getRestarttitel(),
+						JOptionPane.showMessageDialog(frame, getRestart(), getRestarttitel(),
 								JOptionPane.INFORMATION_MESSAGE);
 					}
 				});

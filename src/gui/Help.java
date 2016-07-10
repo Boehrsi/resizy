@@ -61,23 +61,17 @@ public class Help {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		String initialString = "<html>\n <ul>\n" + "<li><strong>" + l.getInf()
-				+ "</strong><br>" + l.getHf() + "</li>\n" + "<li><strong>"
-				+ l.getOutf() + "</strong><br>" + l.getHof() + "</li>\n"
-				+ "<li><strong>" + l.getFiletype() + "</strong><br>"
-				+ l.getHintfiletypes() + "</li>\n" + "<li><strong>"
-				+ l.getOutm() + "</strong><br>" + l.getHom() + "</li>\n"
-				+ "<li><strong>" + l.getOutmeta() + "</strong><br>"
-				+ l.getHoutmeta() + "</li>\n" + "<li><strong>" + l.getSize()
-				+ "</strong><br>" + l.getHs() + "</li>\n" + "<li><strong>"
-				+ l.getPre() + "</strong><br>" + l.getHp() + "</li>\n"
-				+ "</ul></html>";
+		String initialString = "<html>\n <ul>\n" + "<li><strong>" + l.getInf() + "</strong><br>" + l.getHf() + "</li>\n"
+				+ "<li><strong>" + l.getOutf() + "</strong><br>" + l.getHof() + "</li>\n" + "<li><strong>"
+				+ l.getFiletype() + "</strong><br>" + l.getHintfiletypes() + "</li>\n" + "<li><strong>" + l.getOutm()
+				+ "</strong><br>" + l.getHom() + "</li>\n" + "<li><strong>" + l.getOutmeta() + "</strong><br>"
+				+ l.getHoutmeta() + "</li>\n" + "<li><strong>" + l.getSize() + "</strong><br>" + l.getHs() + "</li>\n"
+				+ "<li><strong>" + l.getPre() + "</strong><br>" + l.getHp() + "</li>\n" + "</ul></html>";
 
 		frmResizyHelp = new JFrame();
 		frmResizyHelp.setType(Type.POPUP);
 		frmResizyHelp.setTitle(l.getProg() + " - " + l.getHelp());
-		frmResizyHelp.setIconImage(Toolkit.getDefaultToolkit().getImage(
-				Help.class.getResource("/gui/icon.png")));
+		frmResizyHelp.setIconImage(Toolkit.getDefaultToolkit().getImage(Help.class.getResource("/gui/icon.png")));
 		frmResizyHelp.setResizable(false);
 		frmResizyHelp.setPreferredSize(new Dimension(500, 550));
 		frmResizyHelp.pack();

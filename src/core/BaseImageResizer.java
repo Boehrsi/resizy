@@ -13,8 +13,16 @@ import javax.swing.JButton;
 import interfaces.UiSynchronization;
 import utilities.ImageUtility;
 
-public abstract class BaseImageResizer {
+/**
+ * 
+ * Base class for extension for ImageResizer implementations.
+ * 
+ * @author Boehrsi
+ * @version 1.0
+ * 
+ */
 
+public abstract class BaseImageResizer {
 	Config config;
 	Language lang;
 	JButton convertButton;
@@ -45,23 +53,16 @@ public abstract class BaseImageResizer {
 		g.drawImage(inputImage, 0, 0, outputWidth, outputHeight, null);
 		g.dispose();
 
-		/*
-		 * No output folder is set, use input folder.
-		 */
 		if (!outputFile.contains(":\\")) {
+			// No output folder is set, use input folder.
 			outputFile = originalFile.substring(0, originalFile.lastIndexOf("\\")) + outputFile;
 		}
 
-		/*
-		 * No output type is set, use input type.
-		 */
 		if (outputFileType.equals("")) {
+			// No output type is set, use input type.
 			outputFileType = outputFile.substring(outputFile.lastIndexOf(".") + 1);
-		}
-		/*
-		 * Use costume set output type.
-		 */
-		else {
+		} else {
+			// Use costume set output type.
 			outputFile = outputFile.substring(0, outputFile.lastIndexOf(".") + 1) + outputFileType;
 		}
 

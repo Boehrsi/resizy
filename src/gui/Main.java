@@ -59,12 +59,14 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
 import core.Config;
-import core.DynamicGUI;
 import core.FileFilter;
 import core.Language;
 import core.MultiThreadImageResizer;
 import interfaces.UiSynchronization;
+import utilities.ConstantUtility;
+import utilities.ImageUtility;
 import utilities.ListUtility;
+import utilities.UiUtility;
 
 public class Main implements UiSynchronization {
 
@@ -80,17 +82,18 @@ public class Main implements UiSynchronization {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ((outputPathTextfield.getText().equals("") || outputTextfield.getText().equals(""))
-					&& config.getOverwrite().equals("1")) {
-				JPanel msgPanel = new JPanel();
+					&& config.getOverwrite().equals(ConstantUtility.OVERWRITE_FILES_FALSE)) {
+				JPanel panel = new JPanel();
 				JTextPane textpane = new JTextPane();
 				textpane.setEditable(false);
 				textpane.setText(lang.getOverwritetext());
 				textpane.setPreferredSize(dialogDimension);
-				msgPanel.add(textpane);
-				msgPanel.setPreferredSize(dialogDimension);
-				int answer = JOptionPane.showConfirmDialog(null, msgPanel, lang.getOverwritetitle(),
+				panel.add(textpane);
+				panel.setPreferredSize(dialogDimension);
+				int answer = JOptionPane.showConfirmDialog(null, panel, lang.getOverwritetitle(),
 						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if (answer == JOptionPane.YES_OPTION) {
+					config.setOverwrite("0");
 					execResize();
 				}
 			} else {
@@ -174,9 +177,6 @@ public class Main implements UiSynchronization {
 	private JButton inputButton;
 	private JButton convertButton = new JButton("");
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(final String[] args) {
 		try {
 			ToolTipManager.sharedInstance().setDismissDelay(10000);
@@ -197,144 +197,12 @@ public class Main implements UiSynchronization {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public Main() {
-		System.setProperty("file.encoding", "UTF-8");
 		initialize();
-		widthTextfield.setText(config.getWidth());
-		heightTextfield.setText(config.getHeight());
-		outputTextfield.setText(config.getOutputMod());
-		String[] tempSize = config.getPreset().split(",");
-		for (int i = 0; i < tempSize.length; i++) {
-			presetSizesInputModel.addElement(tempSize[i]);
-		}
-		presetSizesCombobox.setModel(presetSizesInputModel);
-
-		String[] tempTypes = config.getTypes().split(",");
-		for (int i = 0; i < tempTypes.length; i++) {
-			presetTypesModel.addElement(tempTypes[i]);
-		}
-		fileTypesModel.setModel(presetTypesModel);
-
-		savePresetButton = new JButton("");
-		savePresetButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		savePresetButton.setAction(savePreset);
-		savePresetButton.setText(lang.getSavepreset());
-		sizePanel.add(savePresetButton, "3, 5, fill, fill");
-
-		progressTextpane = new JTextPane();
-		progressTextpane.setText(lang.getProgress());
-		progressTextpane.setOpaque(false);
-		progressTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
-		progressTextpane.setEditable(false);
-		progressTextpane.setBackground(SystemColor.menu);
-		centerPanel.add(progressTextpane, "2, 22, fill, fill");
-
-		progressbar = new JProgressBar();
-		progressbar.setToolTipText(lang.getHpro());
-		centerPanel.add(progressbar, "4, 22");
-
-		menubar = new JMenuBar();
-		mainFrame.setJMenuBar(menubar);
-
-		fileMenu = new JMenu(lang.getFile());
-		menubar.add(fileMenu);
-
-		closeMenuitem = new JMenuItem(lang.getClose());
-		closeMenuitem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		fileMenu.add(closeMenuitem);
-
-		languageMenu = new JMenu(lang.getLang());
-		menubar.add(languageMenu);
-
-		ArrayList<JMenuItem> langs = lang.langSelectable(config, mainFrame);
-		for (int i = 0; i < langs.size(); i++) {
-			languageMenu.add(langs.get(i));
-		}
-
-		configMenu = new JMenu(lang.getCfg());
-		menubar.add(configMenu);
-
-		openMenuitem = new JMenuItem(lang.getOpen());
-		openMenuitem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					Desktop desktop = Desktop.getDesktop();
-					desktop.edit(new File("cfg/config.ini"));
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-			}
-		});
-		configMenu.add(openMenuitem);
-
-		resetMenuitem = new JMenuItem(lang.getReset());
-		resetMenuitem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				FileChannel inChannel = null;
-				FileChannel outChannel = null;
-				FileInputStream inStream = null;
-				FileOutputStream outStream = null;
-				try {
-					inStream = new FileInputStream(new File("cfg/config.ini.backup"));
-					outStream = new FileOutputStream(new File("cfg/config.ini"));
-					inChannel = inStream.getChannel();
-					outChannel = outStream.getChannel();
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
-
-				try {
-					inChannel.transferTo(0, inChannel.size(), outChannel);
-					inStream.close();
-					outStream.close();
-					inChannel.close();
-					outChannel.close();
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-				JOptionPane.showMessageDialog(mainFrame, lang.getRestart(), lang.getRestarttitel(),
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
-		configMenu.add(resetMenuitem);
-
-		helpMenu = new JMenu(lang.getHelp());
-		menubar.add(helpMenu);
-
-		helpMenuitem = new JMenuItem(lang.getProg() + " - " + lang.getHelp());
-		helpMenuitem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Help.main(null);
-			}
-		});
-		helpMenu.add(helpMenuitem);
-
-		aboutMenuitem = new JMenuItem(lang.getAbout());
-		aboutMenuitem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				About.main(null);
-			}
-		});
-		helpMenu.add(aboutMenuitem);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
+		System.setProperty("file.encoding", "UTF-8");
 		inputFileModel = new DefaultListModel<String>();
 		mainFrame = new JFrame();
 		mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/gui/icon.png")));
@@ -379,7 +247,7 @@ public class Main implements UiSynchronization {
 			public void actionPerformed(ActionEvent arg0) {
 				inputFileModel.removeAllElements();
 				inputFileList.setModel(inputFileModel);
-				DynamicGUI.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
+				UiUtility.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
 			}
 		});
 		centerPanel.add(inputButton, "4, 2, center, center");
@@ -390,7 +258,7 @@ public class Main implements UiSynchronization {
 		centerPanel.add(inputFilesTextpane, "2, 4, left, center");
 		inputFilesTextpane.setBackground(UIManager.getColor("Label.background"));
 		inputFilesTextpane.setEditable(false);
-		DynamicGUI.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
+		UiUtility.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
 
 		inputFileScrollpane = new JScrollPane();
 		centerPanel.add(inputFileScrollpane, "4, 4, fill, fill");
@@ -440,7 +308,7 @@ public class Main implements UiSynchronization {
 
 					}
 				}
-				DynamicGUI.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
+				UiUtility.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
 			}
 		});
 		inputFileList.setDropTarget(new DropTarget() {
@@ -457,7 +325,7 @@ public class Main implements UiSynchronization {
 					for (File file : droppedFiles) {
 						dropFilter.filterImage(file);
 					}
-					DynamicGUI.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
+					UiUtility.alterPane(inputFilesTextpane, lang.getInf() + " (" + inputFileModel.getSize() + ")");
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -484,8 +352,6 @@ public class Main implements UiSynchronization {
 					} catch (NullPointerException npe) {
 						outputPathTextfield.setText(selectedFile.getName());
 					}
-				} else if (status == JFileChooser.CANCEL_OPTION) {
-
 				}
 			}
 		});
@@ -657,13 +523,139 @@ public class Main implements UiSynchronization {
 		convertButton.setAction(startConversion);
 		convertButton.setText(lang.getConvert());
 		bottomPanel.add(convertButton);
+
+		widthTextfield.setText(config.getWidth());
+		heightTextfield.setText(config.getHeight());
+		outputTextfield.setText(config.getOutputMod());
+		String[] tempSize = config.getPreset().split(",");
+		for (int i = 0; i < tempSize.length; i++) {
+			presetSizesInputModel.addElement(tempSize[i]);
+		}
+		presetSizesCombobox.setModel(presetSizesInputModel);
+
+		String[] tempTypes = config.getTypes().split(",");
+		for (int i = 0; i < tempTypes.length; i++) {
+			presetTypesModel.addElement(tempTypes[i]);
+		}
+		fileTypesModel.setModel(presetTypesModel);
+
+		savePresetButton = new JButton("");
+		savePresetButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		savePresetButton.setAction(savePreset);
+		savePresetButton.setText(lang.getSavepreset());
+		sizePanel.add(savePresetButton, "3, 5, fill, fill");
+
+		progressTextpane = new JTextPane();
+		progressTextpane.setText(lang.getProgress());
+		progressTextpane.setOpaque(false);
+		progressTextpane.setFont(new Font("Arial", Font.PLAIN, 12));
+		progressTextpane.setEditable(false);
+		progressTextpane.setBackground(SystemColor.menu);
+		centerPanel.add(progressTextpane, "2, 22, fill, fill");
+
+		progressbar = new JProgressBar();
+		progressbar.setToolTipText(lang.getHpro());
+		centerPanel.add(progressbar, "4, 22");
+
+		menubar = new JMenuBar();
+		mainFrame.setJMenuBar(menubar);
+
+		fileMenu = new JMenu(lang.getFile());
+		menubar.add(fileMenu);
+
+		closeMenuitem = new JMenuItem(lang.getClose());
+		closeMenuitem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		fileMenu.add(closeMenuitem);
+
+		languageMenu = new JMenu(lang.getLang());
+		menubar.add(languageMenu);
+
+		ArrayList<JMenuItem> langs = lang.langSelectable(config, mainFrame);
+		for (int i = 0; i < langs.size(); i++) {
+			languageMenu.add(langs.get(i));
+		}
+
+		configMenu = new JMenu(lang.getCfg());
+		menubar.add(configMenu);
+
+		openMenuitem = new JMenuItem(lang.getOpen());
+		openMenuitem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Desktop desktop = Desktop.getDesktop();
+					desktop.edit(new File("cfg/config.ini"));
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+			}
+		});
+		configMenu.add(openMenuitem);
+
+		resetMenuitem = new JMenuItem(lang.getReset());
+		resetMenuitem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileChannel inChannel = null;
+				FileChannel outChannel = null;
+				FileInputStream inStream = null;
+				FileOutputStream outStream = null;
+				try {
+					inStream = new FileInputStream(new File("cfg/config.ini.backup"));
+					outStream = new FileOutputStream(new File("cfg/config.ini"));
+					inChannel = inStream.getChannel();
+					outChannel = outStream.getChannel();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+
+				try {
+					inChannel.transferTo(0, inChannel.size(), outChannel);
+					inStream.close();
+					outStream.close();
+					inChannel.close();
+					outChannel.close();
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+				JOptionPane.showMessageDialog(mainFrame, lang.getRestart(), lang.getRestarttitel(),
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		configMenu.add(resetMenuitem);
+
+		helpMenu = new JMenu(lang.getHelp());
+		menubar.add(helpMenu);
+
+		helpMenuitem = new JMenuItem(lang.getProg() + " - " + lang.getHelp());
+		helpMenuitem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Help.main(null);
+			}
+		});
+		helpMenu.add(helpMenuitem);
+
+		aboutMenuitem = new JMenuItem(lang.getAbout());
+		aboutMenuitem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				About.main(null);
+			}
+		});
+		helpMenu.add(aboutMenuitem);
 	}
 
 	private void execResize() {
-		config.setOverwrite("0");
 		if (inputFileModel.size() != 0) {
-			if (!(widthTextfield.getText().equals("") && heightTextfield.getText().equals(""))
-					&& !(widthTextfield.getText().equals("0") && heightTextfield.getText().equals("0"))) {
+			if (ImageUtility.isGivenSizeValid(widthTextfield.getText())
+					&& ImageUtility.isGivenSizeValid(heightTextfield.getText())) {
 				progressbar.setMaximum(inputFileModel.size());
 				progressbar.setValue(0);
 				progressbar.setStringPainted(true);
@@ -684,8 +676,8 @@ public class Main implements UiSynchronization {
 
 				config.setHeight(heightTextfield.getText());
 				config.setWidth(widthTextfield.getText());
-				config.setOutputMod(outputTextfield.getText());
-				config.setOutputDir(outputPathTextfield.getText());
+				config.setOutputMod(outputModifier);
+				config.setOutputDir(outputPath);
 			} else {
 				JOptionPane.showMessageDialog(null, lang.getErr1(), lang.getErr1t(), JOptionPane.ERROR_MESSAGE);
 			}

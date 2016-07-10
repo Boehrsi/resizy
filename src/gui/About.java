@@ -87,8 +87,7 @@ public class About {
 		frmResizyAbout = new JFrame();
 		frmResizyAbout.setType(Type.POPUP);
 		frmResizyAbout.setTitle(l.getProg() + " - " + l.getAbout());
-		frmResizyAbout.setIconImage(Toolkit.getDefaultToolkit().getImage(
-				About.class.getResource("/gui/icon.png")));
+		frmResizyAbout.setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/gui/icon.png")));
 		frmResizyAbout.setResizable(false);
 		frmResizyAbout.setPreferredSize(aboutWindow);
 		frmResizyAbout.pack();
@@ -98,15 +97,13 @@ public class About {
 
 		JPanel middle = new JPanel();
 		frmResizyAbout.getContentPane().add(middle, BorderLayout.CENTER);
-		middle.setLayout(new FormLayout(new ColumnSpec[] {
-				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("35dlu:grow"),
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
-				FormSpecs.RELATED_GAP_COLSPEC, }, new RowSpec[] {
-				RowSpec.decode("default:grow"), FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.NARROW_LINE_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"), }));
+		middle.setLayout(new FormLayout(
+				new ColumnSpec[] { FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("35dlu:grow"),
+						FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("default:grow"),
+						FormSpecs.RELATED_GAP_COLSPEC, },
+				new RowSpec[] { RowSpec.decode("default:grow"), FormSpecs.RELATED_GAP_ROWSPEC,
+						FormSpecs.DEFAULT_ROWSPEC, FormSpecs.NARROW_LINE_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
+						FormSpecs.RELATED_GAP_ROWSPEC, RowSpec.decode("default:grow"), }));
 
 		JTextPane versionPane = new JTextPane();
 		versionPane.setText(l.getVersion());
@@ -137,8 +134,7 @@ public class About {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					Desktop.getDesktop()
-							.browse(new URI(
-									"https://drive.google.com/folderview?id=0B6fLujPPaJuuWWdhdTNmLTVHMGc"));
+							.browse(new URI("https://drive.google.com/folderview?id=0B6fLujPPaJuuWWdhdTNmLTVHMGc"));
 				} catch (URISyntaxException | IOException ex) {
 				}
 			}
@@ -162,8 +158,7 @@ public class About {
 		BufferedImage aboutImg;
 		try {
 			aboutImg = ImageIO.read(About.class.getResource("/gui/icon.png"));
-			JLabel lblNewLabel = new JLabel(new ImageIcon(
-					aboutImg.getScaledInstance(150, 150, Image.SCALE_SMOOTH)));
+			JLabel lblNewLabel = new JLabel(new ImageIcon(aboutImg.getScaledInstance(150, 150, Image.SCALE_SMOOTH)));
 			image.setBorder(new EmptyBorder(10, 10, 10, 10));
 			image.add(lblNewLabel);
 
@@ -176,14 +171,12 @@ public class About {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					try {
-						Desktop.getDesktop().browse(
-								new URI("https://github.com/Boehrsi/resizy"));
+						Desktop.getDesktop().browse(new URI("https://github.com/Boehrsi/resizy"));
 					} catch (URISyntaxException | IOException ex) {
 					}
 				}
 			});
-			txtpnResizyCode.setText(l.getProg() + " " + l.getAt()
-					+ " GitHub");
+			txtpnResizyCode.setText(l.getProg() + " " + l.getAt() + " GitHub");
 			txtpnResizyCode.setOpaque(false);
 			txtpnResizyCode.setFont(new Font("Arial", Font.PLAIN, 12));
 			txtpnResizyCode.setEditable(false);
@@ -199,8 +192,7 @@ public class About {
 				public void mouseClicked(MouseEvent arg0) {
 					try {
 						Desktop.getDesktop()
-								.browse(new URI(
-										"http://boehrsi.de/index.php?action=c-public_project-post&id=26"));
+								.browse(new URI("http://boehrsi.de/index.php?action=c-public_project-post&id=26"));
 					} catch (URISyntaxException | IOException ex) {
 					}
 				}
