@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import interfaces.ResizeStrategy;
 import utilities.ImageUtility;
 
 /**
@@ -16,7 +15,7 @@ import utilities.ImageUtility;
  * 
  */
 
-public class ImageResizer extends BaseImageResizer implements ResizeStrategy {
+public class ImageResizer extends BaseImageResizer {
 
 	public void resizeImageList(int calcWidth, int calcHeight, String outputModifier, String outputPath,
 			ArrayList<String> inputFileList, String outputfileType, boolean saveMetaData) {

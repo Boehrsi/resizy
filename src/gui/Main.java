@@ -58,8 +58,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
+import core.BaseImageResizer;
 import core.Config;
 import core.FileFilter;
+import core.ImageResizer;
 import core.Language;
 import core.MultiThreadImageResizer;
 import interfaces.UiSynchronization;
@@ -525,8 +527,17 @@ public class Main implements UiSynchronization {
 		convertButton.setAction(startConversion);
 		convertButton.setText(lang.getConvert());
 		bottomPanel.add(convertButton);
-		
+
 		multiThreadCheckbox = new JCheckBox(lang.getUseMultithreading());
+		multiThreadCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (multiThreadCheckbox.isSelected()) {
+					config.setUseMultithreading("1");
+				} else {
+					config.setUseMultithreading("0");
+				}
+			}
+		});
 		boolean selected = config.getUseMultithreading().equals("1") ? true : false;
 		multiThreadCheckbox.setSelected(selected);
 		bottomPanel.add(multiThreadCheckbox);
@@ -662,7 +673,7 @@ public class Main implements UiSynchronization {
 	private void execResize() {
 		if (inputFileModel.size() != 0) {
 			if (ImageUtility.isGivenSizeValid(widthTextfield.getText())
-					&& ImageUtility.isGivenSizeValid(heightTextfield.getText())) {
+					|| ImageUtility.isGivenSizeValid(heightTextfield.getText())) {
 				progressbar.setMaximum(inputFileModel.size());
 				progressbar.setValue(0);
 				progressbar.setStringPainted(true);
@@ -676,7 +687,12 @@ public class Main implements UiSynchronization {
 				ArrayList<String> inputFileList = ListUtility.defaultModeltoArrayList(inputFileModel);
 				String outputfileType = (String) fileTypesModel.getSelectedItem();
 
-				MultiThreadImageResizer resizer = new MultiThreadImageResizer();
+				BaseImageResizer resizer;
+				if (multiThreadCheckbox.isSelected()) {
+					resizer = new MultiThreadImageResizer();
+				} else {
+					resizer = new ImageResizer();
+				}
 				resizer.setup(config, lang, convertButton, this);
 				resizer.resizeImageList(calcWidth, calcHeight, outputModifier, outputPath, inputFileList,
 						outputfileType, saveMetaData);
@@ -706,4 +722,5 @@ public class Main implements UiSynchronization {
 		progressbar.setValue(progressbarFinishValue);
 		progressbar.setString(progressbarFinishValue + " / " + inputFileModel.size());
 	}
+
 }

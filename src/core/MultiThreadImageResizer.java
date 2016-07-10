@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import interfaces.ResizeStrategy;
 import utilities.ImageUtility;
 
 /**
@@ -19,7 +18,7 @@ import utilities.ImageUtility;
  * 
  */
 
-public class MultiThreadImageResizer extends BaseImageResizer implements ResizeStrategy {
+public class MultiThreadImageResizer extends BaseImageResizer {
 
 	@Override
 	public void resizeImageList(int calcWidth, int calcHeight, String outputModifier, String outputPath,

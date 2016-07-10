@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 
@@ -76,5 +77,8 @@ public abstract class BaseImageResizer {
 		}
 		ImageUtility.writeImage(outputImage, outputFile, outputFileType, lastModDate);
 	}
+
+	public abstract void resizeImageList(int calcWidth, int calcHeight, String outputModifier, String outputPath,
+			ArrayList<String> inputFileList, String outputfileType, boolean saveMetaData);
 
 }
