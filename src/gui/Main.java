@@ -86,6 +86,7 @@ public class Main implements UiSynchronization {
 				JPanel panel = new JPanel();
 				JTextPane textpane = new JTextPane();
 				textpane.setEditable(false);
+				textpane.setOpaque(false);
 				textpane.setText(lang.getOverwritetext());
 				textpane.setPreferredSize(dialogDimension);
 				panel.add(textpane);
