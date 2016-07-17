@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 
 import interfaces.UiSynchronization;
+import utilities.ConstantUtility;
 import utilities.ImageUtility;
 
 /**
@@ -59,7 +60,7 @@ public abstract class BaseImageResizer {
 			outputFile = originalFile.substring(0, originalFile.lastIndexOf("\\")) + outputFile;
 		}
 
-		if (outputFileType.equals("")) {
+		if (outputFileType.equals(ConstantUtility.EMPTY)) {
 			// No output type is set, use input type.
 			outputFileType = outputFile.substring(outputFile.lastIndexOf(".") + 1);
 		} else {

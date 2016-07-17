@@ -76,7 +76,7 @@ public class ImageUtility {
 	}
 
 	public static boolean isGivenSizeValid(String sizeValue) {
-		return !sizeValue.equals("") && !sizeValue.equals("0");
+		return !sizeValue.equals(ConstantUtility.EMPTY) && !sizeValue.equals("0");
 	}
 
 	public static String generatePath(String outputModifier, String outputPath, String outputFile) {

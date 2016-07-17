@@ -14,6 +14,8 @@ public class ConstantUtility {
 	public static final String OVERWRITE_FILES_FALSE = "1";
 
 	public static final String OVERWRITE_FILES_TRUE = "0";
+	
+	public static final String EMPTY = "";
 
 	private ConstantUtility() {
 		// Utility class

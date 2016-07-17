@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import utilities.ConstantUtility;
+
 /**
  * 
  * Internationalization handling base on the file in the lang folder.
@@ -331,7 +333,7 @@ public class Language {
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
-				JMenuItem tempItem = new JMenuItem(file.getName().replace(".txt", ""));
+				JMenuItem tempItem = new JMenuItem(file.getName().replace(".txt", ConstantUtility.EMPTY));
 				tempItem.addActionListener(new ActionListener() {
 					@Override
 					public final void actionPerformed(final ActionEvent e) {

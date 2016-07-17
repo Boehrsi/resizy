@@ -1,5 +1,7 @@
 package gui;
 
+import static utilities.ConstantUtility.EMPTY;
+
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -83,7 +85,7 @@ public class Main implements UiSynchronization {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ((outputPathTextfield.getText().equals("") || outputTextfield.getText().equals(""))
+			if ((outputPathTextfield.getText().equals(EMPTY) || outputTextfield.getText().equals(EMPTY))
 					&& config.getOverwrite().equals(ConstantUtility.OVERWRITE_FILES_FALSE)) {
 				JPanel panel = new JPanel();
 				JTextPane textpane = new JTextPane();
@@ -118,7 +120,7 @@ public class Main implements UiSynchronization {
 			String tempInsert = widthTextfield.getText() + "x" + heightTextfield.getText();
 			if (presetSizesInputModel.getIndexOf(tempInsert) == -1) {
 				presetSizesInputModel.addElement(tempInsert);
-				String newPreset = "";
+				String newPreset = EMPTY;
 				for (int i = 0; i < presetSizesInputModel.getSize(); i++) {
 					newPreset += presetSizesInputModel.getElementAt(i) + ",";
 				}
@@ -178,7 +180,7 @@ public class Main implements UiSynchronization {
 	private JTextPane inputLabelTextpane;
 	private JButton outputButton;
 	private JButton inputButton;
-	private JButton convertButton = new JButton("");
+	private JButton convertButton = new JButton(EMPTY);
 	private JCheckBox multiThreadCheckbox;
 
 	public static void main(final String[] args) {
@@ -373,9 +375,9 @@ public class Main implements UiSynchronization {
 		outputButton.setToolTipText(lang.getHoutputButton());
 		outputButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				outputPathTextfield.setText("");
+				outputPathTextfield.setText(EMPTY);
 				fileTypesModel.setSelectedIndex(0);
-				outputTextfield.setText("");
+				outputTextfield.setText(EMPTY);
 				metaSaveCheckbox.setSelected(false);
 				presetSizesCombobox.setSelectedIndex(0);
 			}
@@ -401,7 +403,6 @@ public class Main implements UiSynchronization {
 		centerPanel.add(fileTypesTextpane, "2, 12, left, top");
 
 		fileTypesModel = new JComboBox<String>();
-
 		fileTypesModel.setToolTipText(lang.getHintfiletypes());
 		centerPanel.add(fileTypesModel, "4, 12, fill, center");
 
@@ -426,7 +427,7 @@ public class Main implements UiSynchronization {
 		metaSaveTextpane.setText(lang.getOutmeta());
 		centerPanel.add(metaSaveTextpane, "2, 16, left, top");
 
-		metaSaveCheckbox = new JCheckBox("");
+		metaSaveCheckbox = new JCheckBox(EMPTY);
 		metaSaveCheckbox.setToolTipText(lang.getHoutmeta());
 		centerPanel.add(metaSaveCheckbox, "4, 16, left, center");
 
@@ -478,7 +479,7 @@ public class Main implements UiSynchronization {
 			public void keyPressed(KeyEvent key) {
 				if (key.getKeyCode() == KeyEvent.VK_DELETE || key.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					presetSizesInputModel.removeElementAt(presetSizesCombobox.getSelectedIndex());
-					String newPreset = "";
+					String newPreset = EMPTY;
 					for (int i = 0; i < presetSizesInputModel.getSize(); i++) {
 						newPreset += presetSizesInputModel.getElementAt(i) + ",";
 					}
@@ -500,7 +501,7 @@ public class Main implements UiSynchronization {
 		widthTextfield.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (widthTextfield.getText().equals("")) {
+				if (widthTextfield.getText().equals(EMPTY)) {
 					widthTextfield.setText("0");
 				}
 			}
@@ -513,7 +514,7 @@ public class Main implements UiSynchronization {
 		heightTextfield.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (heightTextfield.getText().equals("")) {
+				if (heightTextfield.getText().equals(EMPTY)) {
 					heightTextfield.setText("0");
 				}
 			}
@@ -557,7 +558,7 @@ public class Main implements UiSynchronization {
 		}
 		fileTypesModel.setModel(presetTypesModel);
 
-		savePresetButton = new JButton("");
+		savePresetButton = new JButton(EMPTY);
 		savePresetButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}

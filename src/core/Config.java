@@ -19,7 +19,6 @@ import java.util.Properties;
 public class Config {
 	private static Properties configFile;
 	private String outputDir, outputMod, preset, lang, version, types, overwrite, useMultithreading;
-
 	int width, height;
 	FileOutputStream out;
 	FileInputStream in;

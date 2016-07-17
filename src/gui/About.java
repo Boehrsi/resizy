@@ -39,7 +39,6 @@ import core.Config;
 import core.Language;
 
 public class About {
-
 	private Dimension aboutWindow = new Dimension(500, 285);
 	private JFrame frmResizyAbout;
 	private Config c = new Config();
