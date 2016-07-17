@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import lombok.Data;
+
 /**
  * 
  * This class provides basic functionality for configuration load / store. The
@@ -16,6 +18,7 @@ import java.util.Properties;
  * 
  */
 
+@Data
 public class Config {
 	private static Properties configFile;
 	private String outputDir, outputMod, preset, lang, version, types, overwrite, useMultithreading;
@@ -40,47 +43,14 @@ public class Config {
 			try {
 				width = Integer.parseInt(configFile.getProperty("width"));
 				height = Integer.parseInt(configFile.getProperty("height"));
-			} catch (NumberFormatException nfe) {
-
+			} catch (NumberFormatException ignore) {
 			}
-		} catch (IOException e) {
+		} catch (IOException ignore) {
 		}
 	}
 
 	public String getHeight() {
 		return String.valueOf(height);
-	}
-
-	public String getLang() {
-		return lang;
-	}
-
-	public String getOutputDir() {
-		return outputDir;
-	}
-
-	public String getOutputMod() {
-		return outputMod;
-	}
-
-	public String getOverwrite() {
-		return overwrite;
-	}
-
-	public String getPreset() {
-		return preset;
-	}
-
-	public String getTypes() {
-		return types;
-	}
-
-	public String getUseMultithreading() {
-		return useMultithreading;
-	}
-
-	public String getVersion() {
-		return version;
 	}
 
 	public String getWidth() {
@@ -123,18 +93,10 @@ public class Config {
 		store();
 	}
 
-	public void setTypes(String types) {
-		this.types = types;
-	}
-
 	public void setUseMultithreading(String useMultithreading) {
 		this.useMultithreading = useMultithreading;
 		configFile.setProperty("useMultithreading", useMultithreading);
 		store();
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
 	}
 	
 	public void setWidth(String width) {

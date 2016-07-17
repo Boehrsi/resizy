@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * 
  * Utility class for image operations and checks.
@@ -20,6 +22,7 @@ import javax.imageio.ImageIO;
  * 
  */
 
+@UtilityClass
 public class ImageUtility {
 
 	static final HashMap<Key, Object> hints = new HashMap<Key, Object>();
@@ -28,10 +31,6 @@ public class ImageUtility {
 		hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	}
-
-	private ImageUtility() {
-		// Utility class
 	}
 
 	public static BufferedImage readImage(String file) {

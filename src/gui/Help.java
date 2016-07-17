@@ -16,6 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import core.Config;
 import core.Language;
+import utilities.ConstantUtility;
 
 public class Help {
 	private JFrame frmResizyHelp;
@@ -73,7 +74,7 @@ public class Help {
 		frmResizyHelp.setTitle(l.getProg() + " - " + l.getHelp());
 		frmResizyHelp.setIconImage(Toolkit.getDefaultToolkit().getImage(Help.class.getResource("/gui/icon.png")));
 		frmResizyHelp.setResizable(false);
-		frmResizyHelp.setPreferredSize(new Dimension(500, 550));
+		frmResizyHelp.setPreferredSize(new Dimension(ConstantUtility.HELP_WIDTH, ConstantUtility.HELP_HEIGHT));
 		frmResizyHelp.pack();
 		frmResizyHelp.setLocationRelativeTo(null);
 		frmResizyHelp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

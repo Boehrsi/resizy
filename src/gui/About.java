@@ -37,9 +37,10 @@ import com.jgoodies.forms.layout.RowSpec;
 
 import core.Config;
 import core.Language;
+import utilities.ConstantUtility;
 
 public class About {
-	private Dimension aboutWindow = new Dimension(500, 285);
+	private Dimension aboutWindow = new Dimension(ConstantUtility.ABOUT_WIDTH, ConstantUtility.ABOUT_HEIGHT);
 	private JFrame frmResizyAbout;
 	private Config c = new Config();
 	private Language l = new Language(c.getLang());

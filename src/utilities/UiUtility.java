@@ -2,6 +2,8 @@ package utilities;
 
 import javax.swing.JTextPane;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * 
  * Utility class for UI operations.
@@ -11,12 +13,9 @@ import javax.swing.JTextPane;
  * 
  */
 
+@UtilityClass
 public class UiUtility {
-
-	private UiUtility() {
-		// Utility class
-	}
-
+	
 	public static void alterPane(JTextPane pane, String text) {
 		pane.setText(text);
 	}

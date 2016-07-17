@@ -5,6 +5,8 @@ import java.util.Collections;
 
 import javax.swing.DefaultListModel;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * 
  * Utility class for list operations.
@@ -14,11 +16,8 @@ import javax.swing.DefaultListModel;
  * 
  */
 
+@UtilityClass
 public class ListUtility {
-
-	private ListUtility() {
-		// Utility class
-	}
 
 	public static ArrayList<String> defaultModeltoArrayList(DefaultListModel<String> model) {
 		ArrayList<String> list = new ArrayList<>();

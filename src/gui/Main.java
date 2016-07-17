@@ -135,8 +135,8 @@ public class Main implements UiSynchronization {
 	private final Action startConversion = new ConvertAction();
 	private final Action savePreset = new SaveAction();
 
-	private Dimension dialogDimension = new Dimension(400, 80);
-	private Dimension mainWindowDimension = new Dimension(700, 550);
+	private Dimension dialogDimension = new Dimension(ConstantUtility.DIALOG_WIDTH, ConstantUtility.DIALOG_HEIGHT);
+	private Dimension mainWindowDimension = new Dimension(ConstantUtility.MAIN_WIDTH, ConstantUtility.MAIN_HEIGHT);
 	private JFrame mainFrame;
 	private JTextField outputPathTextfield;
 	private final JPanel topPanel = new JPanel();
