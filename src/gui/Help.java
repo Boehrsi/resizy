@@ -13,6 +13,7 @@ import javax.swing.JTextPane;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 
 import core.Config;
 import core.Language;
@@ -40,6 +41,7 @@ public class Help {
 			e1.printStackTrace();
 		}
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Help window = new Help();
@@ -77,7 +79,7 @@ public class Help {
 		frmResizyHelp.setPreferredSize(new Dimension(ConstantUtility.HELP_WIDTH, ConstantUtility.HELP_HEIGHT));
 		frmResizyHelp.pack();
 		frmResizyHelp.setLocationRelativeTo(null);
-		frmResizyHelp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmResizyHelp.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frmResizyHelp.getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JTextPane helpText = new JTextPane();

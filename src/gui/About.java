@@ -28,6 +28,7 @@ import javax.swing.JTextPane;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -62,6 +63,7 @@ public class About {
 			e1.printStackTrace();
 		}
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					About window = new About();
@@ -92,7 +94,7 @@ public class About {
 		frmResizyAbout.setPreferredSize(aboutWindow);
 		frmResizyAbout.pack();
 		frmResizyAbout.setLocationRelativeTo(null);
-		frmResizyAbout.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmResizyAbout.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frmResizyAbout.getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JPanel middle = new JPanel();
@@ -131,6 +133,7 @@ public class About {
 
 		JButton updateCheckButton = new JButton(l.getGetlatest());
 		updateCheckButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					Desktop.getDesktop()

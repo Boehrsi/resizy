@@ -17,6 +17,7 @@ import utilities.ImageUtility;
 
 public class ImageResizer extends BaseImageResizer {
 
+	@Override
 	public void resizeImageList(int calcWidth, int calcHeight, String outputModifier, String outputPath,
 			ArrayList<String> inputFileList, String outputfileType, boolean saveMetaData) {
 

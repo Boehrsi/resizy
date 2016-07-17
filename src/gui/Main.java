@@ -250,6 +250,7 @@ public class Main implements UiSynchronization {
 		inputButton = new JButton(lang.getInputButton());
 		inputButton.setToolTipText(lang.getHinputButton());
 		inputButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				inputFileModel.removeAllElements();
 				inputFileList.setModel(inputFileModel);
@@ -374,6 +375,7 @@ public class Main implements UiSynchronization {
 		outputButton = new JButton(lang.getOutputButton());
 		outputButton.setToolTipText(lang.getHoutputButton());
 		outputButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				outputPathTextfield.setText(EMPTY);
 				fileTypesModel.setSelectedIndex(0);
@@ -531,6 +533,7 @@ public class Main implements UiSynchronization {
 
 		multiThreadCheckbox = new JCheckBox(lang.getUseMultithreading());
 		multiThreadCheckbox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (multiThreadCheckbox.isSelected()) {
 					config.setUseMultithreading("1");
@@ -560,6 +563,7 @@ public class Main implements UiSynchronization {
 
 		savePresetButton = new JButton(EMPTY);
 		savePresetButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
@@ -656,6 +660,7 @@ public class Main implements UiSynchronization {
 
 		helpMenuitem = new JMenuItem(lang.getProg() + " - " + lang.getHelp());
 		helpMenuitem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Help.main(null);
 			}
@@ -664,6 +669,7 @@ public class Main implements UiSynchronization {
 
 		aboutMenuitem = new JMenuItem(lang.getAbout());
 		aboutMenuitem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				About.main(null);
 			}
