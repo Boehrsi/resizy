@@ -32,7 +32,7 @@ public class Language {
 			restart, restarttitel, progress, hf, hof, hom, hs, hss, hp, s, hpro, help, houtmeta, about, version, update,
 			prog, at, getlatest, filetype, hintfiletypes, err1, err1t, err2, err2t, err3, err3t, overwritetitle,
 			overwritetext, inputLabel, inputButton, hinputButton, outputLabel, outputButton, houtputButton,
-			useMultithreading;
+			useMultithreading, hintmultithread;
 
 	public Language(String langFile) {
 		FileInputStream in = null;
@@ -97,6 +97,7 @@ public class Language {
 			hinputButton = configFile.getProperty("hinputButton");
 			houtputButton = configFile.getProperty("houtputButton");
 			useMultithreading = configFile.getProperty("useMultithreading");
+			hintmultithread = configFile.getProperty("hintmultithread");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

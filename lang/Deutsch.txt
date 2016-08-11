@@ -42,6 +42,7 @@ hintfiletypes=Ausgabedateityp für alle zu konvertierenden Dateien wählen oder le
 hintoutmeta=Aktivieren um das Datum der letzten Änderung der Quelldatei auf die verkleinerte Zieldatei zu übertragen.
 hinputButton=Entfernt alle Einträge aus der Eingabedateienliste.
 houtputButton=Setzt alle Ausgabeeinstellungen zurück.
+hintmultithread=Ermöglicht bis zu 10 Threads für die Umrechnung von Bildern zu nutzen. Dies ist vor allem bei vielen Bildern zu empfehlen.
 # About
 version=Version
 update=Auf Updates prüfen (Öffnet den Browser)

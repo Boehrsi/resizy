@@ -69,7 +69,8 @@ public class Help {
 				+ l.getFiletype() + "</strong><br>" + l.getHintfiletypes() + "</li>\n" + "<li><strong>" + l.getOutm()
 				+ "</strong><br>" + l.getHom() + "</li>\n" + "<li><strong>" + l.getOutmeta() + "</strong><br>"
 				+ l.getHoutmeta() + "</li>\n" + "<li><strong>" + l.getSize() + "</strong><br>" + l.getHs() + "</li>\n"
-				+ "<li><strong>" + l.getPre() + "</strong><br>" + l.getHp() + "</li>\n" + "</ul></html>";
+				+ "<li><strong>" + l.getPre() + "</strong><br>" + l.getHp() + "</li>\n"
+				+ "<li><strong>" + l.getUseMultithreading() + "</strong><br>" + l.getHintmultithread() + "</li>\n" + "</ul></html>";
 
 		frmResizyHelp = new JFrame();
 		frmResizyHelp.setType(Type.POPUP);
