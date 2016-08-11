@@ -137,7 +137,7 @@ public class About {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					Desktop.getDesktop()
-							.browse(new URI("https://drive.google.com/folderview?id=0B6fLujPPaJuuWWdhdTNmLTVHMGc"));
+							.browse(new URI("https://github.com/Boehrsi/resizy/releases"));
 				} catch (URISyntaxException | IOException ex) {
 				}
 			}
