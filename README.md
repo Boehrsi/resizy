@@ -1,6 +1,7 @@
 # Short description #
 Resizy is a small image resize tool featuring the following functions:
   * Simple GUI
+  * Multithread support
   * Drag and Drop support for loading files
   * Edit multiple files and also rename these
   * Set width or height and the other value is calculated automaticly
@@ -8,7 +9,7 @@ Resizy is a small image resize tool featuring the following functions:
   * Use german or english language or easily add your own language by just adding a file (See instructions below)
 
 # Downloads #
-https://drive.google.com/folderview?id=0B6fLujPPaJuuTGJvMEQ3SnNOWDQ&usp=sharing
+https://github.com/Boehrsi/resizy/releases
 
 # Screenshots #
 ![http://boehrsi.de/online/resizy/resizy_full.png](http://boehrsi.de/online/resizy/resizy_full.png)
