@@ -2,7 +2,6 @@ package languages;
 
 import lombok.Data;
 
-import java.io.File;
 import java.util.*;
 
 /**
@@ -14,13 +13,6 @@ import java.util.*;
 
 @Data
 public class Language {
-
-    Map<String, String> supportedLanguages = new HashMap<String, String>() {
-        {
-            put("Deutsch", "de");
-            put("English", "en");
-        }
-    };
 
     public static final String NAME = "name";
     public static final String FILE = "file";
@@ -69,7 +61,12 @@ public class Language {
     public static final String OVERWRITE_TEXT = "overwriteText";
     public static final String BUG = "bug";
     public static final String FEATURE = "feature";
-
+    Map<String, String> supportedLanguages = new HashMap<String, String>() {
+        {
+            put("Deutsch", "de");
+            put("English", "en");
+        }
+    };
     ResourceBundle bundle;
 
     public Language(String languageName) {

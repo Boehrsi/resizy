@@ -20,35 +20,23 @@ import static utilities.ConstantUtility.Strings.EMPTY;
 @RequiredArgsConstructor
 public class MainLogic {
 
-    public interface UiSynchronization {
-
-        void updateProgress();
-
-        void finishProgress();
-
-    }
-
     @Getter
     private DefaultListModel<String> inputFilesModel = new DefaultListModel<>();
-
     @Getter
     private DefaultComboBoxModel<String> sizePresetModel = new DefaultComboBoxModel<>();
-
     @Getter
     private DefaultComboBoxModel<String> fileTypeModel = new DefaultComboBoxModel<>();
-
     @Getter
     private Config config = new Config();
-
     @Getter
     private Language language = new Language(config.get(LANGUAGE));
 
-    void setMultiThreading(boolean selected) {
-        config.set(MULTI_THREADING, selected);
-    }
-
     boolean getMultiThreading() {
         return config.getAsBoolean(MULTI_THREADING);
+    }
+
+    void setMultiThreading(boolean selected) {
+        config.set(MULTI_THREADING, selected);
     }
 
     void loadPresets() {
@@ -112,5 +100,13 @@ public class MainLogic {
         config.set(COPY_LAST_MODIFIED_DATE, false);
         config.set(WIDTH, 0);
         config.set(HEIGHT, 0);
+    }
+
+    public interface UiSynchronization {
+
+        void updateProgress();
+
+        void finishProgress();
+
     }
 }
