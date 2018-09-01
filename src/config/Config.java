@@ -14,7 +14,7 @@ import java.util.Properties;
  * editing configuration files.
  *
  * @author Boehrsi
- * @version 1.1
+ * @version 2.0
  */
 
 @Data
@@ -67,7 +67,7 @@ public class Config {
 
     private void store() {
         try {
-            FileOutputStream out = new FileOutputStream("cfg/config.ini");
+            FileOutputStream out = new FileOutputStream(ConstantUtility.Paths.CONFIG);
             configProperties.store(out, null);
             out.close();
         } catch (Exception ignore) {

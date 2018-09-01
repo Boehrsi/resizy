@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 /**
- * Simple single threaded ImageResizer.
+ * Single threaded ImageResizer.
  *
  * @author Boehrsi
  * @version 1.0
@@ -19,11 +19,10 @@ public class ImageResizer extends BaseImageResizer {
                                 ArrayList<String> inputFileList, String outputFileType, boolean saveMetaData) {
 
         Thread convertThread = new Thread(() -> {
-            for (int i = 0; i < inputFileList.size(); i++) {
-                String outputFile = inputFileList.get(i);
+            for (String outputFile : inputFileList) {
                 outputFile = ImageUtility.generatePath(outputModifier, outputPath, outputFile);
                 try {
-                    resizeImage(inputFileList.get(i), calcWidth, calcHeight, outputFile, outputFileType,
+                    resizeImage(outputFile, calcWidth, calcHeight, outputFile, outputFileType,
                             saveMetaData);
                 } catch (IllegalArgumentException iae) {
                     JOptionPane.showMessageDialog(null, language.getErrorText(3), language.getErrorTitle(3), JOptionPane.ERROR_MESSAGE);

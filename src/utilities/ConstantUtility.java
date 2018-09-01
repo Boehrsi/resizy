@@ -62,10 +62,6 @@ public class ConstantUtility {
 
         public static final int MAIN_HEIGHT = 550;
 
-        public static final int HELP_WIDTH = 600;
-
-        public static final int HELP_HEIGHT = 600;
-
         public static final int DIALOG_WIDTH = 400;
 
         public static final int DIALOG_HEIGHT = 80;
@@ -90,6 +86,14 @@ public class ConstantUtility {
         public static final Font BIG_BOLD = new Font("Arial", Font.BOLD, 16);
 
         public static final Font HUGE_BOLD = new Font("Arial", Font.BOLD, 25);
+
+    }
+
+    public class Settings {
+
+        public static final String FILE_ENCODING_KEY = "file.encoding";
+
+        public static final String FILE_ENCODING_VALUE_UTF8 = "UTF-8";
 
     }
 

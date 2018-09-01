@@ -10,18 +10,18 @@ import java.io.File;
  * @version 1.0
  */
 
-public class FileFilter {
+class FileFilter {
 
     private DefaultListModel<String> inputFilesModel;
 
     private JList<String> inputFiles;
 
-    public FileFilter(DefaultListModel<String> inputFilesModel, JList<String> inputFiles) {
+    FileFilter(DefaultListModel<String> inputFilesModel, JList<String> inputFiles) {
         this.inputFilesModel = inputFilesModel;
         this.inputFiles = inputFiles;
     }
 
-    public void filterImage(File file) {
+    void filterImage(File file) {
         if (file.isFile() && !inputFilesModel.contains(file.getAbsolutePath())
                 && (file.getName().toLowerCase().contains(".png") || file.getName().toLowerCase().contains(".jpg")
                 || file.getName().toLowerCase().contains(".jpeg"))) {

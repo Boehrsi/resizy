@@ -27,6 +27,13 @@ import static utilities.ConstantUtility.Paths.PATH_LOGO;
 import static utilities.ConstantUtility.Strings.GITHUB_PAGES;
 import static utilities.ConstantUtility.Urls.*;
 
+/**
+ * About UI component. Creates the about UI and handles its minimal logic.
+ *
+ * @author Boehrsi
+ * @version 1.1
+ */
+
 public class About {
 
     public About(Language language) {

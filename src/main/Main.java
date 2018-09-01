@@ -2,11 +2,14 @@ package main;
 
 import javax.swing.*;
 
+import static utilities.ConstantUtility.Settings.FILE_ENCODING_KEY;
+import static utilities.ConstantUtility.Settings.FILE_ENCODING_VALUE_UTF8;
+
 /**
  * Core class for program initialization and launch.
  *
  * @author Boehrsi
- * @version 1.0
+ * @version 2.0
  */
 
 public class Main {
@@ -23,7 +26,7 @@ public class Main {
     }
 
     private static void setupUi() {
-        System.setProperty("file.encoding", "UTF-8");
+        System.setProperty(FILE_ENCODING_KEY, FILE_ENCODING_VALUE_UTF8);
         JFrame mainUI = new JFrame();
         mainUI.setContentPane(new MainUi(mainUI).getContainer());
     }

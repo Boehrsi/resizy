@@ -5,10 +5,10 @@ import lombok.Data;
 import java.util.*;
 
 /**
- * Internationalization handling base on the file in the language folder.
+ * Internationalization handling based on ResourceBundles.
  *
  * @author Boehrsi
- * @version 1.0
+ * @version 2.0
  */
 
 @Data
