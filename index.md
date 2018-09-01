@@ -1,4 +1,3 @@
-# Short description #
 Resizy is a small image resize tool featuring the following functions:
   * Simple GUI
   * Multithread support
