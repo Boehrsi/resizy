@@ -23,7 +23,7 @@ public class ConstantUtility {
 
     public class Urls {
 
-        public static final String GITHUB = "https://github.com/Boehrsi/resizy/releases";
+        public static final String GITHUB = "https://github.com/Boehrsi/resizy/releases/latest";
 
         public static final String GITHUB_BUG_FEATURE = "https://github.com/Boehrsi/resizy/issues/new";
 
