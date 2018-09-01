@@ -13,7 +13,7 @@ Resizy is a small image resize tool featuring the following functions:
  * [Alle Releases](https://github.com/Boehrsi/resizy/releases)
 
 # Screenshots #
-![https://github.com/Boehrsi/resizy/blob/master/assets/resizy_ui.png](https://github.com/Boehrsi/resizy/blob/master/assets/resizy_ui.png)
+![https://raw.githubusercontent.com/Boehrsi/resizy/master/assets/resizy_ui.png](https://raw.githubusercontent.com/Boehrsi/resizy/master/assets/resizy_ui.png)
 
 # Localization #
 
