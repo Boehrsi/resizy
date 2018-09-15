@@ -249,12 +249,8 @@ public class MainUi implements MainLogic.UiSynchronization {
             Desktop.getDesktop()
                     .browse(new URI(GITHUB_BUG_FEATURE));
         } catch (URISyntaxException | IOException ex) {
-            showErrorDialog(language);
+            JOptionPane.showMessageDialog(null, language.getErrorText(4), language.getErrorTitle(4), JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private void showErrorDialog(Language language) {
-        JOptionPane.showMessageDialog(null, language.getErrorText(4), language.getErrorTitle(4), JOptionPane.ERROR_MESSAGE);
     }
 
     private void setupText(Language language) {
@@ -314,8 +310,13 @@ public class MainUi implements MainLogic.UiSynchronization {
         sizeHelpText.setBackground(BACKGROUND);
         sizeHelpText.setText("x");
         sizePresetAddButton.addActionListener(arg0 -> {
-            logic.addSizePresent(widthField.getText(), heightField.getText());
-            sizePresetSpinner.setModel(logic.getSizePresetModel());
+            boolean wasAdded = logic.addSizePreset(widthField.getText(), heightField.getText());
+            if (!wasAdded) {
+                Language language = logic.getLanguage();
+                JOptionPane.showMessageDialog(null, language.get(PRESET_NOT_SAVED), language.get(INFORMATION), JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                sizePresetSpinner.setModel(logic.getSizePresetModel());
+            }
         });
     }
 

@@ -53,21 +53,21 @@ public class MainLogic {
         }
     }
 
-    void addSizePresent(String width, String height) {
+    boolean addSizePreset(String width, String height) {
         if (width.isEmpty() || height.isEmpty() || (Integer.valueOf(width) < 1 && Integer.valueOf(height) < 1)) {
-            //TODO
-            return;
+            return false;
         }
         String newPreset = width + "x" + height;
         if (sizePresetModel.getIndexOf(newPreset) == -1) {
             sizePresetModel.addElement(newPreset);
             saveSizePresets();
         }
+        return true;
     }
 
     private void saveSizePresets() {
         StringBuilder newPreset = new StringBuilder(EMPTY);
-        for (int i = 0; i < sizePresetModel.getSize(); i++) {
+        for (int i = 1; i < sizePresetModel.getSize(); i++) {
             newPreset.append(sizePresetModel.getElementAt(i)).append(",");
         }
         config.set(PRESET, newPreset.toString());

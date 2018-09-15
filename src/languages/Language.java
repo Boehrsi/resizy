@@ -61,6 +61,7 @@ public class Language {
     public static final String OVERWRITE_TEXT = "overwriteText";
     public static final String BUG = "bug";
     public static final String FEATURE = "feature";
+    public static final String PRESET_NOT_SAVED = "presetNotSaved";
     Map<String, String> supportedLanguages = new HashMap<String, String>() {
         {
             put("Deutsch", "de");
