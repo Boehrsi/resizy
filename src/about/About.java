@@ -5,6 +5,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import languages.Language;
+import main.MainUi;
 import utilities.ConstantUtility;
 import utilities.UiUtility;
 
@@ -14,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +37,10 @@ import static utilities.ConstantUtility.Urls.*;
  */
 
 public class About {
+    MainUi.OnWindowCloseListener onWindowCloseListener;
 
-    public About(Language language) {
+    public About(Language language, MainUi.OnWindowCloseListener onWindowCloseListener) {
+        this.onWindowCloseListener = onWindowCloseListener;
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
@@ -47,6 +51,12 @@ public class About {
 
     private void setupUi(Language language) {
         JFrame frame = UiUtility.getPopupFrame(ConstantUtility.Size.ABOUT_WIDTH, ConstantUtility.Size.ABOUT_HEIGHT);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                onWindowCloseListener.onClose();
+            }
+        });
         UiUtility.setLogo(frame);
         UiUtility.setTitle(frame, language.get(NAME), language.get(ABOUT));
 

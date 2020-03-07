@@ -56,12 +56,13 @@ import static utilities.ImageUtility.OUTPUT_FILE_PATTERN;
 
 public class MainUi implements MainLogic.UiSynchronization {
 
+    public interface OnWindowCloseListener {
+        void onClose();
+    }
+
     private static final Dimension DIALOG_DIMENSION = new Dimension(ConstantUtility.Size.DIALOG_WIDTH, ConstantUtility.Size.DIALOG_HEIGHT);
-
     private static final Dimension MAIN_WINDOW_DIMENSION = new Dimension(ConstantUtility.Size.MAIN_WIDTH, ConstantUtility.Size.MAIN_HEIGHT);
-
     private static final Border HELP_BORDER = BorderFactory.createLineBorder(Color.GRAY, 1);
-
     private static final String OVERWRITE_FILES_FALSE = "1";
 
     @Getter
@@ -116,6 +117,7 @@ public class MainUi implements MainLogic.UiSynchronization {
     private JLabel executeLabel;
     private MainLogic logic;
 
+    private boolean aboutOpen = false;
 
     MainUi(JFrame frame) {
         setupLogic();
@@ -249,7 +251,12 @@ public class MainUi implements MainLogic.UiSynchronization {
         JMenuItem featureMenuItem = new JMenuItem(language.get(FEATURE));
         featureMenuItem.addActionListener(event -> openGitHub(language));
         JMenuItem aboutMenuItem = new JMenuItem(language.get(ABOUT));
-        aboutMenuItem.addActionListener(arg0 -> new About(language));
+        aboutMenuItem.addActionListener(e -> {
+            if (!aboutOpen) {
+                aboutOpen = true;
+                new About(language, () -> aboutOpen = false);
+            }
+        });
         helpMenu.add(bugMenuItem);
         helpMenu.add(featureMenuItem);
         helpMenu.add(aboutMenuItem);
