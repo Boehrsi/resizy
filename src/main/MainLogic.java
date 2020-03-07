@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import javax.swing.*;
 
 import static config.Config.*;
-import static utilities.ConstantUtility.Strings.EMPTY;
+import static utilities.ConstantUtility.Strings.*;
 
 /**
  * Main logic class for the config UI. Mostly called by MainUi.java.
@@ -93,9 +93,14 @@ public class MainLogic {
         config.set(FILE_TYPE_POSITION, selectedIndex);
     }
 
+    void resetRenameSettings() {
+        config.set(RENAME_TARGET_DIRECTORY, EMPTY);
+        config.set(RENAME_PATTERN, FILE_PATTERN);
+    }
+
     void resetOutputSettings() {
         config.set(TARGET_DIRECTORY, EMPTY);
-        config.set(OUTPUT_MODIFIER, EMPTY);
+        config.set(OUTPUT_MODIFIER, FILENAME_MODIFIER);
         config.set(FILE_TYPE_POSITION, 0);
         config.set(COPY_LAST_MODIFIED_DATE, false);
         config.set(WIDTH, 0);

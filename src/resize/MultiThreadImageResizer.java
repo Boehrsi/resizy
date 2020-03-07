@@ -31,7 +31,6 @@ public class MultiThreadImageResizer extends BaseImageResizer {
                         JOptionPane.showMessageDialog(null, language.getErrorText(3), language.getErrorTitle(3),
                                 JOptionPane.ERROR_MESSAGE);
                         executor.shutdownNow();
-                        convertButton.setEnabled(true);
                     }
                     uiSynchronization.updateProgress();
                 });
@@ -40,7 +39,6 @@ public class MultiThreadImageResizer extends BaseImageResizer {
             try {
                 executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
                 uiSynchronization.finishProgress();
-                convertButton.setEnabled(true);
             } catch (InterruptedException ignore) {
             }
         }, "Conversion thread");

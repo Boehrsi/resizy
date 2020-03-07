@@ -21,6 +21,8 @@ import java.util.Properties;
 public class Config {
 
     public static final String TARGET_DIRECTORY = "outputDir";
+    public static final String RENAME_TARGET_DIRECTORY = "renameTargetDirectory";
+    public static final String RENAME_PATTERN = "renamePattern";
     public static final String OUTPUT_MODIFIER = "outputModifier";
     public static final String PRESET = "preset";
     public static final String LANGUAGE = "language";

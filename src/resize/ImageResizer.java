@@ -26,12 +26,10 @@ public class ImageResizer extends BaseImageResizer {
                             saveMetaData);
                 } catch (IllegalArgumentException iae) {
                     JOptionPane.showMessageDialog(null, language.getErrorText(3), language.getErrorTitle(3), JOptionPane.ERROR_MESSAGE);
-                    convertButton.setEnabled(true);
                 }
                 uiSynchronization.updateProgress();
             }
             uiSynchronization.finishProgress();
-            convertButton.setEnabled(true);
         }, "Conversion thread");
         convertThread.start();
     }

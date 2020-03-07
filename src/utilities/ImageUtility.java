@@ -24,6 +24,8 @@ import static utilities.ConstantUtility.Strings.EMPTY;
 @UtilityClass
 public class ImageUtility {
 
+    public static final String OUTPUT_FILE_PATTERN = "###";
+
     private static final HashMap<Key, Object> hints = new HashMap<>();
 
     static {
@@ -76,6 +78,14 @@ public class ImageUtility {
         return outputPath + File.separator
                 + outputFile.substring(outputFile.lastIndexOf("\\") + 1, outputFile.lastIndexOf(".")) + outputModifier
                 + outputFile.substring(outputFile.lastIndexOf("."));
+    }
+
+    public static String generatePathWithIndex(String outputPath, String outputFileNameWithPattern, int index) {
+        if (!outputFileNameWithPattern.contains(OUTPUT_FILE_PATTERN)) {
+            return null;
+        }
+        String outputFile = outputFileNameWithPattern.replace(OUTPUT_FILE_PATTERN, String.valueOf(index));
+        return outputPath + File.separator + outputFile;
     }
 
     public static HashMap<Key, Object> getImageHints() {

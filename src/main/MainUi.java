@@ -4,6 +4,7 @@ import about.About;
 import config.Config;
 import languages.Language;
 import lombok.Getter;
+import rename.Renamer;
 import resize.BaseImageResizer;
 import resize.ImageResizer;
 import resize.MultiThreadImageResizer;
@@ -31,19 +32,20 @@ import java.util.Collections;
 import java.util.List;
 
 import static config.Config.COPY_LAST_MODIFIED_DATE;
-import static config.Config.*;
 import static config.Config.HEIGHT;
 import static config.Config.LANGUAGE;
 import static config.Config.WIDTH;
-import static languages.Language.*;
+import static config.Config.*;
 import static languages.Language.OUTPUT_MODIFIER;
 import static languages.Language.TARGET_DIRECTORY;
+import static languages.Language.*;
 import static utilities.ConstantUtility.Colors.BACKGROUND;
 import static utilities.ConstantUtility.Fonts.*;
 import static utilities.ConstantUtility.Paths.CONFIG;
 import static utilities.ConstantUtility.Paths.CONFIG_BACKUP;
-import static utilities.ConstantUtility.Strings.EMPTY;
+import static utilities.ConstantUtility.Strings.*;
 import static utilities.ConstantUtility.Urls.GITHUB_BUG_FEATURE;
+import static utilities.ImageUtility.OUTPUT_FILE_PATTERN;
 
 /**
  * Main GUI class. Handles the main window of the program and delegates actions.
@@ -102,6 +104,16 @@ public class MainUi implements MainLogic.UiSynchronization {
     private JLabel sizePresetHelp;
     private JLabel sizeHelp;
     private JLabel multiThreadingHelp;
+    private JButton renameButton;
+    private JLabel renameLabel;
+    private JButton renameResetButton;
+    private JTextField renameTargetDirectoryField;
+    private JLabel renameTargetDirectoryHelp;
+    private JTextField renamePatternField;
+    private JLabel renamePatternFieldHelp;
+    private JLabel renamePatternLabel;
+    private JLabel renameTargetDirectoryLabel;
+    private JLabel executeLabel;
     private MainLogic logic;
 
 
@@ -118,10 +130,13 @@ public class MainUi implements MainLogic.UiSynchronization {
         setupInputFilesList(inputFilesLabelText);
         setupInputResetButton(inputFilesLabelText);
         setupTargetDirectory();
+        setupRenameTargetDirectory();
         setupOutputResetButton();
         setupPresets();
         setupMultiThreading();
         setupLastModified();
+        setupRenameButton();
+        setupRenameResetButton();
         setupConvertButton();
         setupConfigDefaultValues(config);
     }
@@ -138,6 +153,12 @@ public class MainUi implements MainLogic.UiSynchronization {
         int progressbarFinishValue = progressBar.getMaximum();
         progressBar.setValue(progressbarFinishValue);
         progressBar.setString(progressbarFinishValue + " / " + logic.getInputFilesModelSize());
+        enableActions(true);
+    }
+
+    private void enableActions(boolean enable) {
+        convertButton.setEnabled(enable);
+        renameButton.setEnabled(enable);
     }
 
     private void setupLogic() {
@@ -256,7 +277,10 @@ public class MainUi implements MainLogic.UiSynchronization {
     private void setupText(Language language) {
         setHeader(inputLabel, language.get(INPUT));
         setLabel(inputFilesLabel, language.get(INPUT_FILES) + " (0)");
-        setHeader(outputLabel, language.get(OUTPUT));
+        setHeader(renameLabel, language.get(RENAME));
+        setLabel(renameTargetDirectoryLabel, language.get(TARGET_DIRECTORY));
+        setLabel(renamePatternLabel, language.get(OUTPUT_NAME_PATTERN));
+        setHeader(outputLabel, language.get(CONVERT));
         setLabel(targetDirectoryLabel, language.get(TARGET_DIRECTORY));
         setLabel(fileTypeLabel, language.get(FILE_TYPE));
         setLabel(nameModifierLabel, language.get(OUTPUT_MODIFIER));
@@ -265,8 +289,11 @@ public class MainUi implements MainLogic.UiSynchronization {
         setLabel(sizeLabel, language.get(SIZE));
         setLabel(progressLabel, language.get(PROGRESS));
         inputResetButton.setText(language.get(CLEAR_INPUT));
+        renameResetButton.setText(language.get(RESET_RENAME));
         outputResetButton.setText(language.get(RESET_OUTPUT));
+        setHeader(executeLabel, language.get(EXECUTE));
         convertButton.setText(language.get(CONVERT));
+        renameButton.setText(language.get(RENAME));
         multiThreadingCheckBox.setText(language.get(USE_MULTITHREADING));
     }
 
@@ -293,6 +320,8 @@ public class MainUi implements MainLogic.UiSynchronization {
         setupHelpLabel(sizePresetHelp, language.get(HINT_MANAGE_PRESET));
         setupHelpLabel(sizeHelp, language.get(HINT_SIZE));
         setupHelpLabel(multiThreadingHelp, language.get(HINT_USE_MULTITHREADING));
+        setupHelpLabel(renameTargetDirectoryHelp, language.get(HINT_RENAME_TARGET_DIRECTORY));
+        setupHelpLabel(renamePatternFieldHelp, language.get(HINT_RENAME_PATTERN));
     }
 
     private void setupHelpLabel(JLabel component, String text) {
@@ -403,7 +432,15 @@ public class MainUi implements MainLogic.UiSynchronization {
     }
 
     private void setupTargetDirectory() {
-        targetDirectoryField.addMouseListener(new MouseAdapter() {
+        setupDirectoryTextField(targetDirectoryField);
+    }
+
+    private void setupRenameTargetDirectory() {
+        setupDirectoryTextField(renameTargetDirectoryField);
+    }
+
+    private void setupDirectoryTextField(JTextField directoryField) {
+        directoryField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
                 JFileChooser chooser = new JFileChooser();
@@ -415,19 +452,27 @@ public class MainUi implements MainLogic.UiSynchronization {
                 if (status == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = chooser.getSelectedFile();
                     try {
-                        targetDirectoryField.setText(selectedFile.getParent().trim() + File.separator + selectedFile.getName());
+                        directoryField.setText(selectedFile.getParent().trim() + File.separator + selectedFile.getName());
                     } catch (NullPointerException exception) {
-                        targetDirectoryField.setText(selectedFile.getName());
+                        directoryField.setText(selectedFile.getName());
                     }
                 }
             }
         });
     }
 
+    private void setupRenameResetButton() {
+        renameResetButton.addActionListener(e -> {
+            renameTargetDirectoryField.setText(EMPTY);
+            renamePatternField.setText(FILE_PATTERN);
+            logic.resetRenameSettings();
+        });
+    }
+
     private void setupOutputResetButton() {
         outputResetButton.addActionListener(e -> {
             targetDirectoryField.setText(EMPTY);
-            nameModifierField.setText(EMPTY);
+            nameModifierField.setText(FILENAME_MODIFIER);
             fileTypeSpinner.setSelectedIndex(0);
             copyLastModifiedCheckBox.setSelected(false);
             sizePresetSpinner.setSelectedIndex(0);
@@ -477,20 +522,63 @@ public class MainUi implements MainLogic.UiSynchronization {
         copyLastModifiedCheckBox.setSelected(selected);
     }
 
+    private void setupRenameButton() {
+        renameButton.addActionListener(e -> {
+            Language language = logic.getLanguage();
+            Config config = logic.getConfig();
+            if (renameTargetDirectoryField.getText().isEmpty() && config.get(OVERWRITE_WARNING).equals(OVERWRITE_FILES_FALSE)) {
+                int answer = createOverwriteWarningDialog(language, RENAME_OVERWRITE_TEXT);
+                if (answer == JOptionPane.YES_OPTION) {
+                    config.set(OVERWRITE_WARNING, 0);
+                    execRename();
+                }
+            } else {
+                execRename();
+            }
+        });
+    }
+
+    private int createOverwriteWarningDialog(Language language, String text) {
+        JPanel panel = new JPanel();
+        JTextPane textPane = new JTextPane();
+        textPane.setEditable(false);
+        textPane.setOpaque(false);
+        textPane.setText(language.get(text));
+        textPane.setPreferredSize(DIALOG_DIMENSION);
+        panel.add(textPane);
+        panel.setPreferredSize(DIALOG_DIMENSION);
+        return JOptionPane.showConfirmDialog(null, panel, language.get(OVERWRITE_TITLE), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void execRename() {
+        Language language = logic.getLanguage();
+        Config config = logic.getConfig();
+        DefaultListModel<String> inputFileModel = logic.getInputFilesModel();
+        ArrayList<String> inputFileList = defaultModelToArrayList(inputFileModel);
+        if (inputFileModel.size() == 0) {
+            JOptionPane.showMessageDialog(null, language.getErrorText(2), language.getErrorTitle(2), JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Renamer renamer = new Renamer();
+        renamer.setup(language, this);
+        String outputPath = renameTargetDirectoryField.getText();
+        String renamePattern = renamePatternField.getText();
+        if (renamePattern.contains(OUTPUT_FILE_PATTERN)) {
+            enableActions(false);
+            renamer.renameImageList(inputFileList, renamePattern, outputPath);
+            config.set(Config.RENAME_PATTERN, renamePattern);
+            config.set(Config.RENAME_TARGET_DIRECTORY, outputPath);
+        } else {
+            JOptionPane.showMessageDialog(null, language.getErrorText(9), language.getErrorTitle(9), JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void setupConvertButton() {
         convertButton.addActionListener(e -> {
             Config config = logic.getConfig();
             Language language = logic.getLanguage();
             if (nameModifierField.getText().isEmpty() && config.get(OVERWRITE_WARNING).equals(OVERWRITE_FILES_FALSE)) {
-                JPanel panel = new JPanel();
-                JTextPane textPane = new JTextPane();
-                textPane.setEditable(false);
-                textPane.setOpaque(false);
-                textPane.setText(language.get(OVERWRITE_TEXT));
-                textPane.setPreferredSize(DIALOG_DIMENSION);
-                panel.add(textPane);
-                panel.setPreferredSize(DIALOG_DIMENSION);
-                int answer = JOptionPane.showConfirmDialog(null, panel, language.get(OVERWRITE_TITLE), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                int answer = createOverwriteWarningDialog(language, OVERWRITE_TEXT);
                 if (answer == JOptionPane.YES_OPTION) {
                     config.set(OVERWRITE_WARNING, 0);
                     execResize();
@@ -502,6 +590,7 @@ public class MainUi implements MainLogic.UiSynchronization {
     }
 
     private void execResize() {
+        enableActions(false);
         Config config = logic.getConfig();
         Language language = logic.getLanguage();
         DefaultListModel<String> inputFileModel = logic.getInputFilesModel();
@@ -535,7 +624,7 @@ public class MainUi implements MainLogic.UiSynchronization {
 
 
                 String outputModifier = nameModifierField.getText();
-                String targetDir = targetDirectoryField.getText();
+                String outputPath = targetDirectoryField.getText();
                 boolean saveMetaData = copyLastModifiedCheckBox.isSelected();
                 ArrayList<String> inputFileList = defaultModelToArrayList(inputFileModel);
                 String outputFileType = (String) fileTypeSpinner.getSelectedItem();
@@ -546,14 +635,14 @@ public class MainUi implements MainLogic.UiSynchronization {
                 } else {
                     resizer = new ImageResizer();
                 }
-                resizer.setup(language, convertButton, this);
-                resizer.resizeImageList(calcWidth, calcHeight, outputModifier, targetDir, inputFileList,
+                resizer.setup(language, this);
+                resizer.resizeImageList(calcWidth, calcHeight, outputModifier, outputPath, inputFileList,
                         outputFileType, saveMetaData);
 
                 config.set(HEIGHT, heightString);
                 config.set(WIDTH, widthString);
                 config.set(OUTPUT_MODIFIER, outputModifier);
-                config.set(Config.TARGET_DIRECTORY, targetDir);
+                config.set(Config.TARGET_DIRECTORY, outputPath);
             } else {
                 JOptionPane.showMessageDialog(null, language.getErrorText(1), language.getErrorTitle(1), JOptionPane.ERROR_MESSAGE);
             }
@@ -569,7 +658,8 @@ public class MainUi implements MainLogic.UiSynchronization {
     private void setupConfigDefaultValues(Config config) {
         widthField.setText(config.get(WIDTH));
         heightField.setText(config.get(HEIGHT));
-        nameModifierField.setText(config.get(OUTPUT_MODIFIER));
+        renamePatternField.setText(config.get(RENAME_PATTERN));
+        nameModifierField.setText(config.get(Config.OUTPUT_MODIFIER));
         targetDirectoryField.setText(config.get(Config.TARGET_DIRECTORY));
         copyLastModifiedCheckBox.setSelected(config.getAsBoolean(COPY_LAST_MODIFIED_DATE));
         fileTypeSpinner.setSelectedIndex(config.getAsInt(FILE_TYPE_POSITION));

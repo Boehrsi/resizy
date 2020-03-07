@@ -34,6 +34,10 @@ public class ConstantUtility {
 
     public class Strings {
 
+        public static final String FILENAME_MODIFIER = "_resized";
+
+        public static final String FILE_PATTERN = "image_###";
+
         public static final String EMPTY = "";
 
         public static final String GITHUB_PAGES = "GitHub Pages";
@@ -58,9 +62,9 @@ public class ConstantUtility {
 
         public static final int ABOUT_HEIGHT = 285;
 
-        public static final int MAIN_WIDTH = 700;
+        public static final int MAIN_WIDTH = 800;
 
-        public static final int MAIN_HEIGHT = 550;
+        public static final int MAIN_HEIGHT = 700;
 
         public static final int DIALOG_WIDTH = 400;
 

@@ -22,12 +22,10 @@ import java.util.ArrayList;
 
 public abstract class BaseImageResizer {
     Language language;
-    JButton convertButton;
     MainLogic.UiSynchronization uiSynchronization;
 
-    public void setup(Language lang, JButton convertButton, MainLogic.UiSynchronization uiSynchronization) {
+    public void setup(Language lang, MainLogic.UiSynchronization uiSynchronization) {
         this.language = lang;
-        this.convertButton = convertButton;
         this.uiSynchronization = uiSynchronization;
     }
 

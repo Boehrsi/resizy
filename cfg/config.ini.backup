@@ -10,3 +10,4 @@ types=jpg,jpeg,png
 useMultithreading=true
 fileTypePosition=0
 copyLastModifiedDate=false
+renamePattern=image_\#\#\#
