@@ -22,10 +22,12 @@ import java.util.ArrayList;
 
 public abstract class BaseImageResizer {
     Language language;
+    boolean overwrite;
     MainLogic.UiSynchronization uiSynchronization;
 
-    public void setup(Language lang, MainLogic.UiSynchronization uiSynchronization) {
+    public void setup(Language lang, boolean overwrite, MainLogic.UiSynchronization uiSynchronization) {
         this.language = lang;
+        this.overwrite = overwrite;
         this.uiSynchronization = uiSynchronization;
     }
 
@@ -71,7 +73,7 @@ public abstract class BaseImageResizer {
                 JOptionPane.showMessageDialog(null, language.getErrorText(7), language.getErrorTitle(7), JOptionPane.ERROR_MESSAGE);
             }
         }
-        boolean writeResult = ImageUtility.writeImage(outputImage, outputFile, outputFileType, lastModDate);
+        boolean writeResult = ImageUtility.writeImage(outputImage, outputFile, outputFileType, lastModDate, overwrite);
         if (!writeResult) {
             JOptionPane.showMessageDialog(null, language.getErrorText(6), language.getErrorTitle(6), JOptionPane.ERROR_MESSAGE);
         }

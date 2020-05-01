@@ -21,18 +21,22 @@ import static utilities.ConstantUtility.Strings.*;
 public class MainLogic {
 
     @Getter
-    private DefaultListModel<String> inputFilesModel = new DefaultListModel<>();
+    private final DefaultListModel<String> inputFilesModel = new DefaultListModel<>();
     @Getter
-    private DefaultComboBoxModel<String> sizePresetModel = new DefaultComboBoxModel<>();
+    private final DefaultComboBoxModel<String> sizePresetModel = new DefaultComboBoxModel<>();
     @Getter
-    private DefaultComboBoxModel<String> fileTypeModel = new DefaultComboBoxModel<>();
+    private final DefaultComboBoxModel<String> fileTypeModel = new DefaultComboBoxModel<>();
     @Getter
-    private Config config = new Config();
+    private final Config config = new Config();
     @Getter
-    private Language language = new Language(config.get(LANGUAGE));
+    private final Language language = new Language(config.get(LANGUAGE));
 
     boolean getMultiThreading() {
         return config.getAsBoolean(MULTI_THREADING);
+    }
+
+    boolean getOverwrite() {
+        return config.getAsBoolean(OVERWRITE);
     }
 
     void setMultiThreading(boolean selected) {
@@ -54,7 +58,7 @@ public class MainLogic {
     }
 
     boolean addSizePreset(String width, String height) {
-        if (width.isEmpty() || height.isEmpty() || (Integer.valueOf(width) < 1 && Integer.valueOf(height) < 1)) {
+        if (width.isEmpty() || height.isEmpty() || (Integer.parseInt(width) < 1 && Integer.parseInt(height) < 1)) {
             return false;
         }
         String newPreset = width + "x" + height;
@@ -89,6 +93,10 @@ public class MainLogic {
         config.set(COPY_LAST_MODIFIED_DATE, selected);
     }
 
+    void setOverwrite(boolean selected) {
+        config.set(OVERWRITE, selected);
+    }
+
     void setFileTypePosition(int selectedIndex) {
         config.set(FILE_TYPE_POSITION, selectedIndex);
     }
@@ -98,7 +106,7 @@ public class MainLogic {
         config.set(RENAME_PATTERN, FILE_PATTERN);
     }
 
-    void resetOutputSettings() {
+    void resetConvertSettings() {
         config.set(TARGET_DIRECTORY, EMPTY);
         config.set(OUTPUT_MODIFIER, FILENAME_MODIFIER);
         config.set(FILE_TYPE_POSITION, 0);

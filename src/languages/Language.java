@@ -37,12 +37,13 @@ public class Language {
     public static final String CONVERT = "convert";
     public static final String RENAME = "rename";
     public static final String PROGRESS = "progress";
+    public static final String OVERWRITE = "overwrite";
     public static final String INPUT = "input";
     public static final String CLEAR_INPUT = "clearInput";
     public static final String OUTPUT = "output";
     public static final String EXECUTE = "execute";
     public static final String RESET_RENAME = "resetRename";
-    public static final String RESET_OUTPUT = "resetOutput";
+    public static final String RESET_CONVERT = "resetConvert";
     public static final String USE_MULTITHREADING = "useMultithreading";
     public static final String NO_PRESET_SIZE = "noPresetSize";
     public static final String KEEP_DEFAULT_FILE_TYPE = "keepDefaultFileType";
@@ -52,6 +53,7 @@ public class Language {
     public static final String HINT_TARGET_DIRECTORY = "hintTargetDirectory";
     public static final String HINT_RENAME_TARGET_DIRECTORY = "hintRenameTargetDirectory";
     public static final String HINT_RENAME_PATTERN = "hintRenamePattern";
+    public static final String HINT_OVERWRITE = "hintOverwrite";
     public static final String HINT_OUTPUT_MODIFIER = "hintOutputModifier";
     public static final String HINT_SIZE = "hintSize";
     public static final String HINT_SAVE_PRESET = "hintSavePreset";

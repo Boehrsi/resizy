@@ -1,7 +1,5 @@
 package utilities;
 
-import lombok.experimental.UtilityClass;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.RenderingHints.Key;
@@ -21,7 +19,6 @@ import static utilities.ConstantUtility.Strings.EMPTY;
  * @version 1.0
  */
 
-@UtilityClass
 public class ImageUtility {
 
     public static final String OUTPUT_FILE_PATTERN = "###";
@@ -44,11 +41,23 @@ public class ImageUtility {
         return originalImage;
     }
 
-    public static boolean writeImage(BufferedImage outputImage, String outputFile, String type, FileTime lastModDate) {
+    public static boolean writeImage(BufferedImage outputImage, String outputFile, String type, FileTime lastModDate, boolean overwrite) {
         try {
-            File filePath = new File(outputFile);
-            ImageIO.write(outputImage, type, filePath);
-            Files.setLastModifiedTime(filePath.toPath(), lastModDate);
+            File file = new File(outputFile);
+            if (file.exists()) {
+                if (!overwrite) {
+                    return false;
+                } else {
+                    boolean delete = file.delete();
+                    if (delete) {
+                        file = new File(outputFile);
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            ImageIO.write(outputImage, type, file);
+            Files.setLastModifiedTime(file.toPath(), lastModDate);
             return true;
         } catch (NullPointerException | IOException e) {
             return false;

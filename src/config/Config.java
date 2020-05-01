@@ -27,7 +27,7 @@ public class Config {
     public static final String PRESET = "preset";
     public static final String LANGUAGE = "language";
     public static final String TYPES = "types";
-    public static final String OVERWRITE_WARNING = "overwriteWarning";
+    public static final String OVERWRITE = "overwrite";
     public static final String WIDTH = "width";
     public static final String HEIGHT = "height";
     public static final String FILE_TYPE_POSITION = "fileTypePosition";
@@ -49,12 +49,12 @@ public class Config {
 
     public boolean getAsBoolean(String key) {
         String value = configProperties.getProperty(key);
-        return Boolean.valueOf(value);
+        return Boolean.parseBoolean(value);
     }
 
     public int getAsInt(String key) {
         String value = configProperties.getProperty(key);
-        return Integer.valueOf(value);
+        return Integer.parseInt(value);
     }
 
     public String get(String key) {

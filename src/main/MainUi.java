@@ -60,10 +60,10 @@ public class MainUi implements MainLogic.UiSynchronization {
         void onClose();
     }
 
+    @SuppressWarnings("unused")
     private static final Dimension DIALOG_DIMENSION = new Dimension(ConstantUtility.Size.DIALOG_WIDTH, ConstantUtility.Size.DIALOG_HEIGHT);
     private static final Dimension MAIN_WINDOW_DIMENSION = new Dimension(ConstantUtility.Size.MAIN_WIDTH, ConstantUtility.Size.MAIN_HEIGHT);
     private static final Border HELP_BORDER = BorderFactory.createLineBorder(Color.GRAY, 1);
-    private static final String OVERWRITE_FILES_FALSE = "1";
 
     @Getter
     private JPanel container;
@@ -115,6 +115,9 @@ public class MainUi implements MainLogic.UiSynchronization {
     private JLabel renamePatternLabel;
     private JLabel renameTargetDirectoryLabel;
     private JLabel executeLabel;
+    private JLabel overwriteLabel;
+    private JCheckBox overwriteCheckBox;
+    private JLabel overwriteHelp;
     private MainLogic logic;
 
     private boolean aboutOpen = false;
@@ -137,6 +140,7 @@ public class MainUi implements MainLogic.UiSynchronization {
         setupPresets();
         setupMultiThreading();
         setupLastModified();
+        setupOverwrite();
         setupRenameButton();
         setupRenameResetButton();
         setupConvertButton();
@@ -295,9 +299,10 @@ public class MainUi implements MainLogic.UiSynchronization {
         setLabel(sizePresetLabel, language.get(Config.PRESET));
         setLabel(sizeLabel, language.get(SIZE));
         setLabel(progressLabel, language.get(PROGRESS));
+        setLabel(overwriteLabel, language.get(Language.OVERWRITE));
         inputResetButton.setText(language.get(CLEAR_INPUT));
         renameResetButton.setText(language.get(RESET_RENAME));
-        outputResetButton.setText(language.get(RESET_OUTPUT));
+        outputResetButton.setText(language.get(RESET_CONVERT));
         setHeader(executeLabel, language.get(EXECUTE));
         convertButton.setText(language.get(CONVERT));
         renameButton.setText(language.get(RENAME));
@@ -329,6 +334,7 @@ public class MainUi implements MainLogic.UiSynchronization {
         setupHelpLabel(multiThreadingHelp, language.get(HINT_USE_MULTITHREADING));
         setupHelpLabel(renameTargetDirectoryHelp, language.get(HINT_RENAME_TARGET_DIRECTORY));
         setupHelpLabel(renamePatternFieldHelp, language.get(HINT_RENAME_PATTERN));
+        setupHelpLabel(overwriteHelp, language.get(HINT_OVERWRITE));
     }
 
     private void setupHelpLabel(JLabel component, String text) {
@@ -485,7 +491,7 @@ public class MainUi implements MainLogic.UiSynchronization {
             sizePresetSpinner.setSelectedIndex(0);
             widthField.setText("0");
             heightField.setText("0");
-            logic.resetOutputSettings();
+            logic.resetConvertSettings();
         });
     }
 
@@ -529,32 +535,14 @@ public class MainUi implements MainLogic.UiSynchronization {
         copyLastModifiedCheckBox.setSelected(selected);
     }
 
-    private void setupRenameButton() {
-        renameButton.addActionListener(e -> {
-            Language language = logic.getLanguage();
-            Config config = logic.getConfig();
-            if (renameTargetDirectoryField.getText().isEmpty() && config.get(OVERWRITE_WARNING).equals(OVERWRITE_FILES_FALSE)) {
-                int answer = createOverwriteWarningDialog(language, RENAME_OVERWRITE_TEXT);
-                if (answer == JOptionPane.YES_OPTION) {
-                    config.set(OVERWRITE_WARNING, 0);
-                    execRename();
-                }
-            } else {
-                execRename();
-            }
-        });
+    private void setupOverwrite() {
+        overwriteCheckBox.addActionListener(arg0 -> logic.setOverwrite(overwriteCheckBox.isSelected()));
+        boolean selected = logic.getOverwrite();
+        overwriteCheckBox.setSelected(selected);
     }
 
-    private int createOverwriteWarningDialog(Language language, String text) {
-        JPanel panel = new JPanel();
-        JTextPane textPane = new JTextPane();
-        textPane.setEditable(false);
-        textPane.setOpaque(false);
-        textPane.setText(language.get(text));
-        textPane.setPreferredSize(DIALOG_DIMENSION);
-        panel.add(textPane);
-        panel.setPreferredSize(DIALOG_DIMENSION);
-        return JOptionPane.showConfirmDialog(null, panel, language.get(OVERWRITE_TITLE), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+    private void setupRenameButton() {
+        renameButton.addActionListener(e -> execRename());
     }
 
     private void execRename() {
@@ -581,19 +569,7 @@ public class MainUi implements MainLogic.UiSynchronization {
     }
 
     private void setupConvertButton() {
-        convertButton.addActionListener(e -> {
-            Config config = logic.getConfig();
-            Language language = logic.getLanguage();
-            if (nameModifierField.getText().isEmpty() && config.get(OVERWRITE_WARNING).equals(OVERWRITE_FILES_FALSE)) {
-                int answer = createOverwriteWarningDialog(language, OVERWRITE_TEXT);
-                if (answer == JOptionPane.YES_OPTION) {
-                    config.set(OVERWRITE_WARNING, 0);
-                    execResize();
-                }
-            } else {
-                execResize();
-            }
-        });
+        convertButton.addActionListener(e -> execResize());
     }
 
     private void execResize() {
@@ -622,12 +598,9 @@ public class MainUi implements MainLogic.UiSynchronization {
                     String[] res = itemString.split("x");
                     widthString = res[0];
                     heightString = res[1];
-                    calcWidth = Integer.parseInt(widthString);
-                    calcHeight = Integer.parseInt(heightString);
-                } else {
-                    calcWidth = Integer.parseInt(widthString);
-                    calcHeight = Integer.parseInt(heightString);
                 }
+                calcWidth = Integer.parseInt(widthString);
+                calcHeight = Integer.parseInt(heightString);
 
 
                 String outputModifier = nameModifierField.getText();
@@ -635,6 +608,7 @@ public class MainUi implements MainLogic.UiSynchronization {
                 boolean saveMetaData = copyLastModifiedCheckBox.isSelected();
                 ArrayList<String> inputFileList = defaultModelToArrayList(inputFileModel);
                 String outputFileType = (String) fileTypeSpinner.getSelectedItem();
+                boolean overwrite = overwriteCheckBox.isSelected();
 
                 BaseImageResizer resizer;
                 if (multiThreadingCheckBox.isSelected()) {
@@ -642,7 +616,7 @@ public class MainUi implements MainLogic.UiSynchronization {
                 } else {
                     resizer = new ImageResizer();
                 }
-                resizer.setup(language, this);
+                resizer.setup(language, overwrite, this);
                 resizer.resizeImageList(calcWidth, calcHeight, outputModifier, outputPath, inputFileList,
                         outputFileType, saveMetaData);
 

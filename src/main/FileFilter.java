@@ -12,9 +12,9 @@ import java.io.File;
 
 class FileFilter {
 
-    private DefaultListModel<String> inputFilesModel;
+    private final DefaultListModel<String> inputFilesModel;
 
-    private JList<String> inputFiles;
+    private final JList<String> inputFiles;
 
     FileFilter(DefaultListModel<String> inputFilesModel, JList<String> inputFiles) {
         this.inputFilesModel = inputFilesModel;

@@ -37,7 +37,7 @@ import static utilities.ConstantUtility.Urls.*;
  */
 
 public class About {
-    MainUi.OnWindowCloseListener onWindowCloseListener;
+    final MainUi.OnWindowCloseListener onWindowCloseListener;
 
     public About(Language language, MainUi.OnWindowCloseListener onWindowCloseListener) {
         this.onWindowCloseListener = onWindowCloseListener;

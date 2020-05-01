@@ -1,5 +1,5 @@
 #Default Config
-overwriteWarning=1
+overwrite=false
 height=0
 outputDir=
 outputModifier=_resized

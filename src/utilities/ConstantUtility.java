@@ -17,7 +17,7 @@ public class ConstantUtility {
 
     public class Version {
 
-        public static final String CORE = "1.0.1";
+        public static final String CORE = "1.1";
 
     }
 

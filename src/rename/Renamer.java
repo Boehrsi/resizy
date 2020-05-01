@@ -23,17 +23,6 @@ public class Renamer {
         this.uiSynchronization = uiSynchronization;
     }
 
-    private void renameImage(String inputFileName, String outputFileName) throws IOException {
-        File inputFile = new File(inputFileName);
-        if (!outputFileName.contains(":\\")) {
-            // No output folder is set, use input folder.
-            outputFileName = inputFileName.substring(0, inputFileName.lastIndexOf("\\")) + outputFileName;
-        }
-        outputFileName += inputFileName.substring(inputFileName.lastIndexOf("."));
-        File outputFile = new File(outputFileName);
-        Files.copy(inputFile.toPath(), outputFile.toPath());
-    }
-
     public void renameImageList(ArrayList<String> inputFileList, String outputFilePattern, String outputPath) {
         Thread renameThread = new Thread(() -> {
             for (int index = 0; index < inputFileList.size(); index++) {
@@ -50,6 +39,17 @@ public class Renamer {
             uiSynchronization.finishProgress();
         }, "Renaming thread");
         renameThread.start();
+    }
+
+    private void renameImage(String inputFileName, String outputFileName) throws IOException {
+        File inputFile = new File(inputFileName);
+        if (!outputFileName.contains(":\\")) {
+            // No output folder is set, use input folder.
+            outputFileName = inputFileName.substring(0, inputFileName.lastIndexOf("\\")) + outputFileName;
+        }
+        outputFileName += inputFileName.substring(inputFileName.lastIndexOf("."));
+        File outputFile = new File(outputFileName);
+        Files.copy(inputFile.toPath(), outputFile.toPath());
     }
 
 }
